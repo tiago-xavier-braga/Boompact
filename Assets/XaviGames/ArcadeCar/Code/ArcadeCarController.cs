@@ -50,7 +50,6 @@ namespace XaviGames.ArcadeCar
                 if (wheel.IsSteerable)
                 {
                     wheel.WheelCollider.steerAngle = hInput * currentSteerRange;
-                    UpdateWheelPosition(wheel);
                 }
 
                 if (isAccelerating)
@@ -67,6 +66,8 @@ namespace XaviGames.ArcadeCar
                     wheel.WheelCollider.motorTorque = 0f;
                     wheel.WheelCollider.brakeTorque = Mathf.Abs(vInput) * _arcadeCarManager.BreakForce;
                 }
+
+                UpdateWheelPosition(wheel);
             }
         }
 
