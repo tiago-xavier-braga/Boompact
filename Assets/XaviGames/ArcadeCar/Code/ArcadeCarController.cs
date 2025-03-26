@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using XaviEssencials;
@@ -6,7 +7,7 @@ using XaviEssencials;
 namespace XaviGames.ArcadeCar
 {
     [RequireComponent(typeof(ArcadeCarManager))]
-    public class ArcadeCarController : MonoBehaviour
+    public class ArcadeCarController : NetworkBehaviour
     {
         [Header("Car Properties")]
         [SerializeField]
@@ -20,7 +21,7 @@ namespace XaviGames.ArcadeCar
         private ArcadeCarManager _arcadeCarManager;
         private Rigidbody rigidBody;
 
-        private void Start()
+        public override void OnNetworkSpawn()
         {
             _arcadeCarManager = GetComponent<ArcadeCarManager>();
             rigidBody = GetComponent<Rigidbody>();
