@@ -10,6 +10,9 @@ namespace XaviGames.Car
     {
         [Header("Car Properties")]
         [SerializeField]
+        private PlayerInput _playerInput;
+
+        [SerializeField]
         private CarManager _carManager;
 
         [SerializeField]
@@ -27,6 +30,7 @@ namespace XaviGames.Car
             _rigidBody.centerOfMass = centerOfMass;
 
             base.OnNetworkSpawn();
+            _playerInput.enabled = IsOwner;
         }
 
         private void FixedUpdate()
@@ -57,6 +61,13 @@ namespace XaviGames.Car
             }
 
             _inputVector = context.ReadValue<Vector2>();
+            SendInputToServerRpc(_inputVector);
+        }
+
+        [ServerRpc]
+        private void SendInputToServerRpc(Vector2 input)
+        {
+            _inputVector = input;
         }
 
         public void ApplyWheelForces(float currentMotorTorque, float currentSteerRange, bool isAccelerating)
