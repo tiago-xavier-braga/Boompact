@@ -529,8 +529,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2196615591226068898}
   - component: {fileID: 6017120902490618751}
-  - component: {fileID: 7650523028292451472}
   - component: {fileID: 8856804072823628812}
+  - component: {fileID: 7650523028292451472}
   - component: {fileID: 3195238330943901347}
   - component: {fileID: 3659186546181084595}
   m_Layer: 0
@@ -584,24 +584,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!114 &7650523028292451472
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5651255189271374991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ca83649b4afd784ab269908f5f4dcbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <TopSpeed>k__BackingField: 20
-  <Acceleration>k__BackingField: 2000
-  <BreakForce>k__BackingField: 2000
-  <SteeringRange>k__BackingField: 30
-  <SteeringRangeAtMaxSpeed>k__BackingField: 10
-  <CentreOfGravityOffset>k__BackingField: -1
 --- !u!114 &8856804072823628812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -627,6 +609,25 @@ MonoBehaviour:
   AutoObjectParentSync: 1
   SyncOwnerTransformWhenParented: 1
   AllowOwnerToParent: 0
+--- !u!114 &7650523028292451472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5651255189271374991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ca83649b4afd784ab269908f5f4dcbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
+  <TopSpeed>k__BackingField: 20
+  <Acceleration>k__BackingField: 2000
+  <BreakForce>k__BackingField: 2000
+  <SteeringRange>k__BackingField: 30
+  <SteeringRangeAtMaxSpeed>k__BackingField: 10
+  <CentreOfGravityOffset>k__BackingField: -1
 --- !u!114 &3195238330943901347
 MonoBehaviour:
   m_ObjectHideFlags: 0

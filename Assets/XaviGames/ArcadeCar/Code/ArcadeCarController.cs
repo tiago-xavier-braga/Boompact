@@ -19,16 +19,30 @@ namespace XaviGames.ArcadeCar
         private Vector2 _inputVector;
 
         private ArcadeCarManager _arcadeCarManager;
-        private Rigidbody rigidBody;
+        private Rigidbody _rigidBody;
+
+        public NetworkVariable<Vector3> CarPosition = new NetworkVariable<Vector3>(
+            Vector3.zero,
+            NetworkVariableReadPermission.Everyone,
+            NetworkVariableWritePermission.Owner
+        );
 
         public override void OnNetworkSpawn()
         {
             _arcadeCarManager = GetComponent<ArcadeCarManager>();
-            rigidBody = GetComponent<Rigidbody>();
+            _rigidBody = GetComponent<Rigidbody>();
 
-            Vector3 centerOfMass = rigidBody.centerOfMass;
+            Vector3 centerOfMass = _rigidBody.centerOfMass;
             centerOfMass.y += _arcadeCarManager.CentreOfGravityOffset;
-            rigidBody.centerOfMass = centerOfMass;
+            _rigidBody.centerOfMass = centerOfMass;
+
+            base.OnNetworkSpawn();
+        }
+
+        public override void OnNetworkDespawn()
+        {
+            _arcadeCarManager.PlayerInput.enabled = false;
+            base.OnNetworkDespawn();
         }
 
         private void FixedUpdate()
@@ -36,7 +50,7 @@ namespace XaviGames.ArcadeCar
             float hInput = _inputVector.x;
             float vInput = _inputVector.y;
 
-            float forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
+            float forwardSpeed = Vector3.Dot(transform.forward, _rigidBody.linearVelocity);
             float speedFactor = Mathf.InverseLerp(0, _arcadeCarManager.TopSpeed, Mathf.Abs(forwardSpeed));
 
             float currentMotorTorque = Mathf.Lerp(_arcadeCarManager.Acceleration, 0, speedFactor);
@@ -69,10 +83,20 @@ namespace XaviGames.ArcadeCar
 
                 UpdateWheelPosition(wheel);
             }
+
+            if (IsOwner)
+            {
+                SendPositionToServerRpc(transform.position);
+            }
         }
 
         public void OnMoveInput(InputAction.CallbackContext context)
         {
+            if (!IsOwner)
+            {
+                return;
+            }
+
             _inputVector = context.ReadValue<Vector2>();
         }
 
@@ -84,6 +108,20 @@ namespace XaviGames.ArcadeCar
             wheel.ModelTransform.position = position;
             wheel.ModelTransform.rotation = rotation;
         }
+
+        [ServerRpc]
+        private void SendPositionToServerRpc(Vector3 position)
+        {
+            UpdatePositionForClientsClientRpc(position);
+        }
+
+        [ClientRpc]
+        private void UpdatePositionForClientsClientRpc(Vector3 position)
+        {
+            if (!IsOwner)
+            {
+                transform.position = position;
+            }
+        }
     }
 }
-

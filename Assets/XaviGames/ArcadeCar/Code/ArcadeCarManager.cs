@@ -1,9 +1,14 @@
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace XaviGames.ArcadeCar
 {
-    public class ArcadeCarManager : MonoBehaviour
+    public class ArcadeCarManager : NetworkBehaviour
     {
+        [field: Header("Player Parameters")]
+        public PlayerInput PlayerInput { get; private set; }
+
         [field: Header("Car Parameters")]
         [field: SerializeField]
         public float TopSpeed { get; private set; }
