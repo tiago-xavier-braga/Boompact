@@ -21,7 +21,11 @@ MonoBehaviour:
   m_OverrideGlobalSceneList: 1
   m_Scenes:
   - m_enabled: 1
-    m_path: Assets/XaviGames/XaviMultiplayer/Scenes/StartScene.unity
+    m_path: Assets/Level/Scenes/Server/ServerScene.unity
+  - m_enabled: 1
+    m_path: Assets/Level/Scenes/Client/ClientScene.unity
+  - m_enabled: 1
+    m_path: Assets/Level/Scenes/Environment/Environment.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings: []

@@ -5,29 +5,14 @@ namespace XaviGames.Multiplayer
 {
     public class ClientManager : MonoBehaviour
     {
-        public static ClientManager Instance { get; private set; }
-
-        private void Awake()
-        {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-
         private void Start()
         {
-            Debug.Log("Starting Client...");
-            if (!NetworkManager.Singleton.IsServer && !NetworkManager.Singleton.IsClient)
-            {
-                NetworkManager.Singleton.StartClient();
-                Debug.Log("Client started!");
-            }
+            var transport = NetworkManager.Singleton.GetComponent<Unity.Netcode.Transports.UTP.UnityTransport>();
+            transport.ConnectionData.Address = "20.33.63.92";
+            transport.ConnectionData.Port = (ushort)9000;
 
+            bool isClientStarted = NetworkManager.Singleton.StartClient();
+            Debug.Log($"Client Status: {isClientStarted}");
         }
     }
 }
