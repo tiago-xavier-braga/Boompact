@@ -1,6 +1,4 @@
-using System;
 using Unity.Netcode;
-using Unity.Services.Core;
 using UnityEngine;
 using XaviEssencials;
 
@@ -14,22 +12,9 @@ namespace XaviGames.Manager
 
         private void Awake()
         {
+            DontDestroyOnLoad(this);
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = _fps;
-
-            InitMultiplayerSDK();
-        }
-
-        private async void InitMultiplayerSDK()
-        {
-            try
-            {
-                await UnityServices.InitializeAsync();
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e);
-            }
         }
     }
 }
