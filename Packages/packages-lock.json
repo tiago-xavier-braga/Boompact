@@ -425,7 +425,7 @@
       "url": "https://packages.unity.com"
     },
     "com.xavigames.xaviessencials": {
-      "version": "file:XaviEssencials",
+      "version": "file:com.xavigames.xaviessencials",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
