@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using XaviEssencials;
+using XaviEssencials.Runtime;
 
 namespace XavieGames.Manager
 {
