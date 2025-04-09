@@ -1,0 +1,1 @@
+C:\Users\braga\www\github\Boompact\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\2r3k1t45\obj\arm64-v8a
