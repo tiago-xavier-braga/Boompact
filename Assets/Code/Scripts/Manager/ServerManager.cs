@@ -1,3 +1,4 @@
+#if UNITY_SERVER
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,9 +8,10 @@ using Unity.Netcode.Transports.UTP;
 using Unity.Services.Core;
 using Unity.Services.Matchmaker;
 using Unity.Services.Matchmaker.Models;
-using Unity.Services.Multiplay;
 using UnityEngine;
 using XaviEssencials.Runtime;
+using Unity.Services.Multiplay;
+
 
 namespace XaviGames.Manager
 {
@@ -133,3 +135,4 @@ namespace XaviGames.Manager
         }
     }
 }
+#endif
