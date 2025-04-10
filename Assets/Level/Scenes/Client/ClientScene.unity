@@ -268,7 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83faecab632ac3940aa4f5e4ac4be15f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _queueName: HostingRoom
+  _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

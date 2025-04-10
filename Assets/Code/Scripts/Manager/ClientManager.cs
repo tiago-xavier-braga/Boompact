@@ -8,18 +8,22 @@ using Unity.Services.Core;
 using Unity.Services.Matchmaker;
 using Unity.Services.Matchmaker.Models;
 using UnityEngine;
+using XaviGames.Services;
 
 namespace XaviGames.Manager
 {
     public class ClientManager : MonoBehaviour
     {
         [SerializeField]
+        private ServicesSettings _servicesSettings;
+
         private string _queueName;
+        private static bool initialized;
 
-        static bool initialized;
-
-        async void Start()
+        private async void Start()
         {
+            _queueName = _servicesSettings.QueueName;
+
             if (!initialized)
             {
                 await UnityServices.InitializeAsync();
@@ -31,7 +35,7 @@ namespace XaviGames.Manager
             await StartSearch();
         }
 
-        async Task StartSearch()
+        private async Task StartSearch()
         {
             var players = new List<Player>
             {
@@ -45,7 +49,7 @@ namespace XaviGames.Manager
                 await Awaitable.WaitForSecondsAsync(1f);
         }
 
-        async Task<bool> FindMatch(List<Player> players, CreateTicketOptions options)
+        private async Task<bool> FindMatch(List<Player> players, CreateTicketOptions options)
         {
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             var ticketResponse = await MatchmakerService.Instance.CreateTicketAsync(players, options);
@@ -90,7 +94,8 @@ namespace XaviGames.Manager
             }
         }
 
-        void LogConnectionEvent(NetworkManager manager, ConnectionEventData data)
+        //TODO: Remove the Log
+        private void LogConnectionEvent(NetworkManager manager, ConnectionEventData data)
         {
             switch (data.EventType)
             {

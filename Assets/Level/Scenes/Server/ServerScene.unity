@@ -148,10 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 697f48fcda64eca4bbfacd0d6640515f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
   _sceneToLoad:
     _sceneAsset: {fileID: 102900000, guid: 4eaad980f54bfcf4b8d8acfa3d4a7d97, type: 3}
     <SceneName>k__BackingField: Environment
-  _queueName: HostingRoom
 --- !u!4 &338734935
 Transform:
   m_ObjectHideFlags: 0

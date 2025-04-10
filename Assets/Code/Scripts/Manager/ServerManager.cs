@@ -11,6 +11,7 @@ using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using Unity.Services.Multiplay;
+using XaviGames.Services;
 
 
 namespace XaviGames.Manager
@@ -18,16 +19,20 @@ namespace XaviGames.Manager
     public class ServerManager : MonoBehaviour
     {
         [SerializeField]
+        private ServicesSettings _servicesSettings;
+
+        [SerializeField]
         private SceneReference _sceneToLoad;
 
-        [SerializeReference]
         private string _queueName;
-
         private string _ticketId;
 
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
+
+            _queueName = _servicesSettings.QueueName;
+
             StartCoroutine(StartServer());
             StartCoroutine(ApproveBackfillTicketEverySecond());
         }

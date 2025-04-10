@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
 
-namespace XavieGames.Manager
+namespace XaviGames.Manager
 {
     public class StartupManager : MonoBehaviour
     {
