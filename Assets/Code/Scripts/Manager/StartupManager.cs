@@ -36,11 +36,11 @@ namespace XaviGames.Manager
             await sceneBundle.LoadScenesAsync(
                 onSceneProgress: (sceneName, progress) =>
                 {
-                    Debug.Log($"[Scene Progress] {sceneName}: {progress * 100f}%");
+                    GameLogger.Log($"{sceneName}: {progress * 100f}%", LogCategory.Unity);
                 },
                 onTotalProgress: (progress) =>
                 {
-                    Debug.Log($"[Total Progress] {progress * 100f}%");
+                    GameLogger.Log($"Total Progress - {progress * 100f}%", LogCategory.Unity);
                 });
         }
     }

@@ -24,14 +24,11 @@ namespace XaviGames.Manager
         [SerializeField]
         private SceneReference _sceneToLoad;
 
-        private string _queueName;
         private string _ticketId;
 
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
-
-            _queueName = _servicesSettings.QueueName;
 
             StartCoroutine(StartServer());
             StartCoroutine(ApproveBackfillTicketEverySecond());
@@ -43,19 +40,31 @@ namespace XaviGames.Manager
             var server = MultiplayService.Instance.ServerConfig;
             var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
             transport.SetConnectionData("0.0.0.0", server.Port);
-            Debug.Log("Network Transport " + transport.ConnectionData.Address + ":" + transport.ConnectionData.Port);
+
+            GameLogger.Log($"Network Transport {transport.ConnectionData.Address} " +
+                $"{transport.ConnectionData.Port}", LogCategory.Server);
 
             if (!NetworkManager.Singleton.StartServer())
             {
-                Debug.Log("Failed to start server");
+                GameLogger.LogError("Failed to start server", LogCategory.Server);
                 throw new Exception("Failed to start server");
             }
 
-            NetworkManager.Singleton.OnClientConnectedCallback += (clientId) => { Debug.Log("Client connected"); };
-            NetworkManager.Singleton.OnServerStopped += (reason) => { Debug.Log("Server stopped"); };
+            NetworkManager.Singleton.OnClientConnectedCallback += (clientId) => 
+            { 
+                GameLogger.Log("Client connected", LogCategory.Server); 
+            };
+            
+            NetworkManager.Singleton.OnServerStopped += (reason) => 
+            { 
+                GameLogger.Log("Server stopped", LogCategory.Server); 
+            };
 
+            //TODO: Modify Load Server Scene
             NetworkManager.Singleton.SceneManager.LoadScene(_sceneToLoad.SceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
-            Debug.Log($"Started Server {transport.ConnectionData.Address}:{transport.ConnectionData.Port}");
+            
+            GameLogger.Log($"Started Server {transport.ConnectionData.Address}:" +
+                $"{transport.ConnectionData.Port}", LogCategory.Server);
 
             var callbacks = new MultiplayEventCallbacks();
             callbacks.Allocate += OnAllocate;
@@ -74,70 +83,86 @@ namespace XaviGames.Manager
 
         private void OnSubscriptionStateChanged(MultiplayServerSubscriptionState state)
         {
-            Debug.Log($"Subscription state changed: {state}");
-
+            GameLogger.LogWarning($"Subscription state changed: {state}", LogCategory.Server);
         }
 
         private void OnError(MultiplayError error)
         {
-            Debug.LogError($"Error received: {error}");
+            GameLogger.LogError($"Error received: {error}", LogCategory.Server);
         }
 
         private async void OnDeallocate(MultiplayDeallocation deallocation)
         {
-            Debug.Log($"Deallocation received: {deallocation}");
+            GameLogger.LogWarning($"Deallocation received: {deallocation}", LogCategory.Server);
             await MultiplayService.Instance.UnreadyServerAsync();
         }
 
         private async void OnAllocate(MultiplayAllocation allocation)
         {
-            Debug.Log($"Allocation received: {allocation}");
+            GameLogger.LogWarning($"Allocation received: {allocation}", LogCategory.Server);
             await MultiplayService.Instance.ReadyServerForPlayersAsync();
         }
+
 
         private async Task CreateBackfillTicket()
         {
             MatchmakingResults results =
                 await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<MatchmakingResults>();
 
-            Debug.Log(
-                $"Environment: {results.EnvironmentId} MatchId: {results.MatchId} MatchProperties: {results.MatchProperties}");
+            GameLogger.Log($"Environment: {results.EnvironmentId} MatchId: {results.MatchId}" +
+                $" MatchProperties: {results.MatchProperties}", LogCategory.Matchmaker);
 
             var backfillTicketProperties = new BackfillTicketProperties(results.MatchProperties);
 
             string connectionString = MultiplayService.Instance.ServerConfig.IpAddress + ":" +
                                       MultiplayService.Instance.ServerConfig.Port;
 
-            var options = new CreateBackfillTicketOptions(_queueName,
+            var options = new CreateBackfillTicketOptions(_servicesSettings.QueueName,
                 connectionString,
                 new Dictionary<string, object>(),
                 backfillTicketProperties);
 
-            Debug.Log("Requesting backfill ticket");
+            GameLogger.Log("Requesting backfill ticket", LogCategory.Matchmaker);
             _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
         }
+
         private IEnumerator ApproveBackfillTicketEverySecond()
         {
-            for (int i = 4; i >= 0; i--)
+            const int delayBeforeStart = 5;
+
+            for (int i = delayBeforeStart - 1; i >= 0; i--)
             {
-                Debug.Log($"Waiting {i} seconds to start backfill");
+                GameLogger.Log($"Waiting {i} seconds to start backfill", LogCategory.Matchmaker);
                 yield return new WaitForSeconds(1f);
             }
 
             while (true)
             {
                 yield return new WaitForSeconds(1f);
-                if (String.IsNullOrWhiteSpace(_ticketId))
+
+                if (string.IsNullOrWhiteSpace(_ticketId))
                 {
-                    Debug.Log("No backfill ticket to approve");
+                    GameLogger.Log("No backfill ticket to approve", LogCategory.Matchmaker);
                     continue;
                 }
 
-                Debug.Log("Doing backfill approval for _ticketId: " + _ticketId);
-                yield return MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);
-                Debug.Log("Approved backfill ticket: " + _ticketId);
+                GameLogger.Log($"Attempting backfill approval for ticket: {_ticketId}", LogCategory.Matchmaker);
+
+                var approvalOperation = MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);
+                yield return approvalOperation;
+
+                if (approvalOperation.IsFaulted)
+                {
+                    GameLogger.LogError($"Failed to approve backfill ticket: {_ticketId}", LogCategory.Matchmaker);
+                }
+                else
+                {
+                    GameLogger.Log($"Approved backfill ticket: {_ticketId}", LogCategory.Matchmaker);
+                }
             }
         }
+
+
     }
 }
 #endif

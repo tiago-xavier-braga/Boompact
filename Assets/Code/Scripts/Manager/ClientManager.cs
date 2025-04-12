@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using TMPro;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
@@ -8,6 +7,7 @@ using Unity.Services.Core;
 using Unity.Services.Matchmaker;
 using Unity.Services.Matchmaker.Models;
 using UnityEngine;
+using XaviEssencials.Runtime;
 using XaviGames.Services;
 
 namespace XaviGames.Manager
@@ -72,12 +72,14 @@ namespace XaviGames.Manager
             while (true)
             {
                 await Awaitable.WaitForSecondsAsync(1f);
-                Debug.Log("Polling");
+
+                GameLogger.Log("Polling", LogCategory.Client);
+                
                 var ticketStatusResponse = await MatchmakerService.Instance.GetTicketAsync(ticketResponse.Id);
                 if (ticketStatusResponse?.Value is MultiplayAssignment assignment)
                 {
-                    Debug.Log("Response " + assignment.Status);
-                    FindFirstObjectByType<TMP_Text>()?.SetText("Response " + assignment.Status);
+                    GameLogger.Log($"Response {assignment.Status}", LogCategory.Client);
+                    
                     switch (assignment.Status)
                     {
                         case MultiplayAssignment.StatusOptions.Found:
@@ -87,45 +89,23 @@ namespace XaviGames.Manager
                                     transport.SetConnectionData(assignment.Ip, (ushort)assignment.Port);
                                     bool result = NetworkManager.Singleton.StartClient();
 
-                                    Debug.Log("StartClient " + result);
-                                    FindFirstObjectByType<TMP_Text>().SetText("StartClient " + result);
-                                    //NetworkManager.Singleton.OnConnectionEvent += LogConnectionEvent;
 
+                                    GameLogger.Log($"Start Cliente {result}", LogCategory.Client);
                                     return result;
                                 }
 
-                                Debug.LogError("No port found");
+                                GameLogger.LogError("No port found", LogCategory.Client);
                                 return false;
                             }
                         case MultiplayAssignment.StatusOptions.Timeout:
                         case MultiplayAssignment.StatusOptions.Failed:
                             {
-                                Debug.LogError(assignment.ToString());
+                                GameLogger.LogError(assignment.ToString(), LogCategory.Client);
                                 return false;
                             }
                     }
                 }
             }
         }
-
-        ////TODO: Remove the Log
-        //private void LogConnectionEvent(NetworkManager manager, ConnectionEventData data)
-        //{
-        //    switch (data.EventType)
-        //    {
-        //        case ConnectionEvent.ClientConnected:
-        //            FindFirstObjectByType<TMP_Text>().SetText("Client connected " + data.ClientId +
-        //                                                      " Count:" +
-        //                                                      NetworkManager.Singleton.ConnectedClientsIds.Count + " Port:" +
-        //                                                      (manager.NetworkConfig.NetworkTransport as UnityTransport)?.ConnectionData.Port);
-        //            break;
-        //        case ConnectionEvent.ClientDisconnected:
-        //            FindFirstObjectByType<TMP_Text>()
-        //                .SetText("Client disconnected " + data.ClientId + " Count:" +
-        //                         NetworkManager.Singleton.ConnectedClientsIds.Count + " Port:" +
-        //                         (manager.NetworkConfig.NetworkTransport as UnityTransport)?.ConnectionData.Port);
-        //            break;
-        //    }
-        //}
     }
 }
