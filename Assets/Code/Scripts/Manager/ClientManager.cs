@@ -17,25 +17,38 @@ namespace XaviGames.Manager
         [SerializeField]
         private ServicesSettings _servicesSettings;
 
-        private string _queueName;
-        private static bool initialized;
+        private bool _initialized;
+        public static ClientManager Instance { get; private set; } = null;
+
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
 
         private async void Start()
         {
-            _queueName = _servicesSettings.QueueName;
+            await StartServices();
+        }
 
-            if (!initialized)
+        private async Task StartServices()
+        {
+            if (!_initialized)
             {
                 await UnityServices.InitializeAsync();
                 AuthenticationService.Instance.SwitchProfile(UnityEngine.Random.Range(0, 1000000).ToString());
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                initialized = true;
+                _initialized = true;
             }
-
-            await StartSearch();
         }
 
-        private async Task StartSearch()
+        public async Task StartSearch()
         {
             var players = new List<Player>
             {
@@ -43,10 +56,12 @@ namespace XaviGames.Manager
             };
 
             var attributes = new Dictionary<string, object>();
-            var options = new CreateTicketOptions(_queueName, attributes);
+            var options = new CreateTicketOptions(_servicesSettings.QueueName, attributes);
 
-            while (!await FindMatch(players, options)) // if we dont find a match, wait a second and try again
+            while (!await FindMatch(players, options))
+            {
                 await Awaitable.WaitForSecondsAsync(1f);
+            }
         }
 
         private async Task<bool> FindMatch(List<Player> players, CreateTicketOptions options)
@@ -72,12 +87,11 @@ namespace XaviGames.Manager
                                     transport.SetConnectionData(assignment.Ip, (ushort)assignment.Port);
                                     bool result = NetworkManager.Singleton.StartClient();
 
-                                    // Logging and showing on UI
                                     Debug.Log("StartClient " + result);
                                     FindFirstObjectByType<TMP_Text>().SetText("StartClient " + result);
-                                    NetworkManager.Singleton.OnConnectionEvent += LogConnectionEvent;
+                                    //NetworkManager.Singleton.OnConnectionEvent += LogConnectionEvent;
 
-                                    return result; // if we fail to connect try again w/ a false result
+                                    return result;
                                 }
 
                                 Debug.LogError("No port found");
@@ -94,24 +108,24 @@ namespace XaviGames.Manager
             }
         }
 
-        //TODO: Remove the Log
-        private void LogConnectionEvent(NetworkManager manager, ConnectionEventData data)
-        {
-            switch (data.EventType)
-            {
-                case ConnectionEvent.ClientConnected:
-                    FindFirstObjectByType<TMP_Text>().SetText("Client connected " + data.ClientId +
-                                                              " Count:" +
-                                                              NetworkManager.Singleton.ConnectedClientsIds.Count + " Port:" +
-                                                              (manager.NetworkConfig.NetworkTransport as UnityTransport)?.ConnectionData.Port);
-                    break;
-                case ConnectionEvent.ClientDisconnected:
-                    FindFirstObjectByType<TMP_Text>()
-                        .SetText("Client disconnected " + data.ClientId + " Count:" +
-                                 NetworkManager.Singleton.ConnectedClientsIds.Count + " Port:" +
-                                 (manager.NetworkConfig.NetworkTransport as UnityTransport)?.ConnectionData.Port);
-                    break;
-            }
-        }
+        ////TODO: Remove the Log
+        //private void LogConnectionEvent(NetworkManager manager, ConnectionEventData data)
+        //{
+        //    switch (data.EventType)
+        //    {
+        //        case ConnectionEvent.ClientConnected:
+        //            FindFirstObjectByType<TMP_Text>().SetText("Client connected " + data.ClientId +
+        //                                                      " Count:" +
+        //                                                      NetworkManager.Singleton.ConnectedClientsIds.Count + " Port:" +
+        //                                                      (manager.NetworkConfig.NetworkTransport as UnityTransport)?.ConnectionData.Port);
+        //            break;
+        //        case ConnectionEvent.ClientDisconnected:
+        //            FindFirstObjectByType<TMP_Text>()
+        //                .SetText("Client disconnected " + data.ClientId + " Count:" +
+        //                         NetworkManager.Singleton.ConnectedClientsIds.Count + " Port:" +
+        //                         (manager.NetworkConfig.NetworkTransport as UnityTransport)?.ConnectionData.Port);
+        //            break;
+        //    }
+        //}
     }
 }
