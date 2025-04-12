@@ -214,9 +214,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clientSceneBundle: {fileID: 11400000, guid: 0a7e53f0a01866e4ea2adb2b74202e7e, type: 2}
-  _serverScene:
-    _sceneAsset: {fileID: 102900000, guid: 24d9182bbc0020e47a5f35bd9e07debc, type: 3}
-    <SceneName>k__BackingField: ServerScene
+  _serverSceneBundle: {fileID: 11400000, guid: 0a7e53f0a01866e4ea2adb2b74202e7e, type: 2}
   _isClientBuild: 1
 --- !u!4 &1234131880
 Transform:
