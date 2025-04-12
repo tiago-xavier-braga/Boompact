@@ -213,9 +213,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 133c306ab99013a44b4f6e00fa903691, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _clientScene:
-    _sceneAsset: {fileID: 102900000, guid: d1602400a3fc6cf40ae473f54ac84c83, type: 3}
-    <SceneName>k__BackingField: ClientScene
+  _clientSceneBundle: {fileID: 11400000, guid: 0a7e53f0a01866e4ea2adb2b74202e7e, type: 2}
   _serverScene:
     _sceneAsset: {fileID: 102900000, guid: 24d9182bbc0020e47a5f35bd9e07debc, type: 3}
     <SceneName>k__BackingField: ServerScene
