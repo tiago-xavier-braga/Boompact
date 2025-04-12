@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
@@ -6,24 +7,41 @@ namespace XaviGames.Manager
 {
     public class StartupManager : MonoBehaviour
     {
-        public SceneReference _clientScene;
+        [field: SerializeField]
+        private SceneBundle _clientSceneBundle;
 
-        public SceneReference _serverScene;
+
+        [field: SerializeField]
+        private SceneBundle _serverSceneBundle;
 
         [Header("Build Settings")]
         [SerializeField]
         private bool _isClientBuild;
 
-        private void Start()
+        private async void Start()
         {
             if (_isClientBuild)
             {
-                SceneManager.LoadScene(_clientScene.SceneName);
+                await LoadScenesFromBundleAsync(_clientSceneBundle);
             }
             else
             {
-                SceneManager.LoadScene(_serverScene.SceneName);
+                await LoadScenesFromBundleAsync(_serverSceneBundle);
+
             }
+        }
+
+        private async Task LoadScenesFromBundleAsync(SceneBundle sceneBundle)
+        {
+            await sceneBundle.LoadScenesAsync(
+                onSceneProgress: (sceneName, progress) =>
+                {
+                    Debug.Log($"[Scene Progress] {sceneName}: {progress * 100f}%");
+                },
+                onTotalProgress: (progress) =>
+                {
+                    Debug.Log($"[Total Progress] {progress * 100f}%");
+                });
         }
     }
 }
