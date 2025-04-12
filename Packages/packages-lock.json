@@ -431,10 +431,11 @@
       "url": "https://packages.unity.com"
     },
     "com.xavigames.xaviessencials": {
-      "version": "file:com.xavigames.xaviessencials",
+      "version": "https://github.com/tiago-xavier-braga/XaviEssencials.git",
       "depth": 0,
-      "source": "embedded",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "d26ad8e4371d804d245709fc9e3f53472a136ef1"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
