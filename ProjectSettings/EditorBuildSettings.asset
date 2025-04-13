@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Level/Scenes/Environment/Environment.unity
     guid: 4eaad980f54bfcf4b8d8acfa3d4a7d97
+  - enabled: 1
+    path: Assets/Level/Scenes/Dev/Car.unity
+    guid: 472630ef00a42b74f9c0aa2b9d59dba5
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
