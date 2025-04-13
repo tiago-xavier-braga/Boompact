@@ -215,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _clientSceneBundle: {fileID: 11400000, guid: 0a7e53f0a01866e4ea2adb2b74202e7e, type: 2}
   _serverSceneBundle: {fileID: 11400000, guid: a8640e10d740b62499202bdf1b1b57ed, type: 2}
-  _isClientBuild: 1
+  _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
 --- !u!4 &1234131880
 Transform:
   m_ObjectHideFlags: 0
