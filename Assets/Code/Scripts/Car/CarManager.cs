@@ -1,10 +1,11 @@
 using System.Collections.Generic;
-using Unity.Netcode;
 using UnityEngine;
+using XaviEssencials.Runtime;
+using XaviEssencials.Shared;
 
 namespace XaviGames.Car
 {
-    public class CarManager : NetworkBehaviour
+    public class CarManager : MonoBehaviour
     {
         [field: Header("Car Parameters")]
         [field: SerializeField]
@@ -25,16 +26,20 @@ namespace XaviGames.Car
         [field: SerializeField]
         public float CentreOfGravityOffset { get; private set; }
 
-
         [field: Header("Scripts References")]
+        [field: SerializeField]
+        public BoolEventChannel CarMovementPermission { get; private set; }
+
         [field: SerializeField]
         public CarMovementController CarController { get; private set; }
 
         [field: SerializeField]
         public List<WheelController> WheelControllers { get; private set; }
 
-        [field: Header("Network References")]
-        [field: SerializeField]
-        public CarNetworkSync CarNetworkSync { get; private set; }
+        [Button("Switch Car Movement Permission", true)]
+        public void SwitchCarMovementPermission()
+        {
+            CarMovementPermission.RaiseEvent(!CarMovementPermission.Value);
+        }
     }
 }

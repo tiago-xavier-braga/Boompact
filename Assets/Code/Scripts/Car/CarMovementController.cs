@@ -27,6 +27,8 @@ namespace XaviGames.Car
         [ReadOnly]
         private float _kmPerHour = 0f;
 
+        private bool _canMove;
+
         public override void OnNetworkSpawn()
         {
             Vector3 centerOfMass = _rigidBody.centerOfMass;
@@ -39,6 +41,12 @@ namespace XaviGames.Car
 
         private void FixedUpdate()
         {
+            _canMove = _carManager.CarMovementPermission.Value;
+            if (!_canMove)
+            {
+                return;
+            }
+
             _kmPerHour = _rigidBody.linearVelocity.magnitude * 3.6f;
 
             float forwardSpeed = Vector3.Dot(transform.forward, _rigidBody.linearVelocity);
@@ -51,32 +59,19 @@ namespace XaviGames.Car
             bool isAccelerating = Mathf.Sign(_inputVector.y) == Mathf.Sign(forwardSpeed);
 
             ApplyWheelForces(currentMotorTorque, currentSteerRange, isAccelerating);
-
-            if (IsOwner)
-            {
-                _carManager.CarNetworkSync.SendWheelForcesToServerRpc(
-                    currentMotorTorque, currentSteerRange, isAccelerating);
-            }
         }
 
         public void OnMoveInput(InputAction.CallbackContext context)
         {
-            if (!IsOwner)
+            if (!IsOwner || !_canMove)
             {
                 return;
             }
 
             _inputVector = context.ReadValue<Vector2>();
-            SendInputToServerRpc(_inputVector);
         }
 
-        [ServerRpc]
-        private void SendInputToServerRpc(Vector2 input)
-        {
-            _inputVector = input;
-        }
-
-        public void ApplyWheelForces(float currentMotorTorque, float currentSteerRange, bool isAccelerating)
+        private void ApplyWheelForces(float currentMotorTorque, float currentSteerRange, bool isAccelerating)
         {
             foreach (var wheel in _carManager.WheelControllers)
             {
