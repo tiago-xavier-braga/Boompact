@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -50,6 +51,13 @@ namespace XaviGames.Manager
 
         public async Task StartSearch()
         {
+            var serviceType = _servicesSettings.ClientServiceType;
+            if (serviceType == ServiceType.Local)
+            {
+                ConnectToMockServer();
+                return;
+            }
+
             var players = new List<Player>
             {
                 new(AuthenticationService.Instance.PlayerId, new Dictionary<string, object>())
@@ -90,7 +98,7 @@ namespace XaviGames.Manager
                                     bool result = NetworkManager.Singleton.StartClient();
 
 
-                                    GameLogger.Log($"Start Cliente {result}", LogCategory.Client);
+                                    GameLogger.Log($"Start Client {result}", LogCategory.Client);
                                     return result;
                                 }
 
@@ -107,5 +115,15 @@ namespace XaviGames.Manager
                 }
             }
         }
+
+        private void ConnectToMockServer()
+        {
+            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+            transport.SetConnectionData(_servicesSettings.TestServerIP, _servicesSettings.TestServerPort);
+            var success = NetworkManager.Singleton.StartClient();
+
+            GameLogger.Log($"Client started local connection: {success}", LogCategory.Test);
+        }
+
     }
 }

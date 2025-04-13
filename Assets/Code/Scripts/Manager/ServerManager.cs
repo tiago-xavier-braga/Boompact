@@ -12,6 +12,7 @@ using UnityEngine;
 using XaviEssencials.Runtime;
 using Unity.Services.Multiplay;
 using XaviGames.Services;
+using System.IO;
 
 
 namespace XaviGames.Manager
@@ -50,19 +51,19 @@ namespace XaviGames.Manager
                 throw new Exception("Failed to start server");
             }
 
-            NetworkManager.Singleton.OnClientConnectedCallback += (clientId) => 
-            { 
-                GameLogger.Log("Client connected", LogCategory.Server); 
+            NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
+            {
+                GameLogger.Log("Client connected", LogCategory.Server);
             };
-            
-            NetworkManager.Singleton.OnServerStopped += (reason) => 
-            { 
-                GameLogger.Log("Server stopped", LogCategory.Server); 
+
+            NetworkManager.Singleton.OnServerStopped += (reason) =>
+            {
+                GameLogger.Log("Server stopped", LogCategory.Server);
             };
 
             //TODO: Modify Load Server Scene
             NetworkManager.Singleton.SceneManager.LoadScene(_sceneToLoad.SceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
-            
+
             GameLogger.Log($"Started Server {transport.ConnectionData.Address}:" +
                 $"{transport.ConnectionData.Port}", LogCategory.Server);
 
@@ -103,11 +104,19 @@ namespace XaviGames.Manager
             await MultiplayService.Instance.ReadyServerForPlayersAsync();
         }
 
-
         private async Task CreateBackfillTicket()
         {
-            MatchmakingResults results =
-                await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<MatchmakingResults>();
+            var serviceType = _servicesSettings.BuildServiceType;
+            MatchmakingResults results = new();
+            if (serviceType == ServiceType.Local)
+            {
+                string json = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "MockMultiplayPayload.json"));
+                results = JsonUtility.FromJson<MatchmakingResults>(json);
+            }
+            else
+            {
+                results = await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<MatchmakingResults>();
+            }
 
             GameLogger.Log($"Environment: {results.EnvironmentId} MatchId: {results.MatchId}" +
                 $" MatchProperties: {results.MatchProperties}", LogCategory.Matchmaker);

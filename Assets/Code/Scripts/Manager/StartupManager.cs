@@ -1,34 +1,42 @@
 using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
+using XaviGames.Services;
 
 namespace XaviGames.Manager
 {
     public class StartupManager : MonoBehaviour
     {
-        [field: SerializeField]
+        [SerializeField]
         private SceneBundle _clientSceneBundle;
 
 
-        [field: SerializeField]
+        [SerializeField]
         private SceneBundle _serverSceneBundle;
 
         [Header("Build Settings")]
         [SerializeField]
-        private bool _isClientBuild;
+        private ServicesSettings _servicesSettings;
 
         private async void Start()
         {
-            if (_isClientBuild)
+#if UNITY_SERVER
+            await LoadScenesFromBundleAsync(_serverSceneBundle);
+#else
+            await LoadScenesFromBundleAsync(_clientSceneBundle);
+#endif
+
+#if UNITY_EDITOR
+            var buildType = _servicesSettings.BuildType;
+            if (buildType == BuildType.Client)
             {
                 await LoadScenesFromBundleAsync(_clientSceneBundle);
             }
             else
             {
                 await LoadScenesFromBundleAsync(_serverSceneBundle);
-
             }
+#endif
         }
 
         private async Task LoadScenesFromBundleAsync(SceneBundle sceneBundle)
