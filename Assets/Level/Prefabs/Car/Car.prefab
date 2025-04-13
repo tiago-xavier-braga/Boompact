@@ -901,7 +901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   <TopSpeed>k__BackingField: 100
-  <Acceleration>k__BackingField: 800
+  <Acceleration>k__BackingField: 1200
   <BreakForce>k__BackingField: 2000
   <SteeringRange>k__BackingField: 30
   <SteeringRangeAtMaxSpeed>k__BackingField: 10
