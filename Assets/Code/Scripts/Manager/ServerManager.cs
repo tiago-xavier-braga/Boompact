@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -12,8 +13,6 @@ using UnityEngine;
 using XaviEssencials.Runtime;
 using Unity.Services.Multiplay;
 using XaviGames.Services;
-using System.IO;
-
 
 namespace XaviGames.Manager
 {
@@ -38,12 +37,21 @@ namespace XaviGames.Manager
         private async Awaitable StartServer()
         {
             await UnityServices.InitializeAsync();
-            var server = MultiplayService.Instance.ServerConfig;
-            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetConnectionData("0.0.0.0", server.Port);
 
-            GameLogger.Log($"Network Transport {transport.ConnectionData.Address} " +
-                $"{transport.ConnectionData.Port}", LogCategory.Server);
+            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
+
+            if (_servicesSettings.BuildServiceType == ServiceType.Local)
+            {
+                transport.SetConnectionData("0.0.0.0", _servicesSettings.TestServerPort);
+                GameLogger.LogWarning($"Starting the server in LOCAL mode on the port:" +
+                    $" {_servicesSettings.TestServerPort}", LogCategory.Server);
+            }
+            else
+            {
+                var server = MultiplayService.Instance.ServerConfig;
+                transport.SetConnectionData("0.0.0.0", server.Port);
+                GameLogger.Log($"Starting Unity Hosting server on port: {server.Port}", LogCategory.Server);
+            }
 
             if (!NetworkManager.Singleton.StartServer())
             {
@@ -61,24 +69,26 @@ namespace XaviGames.Manager
                 GameLogger.Log("Server stopped", LogCategory.Server);
             };
 
-            //TODO: Modify Load Server Scene
             NetworkManager.Singleton.SceneManager.LoadScene(_sceneToLoad.SceneName, UnityEngine.SceneManagement.LoadSceneMode.Single);
 
-            GameLogger.Log($"Started Server {transport.ConnectionData.Address}:" +
-                $"{transport.ConnectionData.Port}", LogCategory.Server);
+            GameLogger.Log($"Server started at {transport.ConnectionData.Address}:{transport.ConnectionData.Port}", LogCategory.Server);
 
-            var callbacks = new MultiplayEventCallbacks();
-            callbacks.Allocate += OnAllocate;
-            callbacks.Deallocate += OnDeallocate;
-            callbacks.Error += OnError;
-            callbacks.SubscriptionStateChanged += OnSubscriptionStateChanged;
-
-            while (MultiplayService.Instance == null)
+            if (_servicesSettings.BuildServiceType != ServiceType.Local)
             {
-                await Awaitable.NextFrameAsync();
+                var callbacks = new MultiplayEventCallbacks();
+                callbacks.Allocate += OnAllocate;
+                callbacks.Deallocate += OnDeallocate;
+                callbacks.Error += OnError;
+                callbacks.SubscriptionStateChanged += OnSubscriptionStateChanged;
+
+                while (MultiplayService.Instance == null)
+                {
+                    await Awaitable.NextFrameAsync();
+                }
+
+                await MultiplayService.Instance.SubscribeToServerEventsAsync(callbacks);
             }
 
-            var events = await MultiplayService.Instance.SubscribeToServerEventsAsync(callbacks);
             await CreateBackfillTicket();
         }
 
@@ -95,19 +105,28 @@ namespace XaviGames.Manager
         private async void OnDeallocate(MultiplayDeallocation deallocation)
         {
             GameLogger.LogWarning($"Deallocation received: {deallocation}", LogCategory.Server);
-            await MultiplayService.Instance.UnreadyServerAsync();
+
+            if (_servicesSettings.BuildServiceType != ServiceType.Local)
+            {
+                await MultiplayService.Instance.UnreadyServerAsync();
+            }
         }
 
         private async void OnAllocate(MultiplayAllocation allocation)
         {
             GameLogger.LogWarning($"Allocation received: {allocation}", LogCategory.Server);
-            await MultiplayService.Instance.ReadyServerForPlayersAsync();
+
+            if (_servicesSettings.BuildServiceType != ServiceType.Local)
+            {
+                await MultiplayService.Instance.ReadyServerForPlayersAsync();
+            }
         }
 
         private async Task CreateBackfillTicket()
         {
             var serviceType = _servicesSettings.BuildServiceType;
             MatchmakingResults results = new();
+
             if (serviceType == ServiceType.Local)
             {
                 string json = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "MockMultiplayPayload.json"));
@@ -123,13 +142,16 @@ namespace XaviGames.Manager
 
             var backfillTicketProperties = new BackfillTicketProperties(results.MatchProperties);
 
-            string connectionString = MultiplayService.Instance.ServerConfig.IpAddress + ":" +
-                                      MultiplayService.Instance.ServerConfig.Port;
+            string connectionString = serviceType == ServiceType.Local
+                ? $"{_servicesSettings.TestServerIP}:{_servicesSettings.TestServerPort}"
+                : MultiplayService.Instance.ServerConfig.IpAddress + ":" + MultiplayService.Instance.ServerConfig.Port;
 
-            var options = new CreateBackfillTicketOptions(_servicesSettings.QueueName,
+            var options = new CreateBackfillTicketOptions(
+                _servicesSettings.QueueName,
                 connectionString,
                 new Dictionary<string, object>(),
-                backfillTicketProperties);
+                backfillTicketProperties
+            );
 
             GameLogger.Log("Requesting backfill ticket", LogCategory.Matchmaker);
             _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
@@ -170,8 +192,6 @@ namespace XaviGames.Manager
                 }
             }
         }
-
-
     }
 }
 #endif

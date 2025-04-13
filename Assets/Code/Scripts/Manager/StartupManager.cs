@@ -20,9 +20,9 @@ namespace XaviGames.Manager
 
         private async void Start()
         {
-#if UNITY_SERVER
+#if UNITY_SERVER && !UNITY_EDITOR
             await LoadScenesFromBundleAsync(_serverSceneBundle);
-#else
+#elif !UNITY_SERVER && !UNITY_EDITOR
             await LoadScenesFromBundleAsync(_clientSceneBundle);
 #endif
 
