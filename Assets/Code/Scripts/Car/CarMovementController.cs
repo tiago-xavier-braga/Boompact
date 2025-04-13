@@ -23,6 +23,10 @@ namespace XaviGames.Car
         [ReadOnly]
         private Vector2 _inputVector;
 
+        [SerializeField]
+        [ReadOnly]
+        private float _kmPerHour = 0f;
+
         public override void OnNetworkSpawn()
         {
             Vector3 centerOfMass = _rigidBody.centerOfMass;
@@ -35,6 +39,8 @@ namespace XaviGames.Car
 
         private void FixedUpdate()
         {
+            _kmPerHour = _rigidBody.linearVelocity.magnitude * 3.6f;
+
             float forwardSpeed = Vector3.Dot(transform.forward, _rigidBody.linearVelocity);
             float speedFactor = Mathf.InverseLerp(0, _carManager.TopSpeed, Mathf.Abs(forwardSpeed));
 
