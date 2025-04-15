@@ -884,13 +884,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ca83649b4afd784ab269908f5f4dcbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ShowTopMostFoldoutHeaderGroup: 1
-  <TopSpeed>k__BackingField: 100
-  <Acceleration>k__BackingField: 1200
-  <BreakForce>k__BackingField: 2000
-  <SteeringRange>k__BackingField: 30
-  <SteeringRangeAtMaxSpeed>k__BackingField: 10
-  <CentreOfGravityOffset>k__BackingField: -1
+  <CarParameter>k__BackingField: {fileID: 11400000, guid: 672968e43d53c0842ad146d1ae44e3c7, type: 2}
   <CarMovementPermission>k__BackingField: {fileID: 11400000, guid: db734d5c48bd62b4ea04cbe780d70c45, type: 2}
   <CarController>k__BackingField: {fileID: 3195238330943901347}
   <WheelControllers>k__BackingField:
