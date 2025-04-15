@@ -27,16 +27,19 @@ namespace XaviGames.Car
         [ReadOnly]
         private float _kmPerHour = 0f;
 
+        private CarParameter _carParameter;
         private bool _canMove;
 
         public override void OnNetworkSpawn()
         {
+            _carParameter = _carManager.CarParameter;
+
             Vector3 centerOfMass = _rigidBody.centerOfMass;
-            centerOfMass.y += _carManager.CentreOfGravityOffset;
+            centerOfMass.y += _carParameter.CentreOfGravityOffset;
             _rigidBody.centerOfMass = centerOfMass;
 
-            base.OnNetworkSpawn();
             _playerInput.enabled = IsOwner;
+            base.OnNetworkSpawn();
         }
 
         private void FixedUpdate()
@@ -50,11 +53,11 @@ namespace XaviGames.Car
             _kmPerHour = _rigidBody.linearVelocity.magnitude * 3.6f;
 
             float forwardSpeed = Vector3.Dot(transform.forward, _rigidBody.linearVelocity);
-            float speedFactor = Mathf.InverseLerp(0, _carManager.TopSpeed, Mathf.Abs(forwardSpeed));
+            float speedFactor = Mathf.InverseLerp(0, _carParameter.TopSpeed, Mathf.Abs(forwardSpeed));
 
-            float currentMotorTorque = Mathf.Lerp(_carManager.Acceleration, 0, speedFactor);
+            float currentMotorTorque = Mathf.Lerp(_carParameter.Acceleration, 0, speedFactor);
             float currentSteerRange = Mathf.Lerp(
-                _carManager.SteeringRange, _carManager.SteeringRangeAtMaxSpeed, speedFactor);
+                _carParameter.SteeringRange, _carParameter.SteeringRangeAtMaxSpeed, speedFactor);
 
             bool isAccelerating = Mathf.Sign(_inputVector.y) == Mathf.Sign(forwardSpeed);
 
@@ -92,7 +95,7 @@ namespace XaviGames.Car
                 else
                 {
                     wheel.WheelCollider.motorTorque = 0f;
-                    wheel.WheelCollider.brakeTorque = Mathf.Abs(_inputVector.y) * _carManager.BreakForce;
+                    wheel.WheelCollider.brakeTorque = Mathf.Abs(_inputVector.y) * _carParameter.BreakForce;
                 }
 
                 wheel.UpdateWheelPosition();
