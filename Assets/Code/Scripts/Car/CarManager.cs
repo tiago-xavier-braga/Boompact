@@ -12,18 +12,9 @@ namespace XaviGames.Car
         public CarParameter CarParameter { get; private set; }
 
         [field: SerializeField]
-        public BoolEventChannel CarMovementPermission { get; private set; }
-
-        [field: SerializeField]
         public CarMovementController CarController { get; private set; }
 
         [field: SerializeField]
         public List<WheelController> WheelControllers { get; private set; }
-
-        [Button("Switch Car Movement Permission", true )]
-        public void SwitchCarMovementPermission()
-        {
-            CarMovementPermission.RaiseEvent(!CarMovementPermission.Value);
-        }
     }
 }

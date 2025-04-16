@@ -17,7 +17,7 @@ namespace XaviGames.Services
         Server = 1
     }
 
-    [CreateAssetMenu(fileName = "ServicesSettings", menuName = "Xavi Games/ServicesSettings")]
+    [CreateAssetMenu(fileName = "ServicesSettings", menuName = "Xavi Games/Services/ServicesSettings")]
     public class ServicesSettings : ScriptableObject
     {
         [field: Header("Build Settings")]
