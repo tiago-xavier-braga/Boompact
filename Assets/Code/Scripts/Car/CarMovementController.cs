@@ -28,7 +28,6 @@ namespace XaviGames.Car
         private float _kmPerHour = 0f;
 
         private CarParameter _carParameter;
-        private bool _canMove;
 
         public override void OnNetworkSpawn()
         {
@@ -44,12 +43,6 @@ namespace XaviGames.Car
 
         private void FixedUpdate()
         {
-            _canMove = _carManager.CarMovementPermission.Value;
-            if (!_canMove)
-            {
-                return;
-            }
-
             _kmPerHour = _rigidBody.linearVelocity.magnitude * 3.6f;
 
             float forwardSpeed = Vector3.Dot(transform.forward, _rigidBody.linearVelocity);
@@ -66,7 +59,7 @@ namespace XaviGames.Car
 
         public void OnMoveInput(InputAction.CallbackContext context)
         {
-            if (!IsOwner || !_canMove)
+            if (!IsOwner)
             {
                 return;
             }

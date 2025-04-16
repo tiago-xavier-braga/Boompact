@@ -11,9 +11,7 @@ namespace XaviGames.PlayerSystem
         [SerializeField]
         private CarDatabase _carDatabase;
 
-        [Header("Info")]
         [SerializeField]
-        [ReadOnly]
         private UserSession _userSession;
 
         [SerializeField]
@@ -22,7 +20,6 @@ namespace XaviGames.PlayerSystem
 
         public override void OnNetworkSpawn()
         {
-            _userSession = UserSession.Instance;
             CarParameter carParameter = _userSession.CarParameter;
 
             if (IsOwner)
