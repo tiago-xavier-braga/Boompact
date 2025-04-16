@@ -27,14 +27,14 @@ namespace XaviGames.PlayerSystem
 
             if (IsOwner)
             {
-                SpawnCarServerRpc(carParameter.Id);
+                SpawnCarServerRpc(carParameter.Id, OwnerClientId);
             }
 
             base.OnNetworkSpawn();
         }
 
         [ServerRpc(RequireOwnership = true)]
-        public void SpawnCarServerRpc(string id)
+        public void SpawnCarServerRpc(string id, ulong clientId)
         {
             CarParameter parameter = _carDatabase.GetCarParameter(id);
 
@@ -45,8 +45,7 @@ namespace XaviGames.PlayerSystem
             }
 
             _spawnedCar = Instantiate(parameter.CarGameObject, transform.position, Quaternion.identity);
-            _spawnedCar.GetComponent<NetworkObject>().Spawn();
+            _spawnedCar.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
         }
-
     }
 }
