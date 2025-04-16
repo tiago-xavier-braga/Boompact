@@ -1,0 +1,5 @@
+C:/Users/braga/www/github/Boompact/.utmp/RelWithDebInfo/2r3k1t45/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/braga/www/github/Boompact/.utmp/RelWithDebInfo/2r3k1t45/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/braga/www/github/Boompact/.utmp/RelWithDebInfo/2r3k1t45/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/braga/www/github/Boompact/.utmp/RelWithDebInfo/2r3k1t45/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/braga/www/github/Boompact/.utmp/RelWithDebInfo/2r3k1t45/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

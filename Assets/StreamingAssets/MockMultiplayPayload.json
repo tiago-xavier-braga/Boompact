@@ -1,0 +1,9 @@
+{
+    "EnvironmentId": "local-env",
+    "MatchId": "local-match",
+    "MatchProperties": {
+      "map": "TestScene",
+      "mode": "Deathmatch"
+    }
+  }
+  
