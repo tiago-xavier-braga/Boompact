@@ -184,51 +184,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e69677c2cee589c4190e7d58aa104134, type: 3}
---- !u!1 &1138244235
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1138244237}
-  - component: {fileID: 1138244236}
-  m_Layer: 0
-  m_Name: User Session
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1138244236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1138244235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5feeba3079f0a45429fc3ca182e1fbbc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  <CarParameter>k__BackingField: {fileID: 11400000, guid: 672968e43d53c0842ad146d1ae44e3c7, type: 2}
---- !u!4 &1138244237
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1138244235}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1280992426
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,7 +250,6 @@ MonoBehaviour:
     PlayerPrefab: {fileID: 7029028337833791677, guid: 03bcc98d14138bb49a2109849112ee97, type: 3}
     Prefabs:
       NetworkPrefabsLists:
-      - {fileID: 11400000, guid: 1d69290182470ed4a809c6381126ab92, type: 2}
       - {fileID: 11400000, guid: 053dcceccfb1af84cbeae782e1471252, type: 2}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
@@ -386,5 +340,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 1280992429}
   - {fileID: 1982013110}
-  - {fileID: 1138244237}
   - {fileID: 976020445}
