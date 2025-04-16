@@ -26,15 +26,15 @@ namespace XaviGames.Manager
 
         private string _ticketId;
 
-        private void Start()
+        private async void Start()
         {
             DontDestroyOnLoad(gameObject);
 
-            StartCoroutine(StartServer());
-            StartCoroutine(ApproveBackfillTicketEverySecond());
+            await StartServer();
+            await ApproveBackfillTicketEverySecond();
         }
 
-        private async Awaitable StartServer()
+        private async Task StartServer()
         {
             await UnityServices.InitializeAsync();
 
@@ -157,19 +157,19 @@ namespace XaviGames.Manager
             _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
         }
 
-        private IEnumerator ApproveBackfillTicketEverySecond()
+        private async Task ApproveBackfillTicketEverySecond()
         {
             const int delayBeforeStart = 5;
 
             for (int i = delayBeforeStart - 1; i >= 0; i--)
             {
                 GameLogger.Log($"Waiting {i} seconds to start backfill", LogCategory.Matchmaker);
-                yield return new WaitForSeconds(1f);
+                await Task.Delay(1000);
             }
 
             while (true)
             {
-                yield return new WaitForSeconds(1f);
+                await Task.Delay(1000);
 
                 if (string.IsNullOrWhiteSpace(_ticketId))
                 {
@@ -179,16 +179,15 @@ namespace XaviGames.Manager
 
                 GameLogger.Log($"Attempting backfill approval for ticket: {_ticketId}", LogCategory.Matchmaker);
 
-                var approvalOperation = MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);
-                yield return approvalOperation;
-
-                if (approvalOperation.IsFaulted)
+                try
                 {
-                    GameLogger.LogError($"Failed to approve backfill ticket: {_ticketId}", LogCategory.Matchmaker);
-                }
-                else
-                {
+                    var approvalOperation = await MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);
                     GameLogger.Log($"Approved backfill ticket: {_ticketId}", LogCategory.Matchmaker);
+                }
+                catch (Exception ex)
+                {
+                    GameLogger.LogError($"Failed to approve backfill ticket: {_ticketId}." +
+                        $"Error: {ex.Message}", LogCategory.Matchmaker);
                 }
             }
         }
