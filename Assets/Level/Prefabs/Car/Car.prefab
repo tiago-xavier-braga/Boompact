@@ -885,7 +885,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <CarParameter>k__BackingField: {fileID: 11400000, guid: 672968e43d53c0842ad146d1ae44e3c7, type: 2}
-  <CarMovementPermission>k__BackingField: {fileID: 11400000, guid: db734d5c48bd62b4ea04cbe780d70c45, type: 2}
   <CarController>k__BackingField: {fileID: 3195238330943901347}
   <WheelControllers>k__BackingField:
   - {fileID: 5232197078702037983}
@@ -1012,7 +1011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkTransformExpanded: 0
-  AuthorityMode: 0
+  AuthorityMode: 1
   TickSyncChildren: 0
   UseUnreliableDeltas: 0
   SyncPositionX: 1

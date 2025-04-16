@@ -72,5 +72,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   _carDatabase: {fileID: 11400000, guid: fae10f236217f1646a263170d382d167, type: 2}
-  _userSession: {fileID: 0}
+  _userSession: {fileID: 11400000, guid: 33a5e95cd65abfb408f574500cda88ab, type: 2}
   _spawnedCar: {fileID: 0}
