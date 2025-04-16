@@ -5,7 +5,7 @@ using XaviEssencials.Runtime;
 
 namespace XaviGames.Car
 {
-    [CreateAssetMenu(fileName = "_CarParameter", menuName = "Xavi Games/Car Parameter")]
+    [CreateAssetMenu(fileName = "_CarParameter", menuName = "Xavi Games/Car/Car Parameter")]
     public class CarParameter : ScriptableObject
     {
         [field: SerializeField]
