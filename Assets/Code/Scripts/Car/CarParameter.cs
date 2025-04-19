@@ -45,6 +45,22 @@ namespace XaviGames.Car
         [field: SerializeField]
         public float CentreOfGravityOffset { get; private set; }
 
+        [Header("Drift Friction Curve")]
+        [SerializeField]
+        private float _extremumSlip;
+
+        [SerializeField]
+        private float _extremumValue;
+        
+        [SerializeField]
+        private float _asymptoteSlip;
+        
+        [SerializeField] 
+        private float _asymptoteValue;
+        
+        [SerializeField] 
+        private float _stiffness;
+
         [field: Header("UI Parameters")]
         [field: SerializeField]
         public int UiTopSpeed { get; private set; }
@@ -58,6 +74,20 @@ namespace XaviGames.Car
         [field: SerializeField]
         public int UiSteeringRange { get; private set; }
 
+        public WheelFrictionCurve DriftFrictionCurve
+        {
+            get
+            {
+                return new WheelFrictionCurve
+                {
+                    extremumSlip = _extremumSlip,
+                    extremumValue = _extremumValue,
+                    asymptoteSlip = _asymptoteSlip,
+                    asymptoteValue = _asymptoteValue,
+                    stiffness = _stiffness
+                };
+            }
+        }
     }
 }
 
