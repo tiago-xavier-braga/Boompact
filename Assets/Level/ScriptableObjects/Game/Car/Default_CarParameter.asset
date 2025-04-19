@@ -23,6 +23,12 @@ MonoBehaviour:
   <SteeringRange>k__BackingField: 30
   <SteeringRangeAtMaxSpeed>k__BackingField: 10
   <CentreOfGravityOffset>k__BackingField: -1
+  _extremumSlip: 1.5
+  _extremumValue: 0.5
+  _asymptoteSlip: 2.5
+  _asymptoteValue: 0.5
+  _stiffness: 0.2
+  <WheelStiffnessDriftValue>k__BackingField: 0.2
   <UiTopSpeed>k__BackingField: 1
   <UiAcceleration>k__BackingField: 2
   <UiBreakForce>k__BackingField: 2
