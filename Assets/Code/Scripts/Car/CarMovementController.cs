@@ -44,14 +44,6 @@ namespace XaviGames.Car
         [SerializeField]
         private float _driftAngularDamping;
 
-        [Space]
-        [Header("Debug")]
-        [SerializeField]
-        private UnityEvent OnEnableTrail;
-
-        [SerializeField]
-        private UnityEvent OnDisableTrail;
-
         public override void OnNetworkSpawn()
         {
             _playerInput.enabled = IsOwner;
@@ -104,7 +96,6 @@ namespace XaviGames.Car
         private void ConfigureWheelSettings()
         {
             _defaultSidewaysFriction = _wheelControllers.First().WheelCollider.sidewaysFriction;
-
             _driftSidewaysFriction = _carParameter.DriftFrictionCurve;
             _defaultAngularDamping = _rigidBody.angularDamping;
             _driftAngularDamping = 0.3f;
@@ -119,8 +110,6 @@ namespace XaviGames.Car
             }
 
             _rigidBody.angularDamping = _driftAngularDamping;
-
-            OnEnableTrail?.Invoke();
         }
 
         private void ApplyDefaultWheelSettings()
@@ -131,8 +120,6 @@ namespace XaviGames.Car
             }
 
             _rigidBody.angularDamping = _defaultAngularDamping;
-
-            OnDisableTrail?.Invoke();
         }
 
         private void UpdateCarPhysics()
