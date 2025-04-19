@@ -28,7 +28,7 @@ MonoBehaviour:
   _asymptoteSlip: 2.5
   _asymptoteValue: 0.5
   _stiffness: 0.2
-  <WheelStiffnessDriftValue>k__BackingField: 0.2
+  <DriftAngularDamping>k__BackingField: 0.3
   <UiTopSpeed>k__BackingField: 1
   <UiAcceleration>k__BackingField: 2
   <UiBreakForce>k__BackingField: 2
