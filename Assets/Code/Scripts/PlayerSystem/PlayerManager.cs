@@ -1,6 +1,7 @@
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
+using XaviGames.Cameras;
 using XaviGames.Car;
 using XaviGames.Services;
 
@@ -15,23 +16,29 @@ namespace XaviGames.PlayerSystem
         private UserSession _userSession;
 
         [SerializeField]
+        private GameObject _carVirtualCamera;
+
+        [SerializeField]
         [ReadOnly]
         private GameObject _spawnedCar;
 
+        [SerializeField]
+        [ReadOnly]
+        private GameObject _spawnedVirtualCamera;
+
         public override void OnNetworkSpawn()
         {
-            CarParameter carParameter = _userSession.CarParameter;
-
-            if (IsOwner)
+            if (!IsOwner)
             {
-                SpawnCarServerRpc(carParameter.Id, OwnerClientId);
+                return;
             }
 
-            base.OnNetworkSpawn();
+            CarParameter carParameter = _userSession.CarParameter;
+            SpawnCarServerRpc(carParameter.Id);
         }
 
         [ServerRpc(RequireOwnership = true)]
-        public void SpawnCarServerRpc(string id, ulong clientId)
+        private void SpawnCarServerRpc(string id)
         {
             CarParameter parameter = _carDatabase.GetCarParameter(id);
 
@@ -41,8 +48,39 @@ namespace XaviGames.PlayerSystem
                 return;
             }
 
-            _spawnedCar = Instantiate(parameter.CarGameObject, transform.position, Quaternion.identity);
-            _spawnedCar.GetComponent<NetworkObject>().SpawnWithOwnership(clientId);
+            GameObject car = Instantiate(parameter.CarGameObject, transform.position, Quaternion.identity);
+            var networkObject = car.GetComponent<NetworkObject>();
+            networkObject.SpawnWithOwnership(OwnerClientId);
+
+            NotifyClientCarSpawnedClientRpc(networkObject.NetworkObjectId);
+        }
+
+        [ClientRpc]
+        private void NotifyClientCarSpawnedClientRpc(ulong carNetId)
+        {
+            if (!IsOwner)
+            {
+                return;
+            }
+
+            NetworkObject carNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[carNetId];
+            if (carNetworkObject == null)
+            {
+                GameLogger.LogError("Car network object not found on client", LogCategory.Client);
+                return;
+            }
+
+            _spawnedCar = carNetworkObject.gameObject;
+
+            _spawnedVirtualCamera = Instantiate(_carVirtualCamera);
+            if (_spawnedVirtualCamera.TryGetComponent(out VirtualCamera virtualCam))
+            {
+                virtualCam.SetFollowTransform(_spawnedCar.transform);
+            }
+            else
+            {
+                GameLogger.LogError("VirtualCamera component not found on prefab", LogCategory.Client);
+            }
         }
     }
 }
