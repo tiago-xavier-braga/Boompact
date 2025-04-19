@@ -1,0 +1,50 @@
+Boompact - LICENSE
+
+Copyright (c) 2025 XaviGames. All rights reserved.
+
+This game, including but not limited to its source code, scripts, gameplay logic, original animations, UI design,
+and technical content, is an original creation developed by Tiago Xavier Braga under the studio name XaviGames.
+
+The project was developed using Unity (Unity Technologies), including proprietary systems and packages such as
+Unity Netcode for GameObjects, Unity Lobby, Matchmaker, Relay, and Unity Hosting Services.
+
+This project may include 3D models, textures, visual effects, environments, and other creative assets acquired from
+third-party digital stores, public libraries, or licensed external collaborators.
+
+Some environments or visual elements present in the project may have been created by external contributors. In
+these cases, the respective creators retain moral rights over their original work, as protected by current copyright
+laws.
+
+The commercial use of such environments is backed by **formal usage licenses or intellectual property transfer**
+issued by the authors, either through **signed agreements or written statements via email**, explicitly granting
+XaviGames the rights to use, modify, include, and distribute the assets within the Boompact project.
+
+All external assets used in this game comply with their original license terms as defined by their respective
+creators. If you wish to reuse any asset included in this project, please refer directly to the source to verify the
+applicable licensing terms.
+
+All remaining content is protected by XaviGames copyright. Copying, modification, reverse engineering,
+redistribution, publishing on other platforms, or any commercial or non-commercial use is strictly prohibited
+without prior written permission from XaviGames.
+
+This repository may be publicly hosted on GitHub, strictly for the purpose of serving as a development portfolio
+and technical showcase by the author, Tiago Xavier Braga, during job interviews or technical assessments. This
+does not make the project open source and does not grant any rights to reuse the code, assets, or any part of the
+project.
+
+The game may be published on online game distribution platforms and monetized through ad-based revenue. No third
+party is permitted to redistribute, copy, port, or modify the game without formal and explicit authorization from
+XaviGames.
+
+Any attempt at unauthorized use, copying, or redistribution will be considered a violation of intellectual property
+rights and may result in civil and criminal liability under applicable law.
+
+For licensing, partnerships, academic use, technical analysis, or other inquiries, please contact:
+
+📧 xavigames.company@gmail.com
+📧 braga.taigoxavier@gmail.com
+
+This license takes effect from the official release date of the Boompact game and applies to all distributed
+versions, builds, and associated materials.
+
+XaviGames – 2025
