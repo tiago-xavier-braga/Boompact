@@ -41,9 +41,6 @@ namespace XaviGames.Car
         
         private float _defaultAngularDamping;
 
-        [SerializeField]
-        private float _driftAngularDamping;
-
         public override void OnNetworkSpawn()
         {
             _playerInput.enabled = IsOwner;
@@ -98,7 +95,6 @@ namespace XaviGames.Car
             _defaultSidewaysFriction = _wheelControllers.First().WheelCollider.sidewaysFriction;
             _driftSidewaysFriction = _carParameter.DriftFrictionCurve;
             _defaultAngularDamping = _rigidBody.angularDamping;
-            _driftAngularDamping = 0.3f;
         }
 
 
@@ -109,7 +105,7 @@ namespace XaviGames.Car
                 wheel.WheelCollider.sidewaysFriction = _driftSidewaysFriction;
             }
 
-            _rigidBody.angularDamping = _driftAngularDamping;
+            _rigidBody.angularDamping = _carParameter.DriftAngularDamping;
         }
 
         private void ApplyDefaultWheelSettings()
