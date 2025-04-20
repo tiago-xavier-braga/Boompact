@@ -13,15 +13,19 @@ namespace XaviGames.Car
         [Header("Car Properties")]
         [SerializeField]
         private CarParameter _carParameter;
-        
-        [SerializeField]
-        private PlayerInput _playerInput;
 
         [SerializeField]
-        private Rigidbody _rigidBody;
+        private Rigidbody _rigidbody;
 
         [SerializeField]
         private List<WheelController> _wheelControllers;
+
+        [Header("Input References")]
+        [SerializeField]
+        private InputActionReference _moveInputAction;
+
+        [SerializeField]
+        private InputActionReference _handbrakeInputAction;
 
         [Header("Info")]
         [SerializeField]
@@ -36,14 +40,29 @@ namespace XaviGames.Car
         [ReadOnly]
         private float _kmPerHour = 0f;
 
-        private WheelFrictionCurve _defaultSidewaysFriction = new();
+        private WheelFrictionCurve _originalSidewaysFriction = new();
         private WheelFrictionCurve _driftSidewaysFriction = new();
         
         private float _defaultAngularDamping;
 
+        public void OnEnable()
+        {
+            _moveInputAction.action.performed += OnMoveInput;
+            _moveInputAction.action.canceled += OnMoveInput;
+            _handbrakeInputAction.action.performed += OnHandbrake;
+            _handbrakeInputAction.action.canceled += OnHandbrake;
+        }
+
+        public void OnDisable()
+        {
+            _moveInputAction.action.performed -= OnMoveInput;
+            _moveInputAction.action.canceled -= OnMoveInput;
+            _handbrakeInputAction.action.performed -= OnHandbrake;
+            _handbrakeInputAction.action.canceled -= OnHandbrake;
+        }
+
         public override void OnNetworkSpawn()
         {
-            _playerInput.enabled = IsOwner;
             ApplyCenterMass();
             ConfigureWheelSettings();
 
@@ -52,7 +71,7 @@ namespace XaviGames.Car
 
         private void FixedUpdate()
         {
-            UpdateCarPhysics();
+            UpdatePhysics();
         }
 
         public void OnMoveInput(InputAction.CallbackContext context)
@@ -85,16 +104,16 @@ namespace XaviGames.Car
         }
         private void ApplyCenterMass()
         {
-            Vector3 centerOfMass = _rigidBody.centerOfMass;
+            Vector3 centerOfMass = _rigidbody.centerOfMass;
             centerOfMass.y += _carParameter.CentreOfGravityOffset;
-            _rigidBody.centerOfMass = centerOfMass;
+            _rigidbody.centerOfMass = centerOfMass;
         }
 
         private void ConfigureWheelSettings()
         {
-            _defaultSidewaysFriction = _wheelControllers.First().WheelCollider.sidewaysFriction;
+            _originalSidewaysFriction = _wheelControllers.First().WheelCollider.sidewaysFriction;
             _driftSidewaysFriction = _carParameter.DriftFrictionCurve;
-            _defaultAngularDamping = _rigidBody.angularDamping;
+            _defaultAngularDamping = _rigidbody.angularDamping;
         }
 
 
@@ -105,24 +124,24 @@ namespace XaviGames.Car
                 wheel.WheelCollider.sidewaysFriction = _driftSidewaysFriction;
             }
 
-            _rigidBody.angularDamping = _carParameter.DriftAngularDamping;
+            _rigidbody.angularDamping = _carParameter.DriftAngularDamping;
         }
 
         private void ApplyDefaultWheelSettings()
         {
             foreach (var wheel in _wheelControllers)
             {
-                wheel.WheelCollider.sidewaysFriction = _defaultSidewaysFriction;
+                wheel.WheelCollider.sidewaysFriction = _originalSidewaysFriction;
             }
 
-            _rigidBody.angularDamping = _defaultAngularDamping;
+            _rigidbody.angularDamping = _defaultAngularDamping;
         }
 
-        private void UpdateCarPhysics()
+        private void UpdatePhysics()
         {
-            _kmPerHour = _rigidBody.linearVelocity.magnitude * 3.6f;
+            _kmPerHour = _rigidbody.linearVelocity.magnitude * 3.6f;
 
-            float forwardSpeed = Vector3.Dot(transform.forward, _rigidBody.linearVelocity);
+            float forwardSpeed = Vector3.Dot(transform.forward, _rigidbody.linearVelocity);
             float speedFactor = Mathf.InverseLerp(0f, _carParameter.TopSpeed, Mathf.Abs(forwardSpeed));
 
             float motorTorque = Mathf.Lerp(_carParameter.Acceleration, 0f, speedFactor);
