@@ -1,5 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using XaviEssencials.Runtime;
 using XaviGames.Cameras;
 using XaviGames.Car;
@@ -16,6 +17,9 @@ namespace XaviGames.PlayerSystem
         private UserSession _userSession;
 
         [SerializeField]
+        private PlayerInput _playerInput;
+
+        [SerializeField]
         private GameObject _carVirtualCamera;
 
         [SerializeField]
@@ -30,6 +34,7 @@ namespace XaviGames.PlayerSystem
         {
             if (!IsOwner)
             {
+                _playerInput.enabled = false;
                 return;
             }
 
@@ -73,7 +78,7 @@ namespace XaviGames.PlayerSystem
             _spawnedCar = carNetworkObject.gameObject;
 
             _spawnedVirtualCamera = Instantiate(_carVirtualCamera);
-            if (_spawnedVirtualCamera.TryGetComponent(out VirtualCamera virtualCam))
+            if (_spawnedVirtualCamera.TryGetComponent(out CarFollowCamera virtualCam))
             {
                 virtualCam.SetFollowTransform(_spawnedCar.transform);
             }
