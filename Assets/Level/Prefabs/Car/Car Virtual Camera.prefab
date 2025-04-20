@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3007017342320499610}
   - component: {fileID: 3397518112668850211}
   - component: {fileID: 1066654012791992676}
-  - component: {fileID: 8341976204736369956}
+  - component: {fileID: 2980912756155417180}
   m_Layer: 0
   m_Name: Car Virtual Camera
   m_TagString: Untagged
@@ -138,7 +138,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!114 &8341976204736369956
+--- !u!114 &2980912756155417180
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,19 +147,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 4748842373785820941}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 106e8eaeeb4853d4280c294ef5281974, type: 3}
+  m_Script: {fileID: 11500000, guid: 30637da2c2c6e1949a4cc8d37a153316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraOption: 0
+  <CameraOption>k__BackingField: 0
+  _cameraInputAction: {fileID: -1694954397187473038, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   <FollowTransform>k__BackingField: {fileID: 0}
-  _orbitRadius: 6
+  _orbitRadius: 8
   _heightOffset: 3
   _rotationSpeed: 10
   _smoothTime: 0.6
-  <SplineContainer>k__BackingField: {fileID: 0}
-  _normalizedPosition: 0
-  _speed: 0.2
-  _loop: 0
-  _lookForward: 1
-  _offset: {x: 0, y: 0, z: 0}
   _cameraInput: {x: 0, y: 0}
