@@ -9,161 +9,84 @@ namespace XaviGames.Cameras
 {
     public class VirtualCamera : MonoBehaviour
     {
-        [SerializeField]
-        private CameraOption cameraOption;
-
-        [field: Header("Follow Target Settings")]
+        [field: Header("Virtual Camera")]
         [field: SerializeField]
-        public Transform FollowTransform { get; private set; }
+        public CameraOption CameraOption { get; private set; }
 
-        [SerializeField]
-        private float _orbitRadius;
-
-        [SerializeField]
-        private float _heightOffset = 3f;
-
-        [SerializeField]
-        private float _rotationSpeed = 120f;
-
-        [SerializeField]
-        private float _smoothTime = 0.1f;
-
-        [field: Header("Follow Spline Settings")]
-        [field: SerializeField]
-        public SplineContainer SplineContainer { get; private set; }
-
-        [Range(0f, 1f)]
-        [SerializeField]
-        private float _normalizedPosition;
-
-        [SerializeField]
-        private float _speed = 0.2f;
-
-        [SerializeField]
-        private bool _loop = false;
-
-        [SerializeField]
-        private bool _lookForward = true;
-
-        [SerializeField]
-        private Vector3 _offset;
-
-        [Header("Info")]
-        [SerializeField]
-        [ReadOnly]
-        private Vector2 _cameraInput;
-
-        private Vector3 _currentVelocity;
-        private float _currentYaw;
-        private float _splineLength;
-
-        private void Start()
+        public void SetCameraOption(CameraOption cameraOption)
         {
-            if (SplineContainer != null)
-            {
-                UpdateSplineLength();
-            }
+            CameraOption = cameraOption;
         }
 
-        private void Update()
-        {
-            switch (cameraOption)
-            {
-                case CameraOption.Fixed:
-                    {
-                        break;
-                    }
-                case CameraOption.FollowSpline:
-                    {
-                        ExecuteFollowSpline();
-                        break;
-                    }
-                case CameraOption.FollowTarget:
-                    {
-                        ExecuteFollowTarget();
-                        break;
-                    }
-                default:
-                    {
-                        Debug.LogWarning($"Unhandled CameraOption: {cameraOption}");
-                        break;
-                    }
-            }
-        }
+        //[field: Header("Follow Spline Settings")]
+        //[field: SerializeField]
+        //public SplineContainer SplineContainer { get; private set; }
 
-        public void OnCameraInput(InputAction.CallbackContext context)
-        {
-            _cameraInput = context.ReadValue<Vector2>();
-        }
+        //[Range(0f, 1f)]
+        //[SerializeField]
+        //private float _normalizedPosition;
 
-        public void SetFollowTransform(Transform transform)
-        {
-            if (transform == null)
-            {
-                GameLogger.LogError("Transform is null", LogCategory.Unity);
-                return;
-            }
+        //[SerializeField]
+        //private float _speed = 0.2f;
 
-            FollowTransform = transform;
-        }
+        //[SerializeField]
+        //private bool _loop = false;
 
-        public void SetSplineContainer(SplineContainer splineContainer)
-        {
-            if (splineContainer == null)
-            {
-                GameLogger.LogError("SplineContainer is null", LogCategory.Unity);
-                return;
-            }
+        //[SerializeField]
+        //private bool _lookForward = true;
 
-            SplineContainer = splineContainer;
-            UpdateSplineLength();
-        }
+        //[SerializeField]
+        //private Vector3 _offset;
 
-        private void UpdateSplineLength()
-        {
-            _splineLength = SplineContainer.Spline.GetLength();
-        }
+        //private float _splineLength;
 
-        private void ExecuteFollowSpline()
-        {
-            _normalizedPosition += _speed * Time.deltaTime / _splineLength;
+        //private void Start()
+        //{
+        //    if (SplineContainer != null)
+        //    {
+        //        UpdateSplineLength();
+        //    }
+        //}
 
-            if (_loop)
-            {
-                _normalizedPosition %= 1f;
-            }
-            else
-            {
-                _normalizedPosition = Mathf.Clamp01(_normalizedPosition);
-            }
+        //public void SetSplineContainer(SplineContainer splineContainer)
+        //{
+        //    if (splineContainer == null)
+        //    {
+        //        GameLogger.LogError("SplineContainer is null", LogCategory.Unity);
+        //        return;
+        //    }
 
-            SplineContainer.Spline.Evaluate(_normalizedPosition, out var pos, out var tangent, out _);
+        //    SplineContainer = splineContainer;
+        //    UpdateSplineLength();
+        //}
 
-            transform.position = (Vector3)pos + _offset;
+        //private void UpdateSplineLength()
+        //{
+        //    _splineLength = SplineContainer.Spline.GetLength();
+        //}
 
-            if (_lookForward)
-            {
-                transform.rotation = Quaternion.LookRotation(tangent);
-            }
-        }
+        //private void ExecuteFollowSpline()
+        //{
+        //    _normalizedPosition += _speed * Time.deltaTime / _splineLength;
 
-        private void ExecuteFollowTarget()
-        {
-            if (FollowTransform == null)
-            {
-                return;
-            }
+        //    if (_loop)
+        //    {
+        //        _normalizedPosition %= 1f;
+        //    }
+        //    else
+        //    {
+        //        _normalizedPosition = Mathf.Clamp01(_normalizedPosition);
+        //    }
 
-            _currentYaw += _cameraInput.x * _rotationSpeed * Time.deltaTime;
+        //    SplineContainer.Spline.Evaluate(_normalizedPosition, out var pos, out var tangent, out _);
 
-            Vector3 rotationOffset = Quaternion.Euler(0, _currentYaw, 0) * Vector3.back * _orbitRadius;
-            Vector3 verticalOffset = Vector3.up * _heightOffset;
+        //    transform.position = (Vector3)pos + _offset;
 
-            Vector3 desiredPosition = FollowTransform.position + rotationOffset + verticalOffset;
-            transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref _currentVelocity, _smoothTime);
+        //    if (_lookForward)
+        //    {
+        //        transform.rotation = Quaternion.LookRotation(tangent);
+        //    }
+        //}
 
-            Vector3 lookTarget = FollowTransform.position + Vector3.up * (_heightOffset / 2);
-            transform.LookAt(lookTarget);
-        }
     }
 }
