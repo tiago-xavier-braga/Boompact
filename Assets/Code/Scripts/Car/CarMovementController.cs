@@ -27,6 +27,10 @@ namespace XaviGames.Car
         [SerializeField]
         private InputActionReference _handbrakeInputAction;
 
+        [Header("Car Evetns")]
+        [SerializeField]
+        private BoolEventChannel _onCarDrifting;
+
         [Header("Info")]
         [SerializeField]
         [ReadOnly]
@@ -95,10 +99,12 @@ namespace XaviGames.Car
             {
                 case InputActionPhase.Performed:
                     ApplyDriftWheelSettings();
+                    _onCarDrifting?.RaiseEvent(true);
                     break;
 
                 case InputActionPhase.Canceled:
                     ApplyDefaultWheelSettings();
+                    _onCarDrifting?.RaiseEvent(false);
                     break;
             }
         }
