@@ -1233,8 +1233,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _wheelTrailRenderers:
   - {fileID: 7307881114928927354}
-  - {fileID: 5532751801039106286}
   - {fileID: 6092542789915564133}
+  - {fileID: 5532751801039106286}
   - {fileID: 2262729321102030740}
   _onCarDrifting: {fileID: 11400000, guid: a5ce75bd2d07c2f43a6a5e0b5cb5f37c, type: 2}
 --- !u!1 &6492896680591359715
