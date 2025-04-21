@@ -150,11 +150,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30637da2c2c6e1949a4cc8d37a153316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CameraOption>k__BackingField: 0
+  <CameraOption>k__BackingField: 2
   _cameraInputAction: {fileID: -1694954397187473038, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   <FollowTransform>k__BackingField: {fileID: 0}
-  _orbitRadius: 8
+  _orbitRadius: 6
   _heightOffset: 3
   _rotationSpeed: 10
-  _smoothTime: 0.6
+  _smoothTime: 0.3
   _cameraInput: {x: 0, y: 0}

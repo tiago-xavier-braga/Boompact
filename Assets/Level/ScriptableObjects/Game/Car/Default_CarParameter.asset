@@ -18,7 +18,7 @@ MonoBehaviour:
   <CarImage>k__BackingField: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   <CarGameObject>k__BackingField: {fileID: 5651255189271374991, guid: 876217591b84751479c08e85271017de, type: 3}
   <TopSpeed>k__BackingField: 100
-  <Acceleration>k__BackingField: 1200
+  <Acceleration>k__BackingField: 1600
   <BreakForce>k__BackingField: 2000
   <SteeringRange>k__BackingField: 30
   <SteeringRangeAtMaxSpeed>k__BackingField: 10

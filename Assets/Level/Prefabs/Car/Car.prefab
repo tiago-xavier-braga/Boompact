@@ -227,7 +227,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   <ModelTransform>k__BackingField: {fileID: 4246801109032708516}
   <WheelCollider>k__BackingField: {fileID: 6811195631247212220}
-  <IsMotorized>k__BackingField: 0
+  <IsMotorized>k__BackingField: 1
   <IsSteerable>k__BackingField: 1
 --- !u!1 &1246972520498930864
 GameObject:
@@ -798,7 +798,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   <ModelTransform>k__BackingField: {fileID: 526326843520408129}
   <WheelCollider>k__BackingField: {fileID: 8889608449102849364}
-  <IsMotorized>k__BackingField: 0
+  <IsMotorized>k__BackingField: 1
   <IsSteerable>k__BackingField: 1
 --- !u!1 &4786875297238239980
 GameObject:
@@ -1112,7 +1112,7 @@ Rigidbody:
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!114 &8856804072823628812
@@ -1175,7 +1175,7 @@ MonoBehaviour:
   InLocalSpace: 0
   SwitchTransformSpaceWhenParented: 0
   Interpolate: 1
-  SlerpPosition: 0
+  SlerpPosition: 1
 --- !u!114 &4250051137879964431
 MonoBehaviour:
   m_ObjectHideFlags: 0
