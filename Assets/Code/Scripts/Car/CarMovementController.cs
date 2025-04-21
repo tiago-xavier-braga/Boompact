@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using XaviEssencials.Runtime;
 
@@ -29,7 +28,7 @@ namespace XaviGames.Car
 
         [Header("Car Evetns")]
         [SerializeField]
-        private BoolEventChannel _onCarDrifting;
+        private EventChannel _onCarDrifting;
 
         [Header("Info")]
         [SerializeField]
@@ -99,12 +98,12 @@ namespace XaviGames.Car
             {
                 case InputActionPhase.Performed:
                     ApplyDriftWheelSettings();
-                    _onCarDrifting?.RaiseEvent(true);
+                    _onCarDrifting?.Raise(true);
                     break;
 
                 case InputActionPhase.Canceled:
                     ApplyDefaultWheelSettings();
-                    _onCarDrifting?.RaiseEvent(false);
+                    _onCarDrifting?.Raise(false);
                     break;
             }
         }

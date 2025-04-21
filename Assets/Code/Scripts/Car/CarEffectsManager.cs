@@ -7,26 +7,31 @@ namespace XaviGames.Car
     public class CarEffectsManager : MonoBehaviour
     {
         [Header("Trail Renderers")]
-        [SerializeField] private List<TrailRenderer> _wheelTrailRenderers;
+        [SerializeField] 
+        private List<TrailRenderer> _wheelTrailRenderers;
 
         [Header("Event Channels")]
-        [SerializeField] private BoolEventChannel _onCarDrifting;
+        [SerializeField] 
+        private EventChannel _onCarDrifting;
 
         private void OnEnable()
         {
-            _onCarDrifting.OnEventRaised += OnCarDrifting;
+            _onCarDrifting.OnEventRaisedWithContext += OnCarDrifting;
         }
 
         private void OnDisable()
         {
-            _onCarDrifting.OnEventRaised -= OnCarDrifting;
+            _onCarDrifting.OnEventRaisedWithContext -= OnCarDrifting;
         }
 
-        private void OnCarDrifting(bool state)
+        private void OnCarDrifting(object state)
         {
-            foreach (var trail in _wheelTrailRenderers)
+            if (state is bool isDrifting)
             {
-                trail.emitting = state;
+                foreach (var trail in _wheelTrailRenderers)
+                {
+                    trail.emitting = isDrifting;
+                }
             }
         }
     }
