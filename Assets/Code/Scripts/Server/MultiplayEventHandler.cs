@@ -17,17 +17,17 @@ namespace XaviGames.Server
 
         public void OnServerSubscriptionStateChanged(MultiplayServerSubscriptionState state)
         {
-            GameLogger.LogWarning($"[Multiplay] Subscription state changed to: {state}", LogCategory.Server);
+            GameLogger.LogWarning($"Subscription state changed to: {state}", LogCategory.Server);
         }
 
         public void OnServerErrorReceived(MultiplayError error)
         {
-            GameLogger.LogError($"[Multiplay] Error received. Status: {error.Status}, Message: {error.Message}", LogCategory.Server);
+            GameLogger.LogError($"Error received. {error}", LogCategory.Server);
         }
 
         public async void OnServerDeallocated(MultiplayDeallocation deallocation)
         {
-            GameLogger.LogWarning($"[Multiplay] Deallocation received. ServerId: {deallocation.ServerId}, EventId: {deallocation.EventId}", LogCategory.Server);
+            GameLogger.LogWarning($"Deallocation received. ServerId: {deallocation.ServerId}, EventId: {deallocation.EventId}", LogCategory.Server);
 
             if (_servicesSettings.BuildServiceType != ServiceType.Local)
             {
@@ -37,7 +37,7 @@ namespace XaviGames.Server
 
         public async void OnServerAllocated(MultiplayAllocation allocation)
         {
-            GameLogger.LogWarning($"[Multiplay] Allocation received. AllocationId: {allocation.AllocationId}, SessionId: {allocation.SessionId}", LogCategory.Server);
+            GameLogger.LogWarning($"Allocation received. AllocationId: {allocation.AllocationId}", LogCategory.Server);
 
             if (_servicesSettings.BuildServiceType != ServiceType.Local)
             {

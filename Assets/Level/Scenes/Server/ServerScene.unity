@@ -129,6 +129,8 @@ GameObject:
   m_Component:
   - component: {fileID: 338734935}
   - component: {fileID: 338734934}
+  - component: {fileID: 338734936}
+  - component: {fileID: 338734937}
   m_Layer: 0
   m_Name: Server Manager
   m_TagString: Untagged
@@ -149,6 +151,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
+  _multiplayEventHandler: {fileID: 338734936}
+  _backfillController: {fileID: 338734937}
   _sceneToLoad:
     _sceneAsset: {fileID: 102900000, guid: 4eaad980f54bfcf4b8d8acfa3d4a7d97, type: 3}
     <SceneName>k__BackingField: Environment
@@ -167,6 +171,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &338734936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338734933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d51dfaa211258a4488dc9c3d3446e25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
+--- !u!114 &338734937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338734933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 608508d5c3d11a941bb0803c4d4073dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
 --- !u!1 &1086370287
 GameObject:
   m_ObjectHideFlags: 0
