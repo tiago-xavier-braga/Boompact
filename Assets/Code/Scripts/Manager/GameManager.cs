@@ -12,7 +12,6 @@ namespace XaviGames.Manager
 
         private void Awake()
         {
-            DontDestroyOnLoad(this);
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = _fps;
         }
