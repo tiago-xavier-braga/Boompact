@@ -25,15 +25,20 @@ namespace XaviGames.Services
         public BuildType BuildType { get; private set; }
 
         [field: SerializeField]
-        public ServiceType BuildServiceType { get; private set; }
+        public ServiceType ServerServiceType { get; private set; }
 
         [field: SerializeField]
         public ServiceType ClientServiceType { get; private set; }
 
-
         [field: Header("Unity Matchmaker")]
         [field: SerializeField]
         public string QueueName { get; private set; }
+
+        [field: SerializeField]
+        public int MinPlayers { get; private set; }
+
+        [field: SerializeField]
+        public int MaxPlayers { get; private set; }
 
         [field: Header("Tests Settings")]
         [field: SerializeField]

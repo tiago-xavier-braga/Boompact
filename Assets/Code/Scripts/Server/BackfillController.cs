@@ -4,13 +4,9 @@
 
 #if UNITY_SERVER
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Unity.Netcode;
-using Unity.Netcode.Transports.UTP;
-using Unity.Services.Core;
 using Unity.Services.Matchmaker;
 using Unity.Services.Matchmaker.Models;
 using UnityEngine;
@@ -25,11 +21,18 @@ namespace XaviGames.Server
         [SerializeField]
         private ServicesSettings _servicesSettings;
 
+        [SerializeField]
+        private ServerManager _serverManager;
+
         private string _ticketId = string.Empty;
 
-        public async Task CreateBackfillTicket()
+        private int _currentPlayers => _serverManager.PlayersCount;
+        private int _minPlayers => _servicesSettings.MinPlayers;
+        private int _maxPlayers => _servicesSettings.MaxPlayers;
+
+        public async Task<bool> CreateBackfillTicket()
         {
-            var serviceType = _servicesSettings.BuildServiceType;
+            var serviceType = _servicesSettings.ServerServiceType;
             var results = new MatchmakingResults();
 
             if (serviceType == ServiceType.Local)
@@ -42,9 +45,6 @@ namespace XaviGames.Server
             {
                 results = await MultiplayService.Instance.GetPayloadAllocationFromJsonAs<MatchmakingResults>();
             }
-
-            GameLogger.Log($"Environment: {results.EnvironmentId} MatchId: {results.MatchId}" +
-                $" MatchProperties: {results.MatchProperties}", LogCategory.Matchmaker);
 
             var backfillTicketProperties = new BackfillTicketProperties(results.MatchProperties);
 
@@ -59,21 +59,28 @@ namespace XaviGames.Server
                 backfillTicketProperties
             );
 
-            GameLogger.Log("Requesting backfill ticket", LogCategory.Matchmaker);
-            _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
+            try
+            {
+                _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
+                _serverManager.SetServerState(ServerState.WaitingForPlayers);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                GameLogger.LogError($"Failed to create backfill ticket: {ex.Message}", LogCategory.Matchmaker);
+                return false;
+            }
         }
 
         public async Task ApproveBackfillTicketEverySecond()
         {
             const int delayBeforeStart = 5;
 
-            for (int i = delayBeforeStart - 1; i >= 0; i--)
-            {
-                GameLogger.Log($"Waiting {i} seconds to start backfill", LogCategory.Matchmaker);
-                await Task.Delay(1000);
-            }
+            GameLogger.Log($"Waiting {delayBeforeStart} seconds to start backfill", LogCategory.Matchmaker);
+            await Task.Delay(TimeSpan.FromSeconds(delayBeforeStart));
 
-            while (true)
+            while (_serverManager.ServerState == ServerState.WaitingForPlayers ||
+                _serverManager.ServerState == ServerState.RestartingGame)
             {
                 await Task.Delay(1000);
 
@@ -83,8 +90,25 @@ namespace XaviGames.Server
                     continue;
                 }
 
-                GameLogger.Log($"Attempting backfill approval for ticket: {_ticketId}", LogCategory.Matchmaker);
+                if (_currentPlayers == _maxPlayers)
+                {
+                    GameLogger.Log("Max players reached. No more backfill approvals.", LogCategory.Matchmaker);
 
+                    try
+                    {
+                        var approvalOperation = await MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);
+                        GameLogger.Log($"Approved backfill ticket: {_ticketId}", LogCategory.Matchmaker);
+
+                        await MatchmakerService.Instance.DeleteBackfillTicketAsync(_ticketId);
+                        GameLogger.Log("Backfill ticket deleted as max players reached.", LogCategory.Matchmaker);
+                    }
+                    catch (Exception ex)
+                    {
+                        GameLogger.LogError($"Failed to delete backfill ticket: {ex.Message}", LogCategory.Matchmaker);
+                    }
+
+                    break;
+                }
                 try
                 {
                     var approvalOperation = await MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);

@@ -4,24 +4,24 @@
 
 #if UNITY_SERVER
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Core;
-using Unity.Services.Matchmaker;
-using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using Unity.Services.Multiplay;
 using XaviGames.Services;
+using UnityEngine.Events;
 
 namespace XaviGames.Server
 {
     public class ServerManager : MonoBehaviour
     {
+        [field: SerializeField]
+        [field: ReadOnly]
+        public ServerState ServerState { get; private set; } = ServerState.ServerOff;
+
         [SerializeField]
         private ServicesSettings _servicesSettings;
 
@@ -34,12 +34,31 @@ namespace XaviGames.Server
         [SerializeField]
         private SceneReference _sceneToLoad;
 
+        [field: SerializeField]
+        [field: ReadOnly]
+        public int PlayersCount { get; private set; }
+
+        public UnityAction<ServerState> OnChangeServerState;
+
         private async void Start()
         {
             DontDestroyOnLoad(gameObject);
-
             await StartServer();
-            await _backfillController.ApproveBackfillTicketEverySecond();
+        }
+
+        public void SetServerState(ServerState state)
+        {
+            ServerState = state;
+            GameLogger.Log($"Server state changed to: {state}", LogCategory.Server);
+        }
+
+        public async Task BeginBackfillCycle()
+        {
+            var success = await _backfillController.CreateBackfillTicket();
+            if (success)
+            {
+                _ = _backfillController.ApproveBackfillTicketEverySecond();
+            }
         }
 
         private async Task StartServer()
@@ -52,7 +71,7 @@ namespace XaviGames.Server
 
             SetupEventCallbacks();
             await SubscribeMultiplayCallbacksIfNeeded();
-            await _backfillController.CreateBackfillTicket();
+            await BeginBackfillCycle();
         }
 
         private async Task InitializeUnityServicesAndTransport()
@@ -66,7 +85,7 @@ namespace XaviGames.Server
                 throw new Exception("UnityTransport component not found on NetworkManager");
             }
 
-            if (_servicesSettings.BuildServiceType == ServiceType.Local)
+            if (_servicesSettings.ServerServiceType == ServiceType.Local)
             {
                 transport.SetConnectionData("0.0.0.0", _servicesSettings.TestServerPort);
                 GameLogger.LogWarning($"Starting the server in LOCAL mode on the port:" +
@@ -96,6 +115,22 @@ namespace XaviGames.Server
         {
             NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
             {
+                PlayersCount++;
+
+                if (PlayersCount > _servicesSettings.MaxPlayers)
+                {
+                    GameLogger.LogWarning($"Max players reached. Disconnecting client {clientId}", LogCategory.Server);
+                    NetworkManager.Singleton.DisconnectClient(clientId);
+                    PlayersCount--;
+                    return;
+                }
+
+                GameLogger.Log($"Client connected {clientId}", LogCategory.Server);
+            };
+
+            NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
+            {
+                PlayersCount = Mathf.Max(0, PlayersCount - 1);
                 GameLogger.Log($"Client connected {clientId}", LogCategory.Server);
             };
 
@@ -107,7 +142,7 @@ namespace XaviGames.Server
 
         private async Task SubscribeMultiplayCallbacksIfNeeded()
         {
-            if (_servicesSettings.BuildServiceType != ServiceType.Local)
+            if (_servicesSettings.ServerServiceType != ServiceType.Local)
             {
                 var callbacks = new MultiplayEventCallbacks();
                 callbacks.Allocate += _multiplayEventHandler.OnServerAllocated;

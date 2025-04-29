@@ -29,7 +29,7 @@ namespace XaviGames.Server
         {
             GameLogger.LogWarning($"Deallocation received. ServerId: {deallocation.ServerId}, EventId: {deallocation.EventId}", LogCategory.Server);
 
-            if (_servicesSettings.BuildServiceType != ServiceType.Local)
+            if (_servicesSettings.ServerServiceType != ServiceType.Local)
             {
                 await MultiplayService.Instance.UnreadyServerAsync();
             }
@@ -39,7 +39,7 @@ namespace XaviGames.Server
         {
             GameLogger.LogWarning($"Allocation received. AllocationId: {allocation.AllocationId}", LogCategory.Server);
 
-            if (_servicesSettings.BuildServiceType != ServiceType.Local)
+            if (_servicesSettings.ServerServiceType != ServiceType.Local)
             {
                 await MultiplayService.Instance.ReadyServerForPlayersAsync();
             }
