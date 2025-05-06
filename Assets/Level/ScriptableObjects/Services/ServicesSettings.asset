@@ -12,9 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b71544ab23cf56e49b4b26fbb76fdd77, type: 3}
   m_Name: ServicesSettings
   m_EditorClassIdentifier: 
-  <BuildType>k__BackingField: 0
-  <BuildServiceType>k__BackingField: 0
+  <BuildType>k__BackingField: 1
+  <ServerServiceType>k__BackingField: 0
   <ClientServiceType>k__BackingField: 0
   <QueueName>k__BackingField: HostingRoom
+  <MinPlayers>k__BackingField: 1
+  <MaxPlayers>k__BackingField: 1
   <TestServerIP>k__BackingField: 127.0.0.1
   <TestServerPort>k__BackingField: 7777

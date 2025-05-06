@@ -35,6 +35,15 @@ MonoBehaviour:
     m_AdvancedConfiguration:
       StreamLogsToMainEditor: 0
       LogsColor: {r: 0.3643, g: 0.581, b: 0.8679, a: 1}
+  - Name: Player 3
+    <CorrespondingNodeId>k__BackingField: 
+    m_Nodes: []
+    m_Role: 1
+    m_PlayerTag: 
+    m_InitialScene: {fileID: 0}
+    m_AdvancedConfiguration:
+      StreamLogsToMainEditor: 0
+      LogsColor: {r: 0.6634241, g: 0.8962264, b: 0.51998043, a: 1}
   m_LocalInstances:
   - Name: Instance
     <CorrespondingNodeId>k__BackingField: Instance - Run
@@ -44,7 +53,7 @@ MonoBehaviour:
     m_BuildProfile: {fileID: 11400000, guid: 335b5ec53e7ba4149a0b42facd3a7bdb, type: 2}
     advancedConfiguration:
       m_StreamLogsToMainEditor: 1
-      m_LogsColor: {r: 0.3643, g: 0.581, b: 0.8679, a: 1}
+      m_LogsColor: {r: 0.9811321, g: 0.254539, b: 0.6817607, a: 1}
       m_Arguments: -screen-fullscreen 0 -screen-width 1024 -screen-height 720
   m_RemoteInstances: []
   m_OverridePort: 0
