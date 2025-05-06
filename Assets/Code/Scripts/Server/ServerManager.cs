@@ -116,15 +116,6 @@ namespace XaviGames.Server
             NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
             {
                 PlayersCount++;
-
-                if (PlayersCount > _servicesSettings.MaxPlayers)
-                {
-                    GameLogger.LogWarning($"Max players reached. Disconnecting client {clientId}", LogCategory.Server);
-                    NetworkManager.Singleton.DisconnectClient(clientId);
-                    PlayersCount--;
-                    return;
-                }
-
                 GameLogger.Log($"Client connected {clientId}", LogCategory.Server);
             };
 

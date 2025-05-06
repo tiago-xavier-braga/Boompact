@@ -90,15 +90,12 @@ namespace XaviGames.Server
                     continue;
                 }
 
-                if (_currentPlayers == _maxPlayers)
+                if (_currentPlayers >= _maxPlayers)
                 {
                     GameLogger.Log("Max players reached. No more backfill approvals.", LogCategory.Matchmaker);
-
+                    
                     try
                     {
-                        var approvalOperation = await MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);
-                        GameLogger.Log($"Approved backfill ticket: {_ticketId}", LogCategory.Matchmaker);
-
                         await MatchmakerService.Instance.DeleteBackfillTicketAsync(_ticketId);
                         GameLogger.Log("Backfill ticket deleted as max players reached.", LogCategory.Matchmaker);
                     }
