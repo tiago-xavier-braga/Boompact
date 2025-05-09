@@ -35,10 +35,10 @@ namespace XaviGames.Services
         public string QueueName { get; private set; }
 
         [field: SerializeField]
-        public int MinPlayers { get; private set; }
+        public int MinPlayersInMatch { get; private set; }
 
         [field: SerializeField]
-        public int MaxPlayers { get; private set; }
+        public int MaxPlayersInMatch { get; private set; }
 
         [field: Header("Tests Settings")]
         [field: SerializeField]

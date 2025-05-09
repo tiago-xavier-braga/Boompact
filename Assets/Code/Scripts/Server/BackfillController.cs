@@ -13,6 +13,7 @@ using UnityEngine;
 using XaviEssencials.Runtime;
 using Unity.Services.Multiplay;
 using XaviGames.Services;
+using Unity.Netcode;
 
 namespace XaviGames.Server
 {
@@ -24,13 +25,15 @@ namespace XaviGames.Server
         [SerializeField]
         private ServerManager _serverManager;
 
+        [field: SerializeField]
+        [field: ReadOnly]
+        public int PlayersCount { get; private set; }
+
+        [field: SerializeField]
+        [field: ReadOnly]
         private string _ticketId = string.Empty;
 
-        private int _currentPlayers => _serverManager.PlayersCount;
-        private int _minPlayers => _servicesSettings.MinPlayers;
-        private int _maxPlayers => _servicesSettings.MaxPlayers;
-
-        public async Task<bool> CreateBackfillTicket()
+        public async Task CreateBackfillTicket()
         {
             var serviceType = _servicesSettings.ServerServiceType;
             var results = new MatchmakingResults();
@@ -63,12 +66,12 @@ namespace XaviGames.Server
             {
                 _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
                 _serverManager.SetServerState(ServerState.WaitingForPlayers);
-                return true;
+                await ApproveBackfillTicketEverySecond();
             }
             catch (Exception ex)
             {
                 GameLogger.LogError($"Failed to create backfill ticket: {ex.Message}", LogCategory.Matchmaker);
-                return false;
+                return;
             }
         }
 
@@ -90,22 +93,6 @@ namespace XaviGames.Server
                     continue;
                 }
 
-                if (_currentPlayers >= _maxPlayers)
-                {
-                    GameLogger.Log("Max players reached. No more backfill approvals.", LogCategory.Matchmaker);
-                    
-                    try
-                    {
-                        await MatchmakerService.Instance.DeleteBackfillTicketAsync(_ticketId);
-                        GameLogger.Log("Backfill ticket deleted as max players reached.", LogCategory.Matchmaker);
-                    }
-                    catch (Exception ex)
-                    {
-                        GameLogger.LogError($"Failed to delete backfill ticket: {ex.Message}", LogCategory.Matchmaker);
-                    }
-
-                    break;
-                }
                 try
                 {
                     var approvalOperation = await MatchmakerService.Instance.ApproveBackfillTicketAsync(_ticketId);
@@ -117,6 +104,24 @@ namespace XaviGames.Server
                         $"Error: {ex.Message}", LogCategory.Matchmaker);
                 }
             }
+
+            await MatchmakerService.Instance.DeleteTicketAsync(_ticketId);
+        }
+
+
+        public void HandleClientConnected()
+        {
+            PlayersCount = NetworkManager.Singleton.ConnectedClientsList.Count;
+
+            if (PlayersCount >= _servicesSettings.MaxPlayersInMatch)
+            {
+                StartMatch();
+            }
+        }
+
+        private void StartMatch()
+        {
+
         }
     }
 }

@@ -32,11 +32,10 @@ namespace XaviGames.Server
         private BackfillController _backfillController;
 
         [SerializeField]
-        private SceneReference _sceneToLoad;
+        private ServerMatchController _serverMatchLogic;
 
-        [field: SerializeField]
-        [field: ReadOnly]
-        public int PlayersCount { get; private set; }
+        [SerializeField]
+        private SceneReference _sceneToLoad;
 
         public UnityAction<ServerState> OnChangeServerState;
 
@@ -52,15 +51,6 @@ namespace XaviGames.Server
             GameLogger.Log($"Server state changed to: {state}", LogCategory.Server);
         }
 
-        public async Task BeginBackfillCycle()
-        {
-            var success = await _backfillController.CreateBackfillTicket();
-            if (success)
-            {
-                _ = _backfillController.ApproveBackfillTicketEverySecond();
-            }
-        }
-
         private async Task StartServer()
         {
             await InitializeUnityServicesAndTransport();
@@ -71,7 +61,7 @@ namespace XaviGames.Server
 
             SetupEventCallbacks();
             await SubscribeMultiplayCallbacksIfNeeded();
-            await BeginBackfillCycle();
+            await _backfillController.CreateBackfillTicket();
         }
 
         private async Task InitializeUnityServicesAndTransport()
@@ -115,13 +105,11 @@ namespace XaviGames.Server
         {
             NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
             {
-                PlayersCount++;
-                GameLogger.Log($"Client connected {clientId}", LogCategory.Server);
+                _backfillController.HandleClientConnected();
             };
 
             NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
             {
-                PlayersCount = Mathf.Max(0, PlayersCount - 1);
                 GameLogger.Log($"Client connected {clientId}", LogCategory.Server);
             };
 

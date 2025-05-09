@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace XaviGames.Server
 {
-    public class ServerMatchLogic : MonoBehaviour
+    public class ServerMatchController : MonoBehaviour
     {
-        
+
     }
 }
