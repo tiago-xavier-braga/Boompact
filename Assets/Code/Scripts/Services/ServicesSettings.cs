@@ -1,3 +1,7 @@
+//Boompact(c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
+// Unauthorized use, copying, or distribution is prohibited.
+// For inquiries: xavigames.company@gmail.com
+
 using System;
 using UnityEngine;
 
@@ -29,16 +33,6 @@ namespace XaviGames.Services
 
         [field: SerializeField]
         public ServiceType ClientServiceType { get; private set; }
-
-        [field: Header("Unity Matchmaker")]
-        [field: SerializeField]
-        public string QueueName { get; private set; }
-
-        [field: SerializeField]
-        public int MinPlayersInMatch { get; private set; }
-
-        [field: SerializeField]
-        public int MaxPlayersInMatch { get; private set; }
 
         [field: Header("Tests Settings")]
         [field: SerializeField]

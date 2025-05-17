@@ -13,7 +13,7 @@ using UnityEngine;
 using XaviEssencials.Runtime;
 using Unity.Services.Multiplay;
 using XaviGames.Services;
-using Unity.Netcode;
+using System.Threading;
 
 namespace XaviGames.Server
 {
@@ -23,15 +23,16 @@ namespace XaviGames.Server
         private ServicesSettings _servicesSettings;
 
         [SerializeField]
+        private MatchmakerSettings _matchmakerSettings;
+
+        [SerializeField]
         private ServerManager _serverManager;
 
-        [field: SerializeField]
-        [field: ReadOnly]
-        public int PlayersCount { get; private set; }
-
-        [field: SerializeField]
-        [field: ReadOnly]
+        [SerializeField]
+        [ReadOnly]
         private string _ticketId = string.Empty;
+
+        private CancellationTokenSource _backfillCancellationTokenSource;
 
         public async Task CreateBackfillTicket()
         {
@@ -56,7 +57,7 @@ namespace XaviGames.Server
                 : MultiplayService.Instance.ServerConfig.IpAddress + ":" + MultiplayService.Instance.ServerConfig.Port;
 
             var options = new CreateBackfillTicketOptions(
-                _servicesSettings.QueueName,
+                _matchmakerSettings.QueueName,
                 connectionString,
                 new Dictionary<string, object>(),
                 backfillTicketProperties
@@ -66,7 +67,11 @@ namespace XaviGames.Server
             {
                 _ticketId = await MatchmakerService.Instance.CreateBackfillTicketAsync(options);
                 _serverManager.SetServerState(ServerState.WaitingForPlayers);
-                await ApproveBackfillTicketEverySecond();
+
+                _backfillCancellationTokenSource?.Cancel();
+                _backfillCancellationTokenSource = new CancellationTokenSource();
+                await ApproveBackfillTicketEverySecond(_backfillCancellationTokenSource.Token);
+
             }
             catch (Exception ex)
             {
@@ -75,15 +80,42 @@ namespace XaviGames.Server
             }
         }
 
-        public async Task ApproveBackfillTicketEverySecond()
+        public async Task DeleteBackfillTicket()
+        {
+            if (string.IsNullOrWhiteSpace(_ticketId))
+            {
+                GameLogger.Log("No backfill ticket to delete", LogCategory.Matchmaker);
+                return;
+            }
+            try
+            {
+                if (_backfillCancellationTokenSource != null)
+                {
+                    _backfillCancellationTokenSource.Cancel();
+                    _backfillCancellationTokenSource.Dispose();
+                    _backfillCancellationTokenSource = null;
+                }
+
+                await MatchmakerService.Instance.DeleteTicketAsync(_ticketId);
+                GameLogger.Log($"Deleted backfill ticket: {_ticketId}", LogCategory.Matchmaker);
+            }
+            catch (Exception ex)
+            {
+                GameLogger.LogError($"Failed to delete backfill ticket: {_ticketId}." +
+                    $"Error: {ex.Message}", LogCategory.Matchmaker);
+            }
+        }
+
+        private async Task ApproveBackfillTicketEverySecond(CancellationToken token)
         {
             const int delayBeforeStart = 5;
 
             GameLogger.Log($"Waiting {delayBeforeStart} seconds to start backfill", LogCategory.Matchmaker);
-            await Task.Delay(TimeSpan.FromSeconds(delayBeforeStart));
+            await Task.Delay(TimeSpan.FromSeconds(delayBeforeStart), token);
 
-            while (_serverManager.ServerState == ServerState.WaitingForPlayers ||
-                _serverManager.ServerState == ServerState.RestartingGame)
+            while (!token.IsCancellationRequested &&
+                (_serverManager.ServerState == ServerState.WaitingForPlayers ||
+                _serverManager.ServerState == ServerState.RestartingGame))
             {
                 await Task.Delay(1000);
 
@@ -104,24 +136,6 @@ namespace XaviGames.Server
                         $"Error: {ex.Message}", LogCategory.Matchmaker);
                 }
             }
-
-            await MatchmakerService.Instance.DeleteTicketAsync(_ticketId);
-        }
-
-
-        public void HandleClientConnected()
-        {
-            PlayersCount = NetworkManager.Singleton.ConnectedClientsList.Count;
-
-            if (PlayersCount >= _servicesSettings.MaxPlayersInMatch)
-            {
-                StartMatch();
-            }
-        }
-
-        private void StartMatch()
-        {
-
         }
     }
 }

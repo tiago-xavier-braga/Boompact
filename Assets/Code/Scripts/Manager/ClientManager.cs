@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
@@ -17,6 +16,9 @@ namespace XaviGames.Manager
     {
         [SerializeField]
         private ServicesSettings _servicesSettings;
+
+        [SerializeField]
+        private MatchmakerSettings _matchmakerSettings;
 
         private bool _initialized;
         public static ClientManager Instance { get; private set; } = null;
@@ -64,7 +66,7 @@ namespace XaviGames.Manager
             };
 
             var attributes = new Dictionary<string, object>();
-            var options = new CreateTicketOptions(_servicesSettings.QueueName, attributes);
+            var options = new CreateTicketOptions(_matchmakerSettings.QueueName, attributes);
 
             while (!await FindMatch(players, options))
             {

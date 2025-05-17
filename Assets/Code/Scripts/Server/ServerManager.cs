@@ -59,7 +59,6 @@ namespace XaviGames.Server
             NetworkManager.Singleton.SceneManager.LoadScene(_sceneToLoad.SceneName,
                 UnityEngine.SceneManagement.LoadSceneMode.Single);
 
-            SetupEventCallbacks();
             await SubscribeMultiplayCallbacksIfNeeded();
             await _backfillController.CreateBackfillTicket();
         }
@@ -99,24 +98,6 @@ namespace XaviGames.Server
                 GameLogger.LogError("Failed to start server", LogCategory.Server);
                 throw new Exception("Failed to start server");
             }
-        }
-
-        private void SetupEventCallbacks()
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback += (clientId) =>
-            {
-                _backfillController.HandleClientConnected();
-            };
-
-            NetworkManager.Singleton.OnClientDisconnectCallback += (clientId) =>
-            {
-                GameLogger.Log($"Client connected {clientId}", LogCategory.Server);
-            };
-
-            NetworkManager.Singleton.OnServerStopped += (reason) =>
-            {
-                GameLogger.Log("Server stopped", LogCategory.Server);
-            };
         }
 
         private async Task SubscribeMultiplayCallbacksIfNeeded()
