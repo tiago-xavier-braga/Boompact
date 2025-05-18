@@ -32,7 +32,7 @@ namespace XaviGames.Server
         private BackfillController _backfillController;
 
         [SerializeField]
-        private ServerMatchController _serverMatchLogic;
+        private MatchController _serverMatchLogic;
 
         [SerializeField]
         private SceneReference _sceneToLoad;

@@ -8,7 +8,7 @@ using XaviEssencials.Runtime;
 
 namespace XaviGames.Server
 {
-    public class ServerMatchController : MonoBehaviour
+    public class MatchController : MonoBehaviour
     {
         [field: SerializeField]
         public ServerManager ServerManager { get; private set; }

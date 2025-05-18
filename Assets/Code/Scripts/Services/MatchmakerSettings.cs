@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace XaviGames.Services
 {
-    [CreateAssetMenu(fileName = "MatchmakerSettings", menuName = "Xavi Games/Servicess/MatchmakerSettings")]
+    [CreateAssetMenu(fileName = "MatchmakerSettings", menuName = "Xavi Games/Services/MatchmakerSettings")]
     public class MatchmakerSettings : ScriptableObject
     {
         [field: Header("Unity Matchmaker")]
