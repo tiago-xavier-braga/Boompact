@@ -35,15 +35,6 @@ MonoBehaviour:
     m_AdvancedConfiguration:
       StreamLogsToMainEditor: 0
       LogsColor: {r: 0.3643, g: 0.581, b: 0.8679, a: 1}
-  - Name: Player 3
-    <CorrespondingNodeId>k__BackingField: 
-    m_Nodes: []
-    m_Role: 1
-    m_PlayerTag: 
-    m_InitialScene: {fileID: 0}
-    m_AdvancedConfiguration:
-      StreamLogsToMainEditor: 0
-      LogsColor: {r: 0.6634241, g: 0.8962264, b: 0.51998043, a: 1}
   m_LocalInstances:
   - Name: Instance
     <CorrespondingNodeId>k__BackingField: Instance - Run

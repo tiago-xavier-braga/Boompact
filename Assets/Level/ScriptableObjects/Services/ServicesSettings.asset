@@ -16,7 +16,7 @@ MonoBehaviour:
   <ServerServiceType>k__BackingField: 0
   <ClientServiceType>k__BackingField: 0
   <QueueName>k__BackingField: HostingRoom
-  <MinPlayers>k__BackingField: 1
-  <MaxPlayers>k__BackingField: 1
+  <MinPlayersInMatch>k__BackingField: 1
+  <MaxPlayersInMatch>k__BackingField: 1
   <TestServerIP>k__BackingField: 127.0.0.1
   <TestServerPort>k__BackingField: 7777
