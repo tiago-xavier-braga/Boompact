@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: MatchmakerSettings
   m_EditorClassIdentifier: 
   <QueueName>k__BackingField: 
-  <MinPlayersInMatch>k__BackingField: 0
-  <MaxPlayersInMatch>k__BackingField: 0
+  <MinPlayersInMatch>k__BackingField: 1
+  <MaxPlayersInMatch>k__BackingField: 1
+  <SecondsToStartWhenMinimumPlayers>k__BackingField: 5
