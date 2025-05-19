@@ -113,9 +113,7 @@ namespace XaviGames.Server
             GameLogger.Log($"Waiting {delayBeforeStart} seconds to start backfill", LogCategory.Matchmaker);
             await Task.Delay(TimeSpan.FromSeconds(delayBeforeStart), token);
 
-            while (!token.IsCancellationRequested &&
-                (_serverManager.ServerState == ServerState.WaitingForPlayers ||
-                _serverManager.ServerState == ServerState.RestartingGame))
+            while (!token.IsCancellationRequested && (_serverManager.ServerState == ServerState.WaitingForPlayers))
             {
                 await Task.Delay(1000);
 

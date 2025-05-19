@@ -11,7 +11,6 @@ namespace XaviGames.Server
         StartingGame = 2,
         GameInProgress = 3,
         GameEnded = 4,
-        RestartingGame = 5,
     }
 }
 

@@ -18,5 +18,9 @@ namespace XaviGames.Services
 
         [field: SerializeField]
         public int MaxPlayersInMatch { get; private set; }
+
+        [field: SerializeField]
+        [field: Min(0)]
+        public float StartDelayAfterMinPlayers { get; private set; }
     }
 }

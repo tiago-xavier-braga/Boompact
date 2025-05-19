@@ -51,6 +51,13 @@ namespace XaviGames.Server
             GameLogger.Log($"Server state changed to: {state}", LogCategory.Server);
         }
 
+        public async void StartMatch()
+        {
+            await _backfillController.DeleteBackfillTicket();
+            SetServerState(ServerState.StartingGame);
+            //Call external function to match logic
+        }
+
         private async Task StartServer()
         {
             await InitializeUnityServicesAndTransport();
@@ -60,6 +67,7 @@ namespace XaviGames.Server
                 UnityEngine.SceneManagement.LoadSceneMode.Single);
 
             await SubscribeMultiplayCallbacksIfNeeded();
+            SetServerState(ServerState.WaitingForPlayers);
             await _backfillController.CreateBackfillTicket();
         }
 
