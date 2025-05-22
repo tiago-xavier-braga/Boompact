@@ -58,8 +58,6 @@ namespace XaviGames.Server
                 return;
             }
 
-            //_connectedPlayers = NetworkManager.Singleton.ConnectedClientsList.Count;
-
             if (_connectedPlayers == _matchmakerSettings.MaxPlayersInMatch)
             {
                 if (_startMatchCountdownCoroutine != null)
@@ -67,6 +65,7 @@ namespace XaviGames.Server
                     StopCoroutine(_startMatchCountdownCoroutine);
                     _startMatchCountdownCoroutine = null;
                 }
+                _serverManager.StartMatch();
 
                 GameLogger.Log($"Maximum players reached. Starting game. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
             }

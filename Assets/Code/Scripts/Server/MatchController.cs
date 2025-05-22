@@ -43,8 +43,6 @@ namespace XaviGames.Server
 
             Debug.Log($"Assigned pumps. Players with bombs:{_playersWithBombs.Count}, without bomb: {_playersWithoutBombs.Count}");
         
-            
-            
             _serverManager.SetServerState(ServerState.GameInProgress);
         }
 
