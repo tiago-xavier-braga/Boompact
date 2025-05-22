@@ -32,7 +32,7 @@ namespace XaviGames.Server
         private BackfillController _backfillController;
 
         [SerializeField]
-        private MatchController _serverMatchLogic;
+        private MatchController _MatchController;
 
         [SerializeField]
         private SceneReference _sceneToLoad;
@@ -55,7 +55,7 @@ namespace XaviGames.Server
         {
             await _backfillController.DeleteBackfillTicket();
             SetServerState(ServerState.StartingGame);
-            //Call external function to match logic
+            _MatchController.StartMatch();
         }
 
         private async Task StartServer()

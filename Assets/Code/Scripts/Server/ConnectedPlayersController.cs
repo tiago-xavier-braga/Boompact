@@ -62,8 +62,6 @@ namespace XaviGames.Server
 
             if (_connectedPlayers == _matchmakerSettings.MaxPlayersInMatch)
             {
-                _serverManager.SetServerState(ServerState.StartingGame);
-
                 if (_startMatchCountdownCoroutine != null)
                 {
                     StopCoroutine(_startMatchCountdownCoroutine);
