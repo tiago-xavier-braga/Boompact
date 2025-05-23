@@ -8,7 +8,7 @@ using XaviGames.Services;
 
 namespace XaviGames.PlayerSystem
 {
-    public class PlayerManager : NetworkBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         [SerializeField]
         private CarDatabase _carDatabase;
