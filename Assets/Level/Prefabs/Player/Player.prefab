@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1161099194
+  GlobalObjectIdHash: 3315290274
   InScenePlacedSourceGlobalObjectIdHash: 3315290274
   DeferredDespawnTick: 0
   Ownership: 1
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   _carDatabase: {fileID: 11400000, guid: fae10f236217f1646a263170d382d167, type: 2}
-  _userSession: {fileID: 11400000, guid: 33a5e95cd65abfb408f574500cda88ab, type: 2}
+  <UserSession>k__BackingField: {fileID: 11400000, guid: 33a5e95cd65abfb408f574500cda88ab, type: 2}
   _playerInput: {fileID: 2977189341284256756}
   _carVirtualCamera: {fileID: 4748842373785820941, guid: c4632edb28d73c142bd70507afc34def, type: 3}
   _spawnedCar: {fileID: 0}
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_NotificationBehavior: 3
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -102,9 +102,21 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 351f2ccd-1f9f-44bf-9bec-d62ac5c5f408
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 39e1c564-a66c-4344-9b7f-c8107a4b326d
+    m_ActionName: 'Player/Handbrake[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d9a7f70d-5c27-49b5-bcd5-e8c7e0fe8f74
+    m_ActionName: 'Player/Camera[/Mouse/delta]'
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
