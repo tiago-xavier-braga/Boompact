@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using XaviEssencials.Runtime;
 using XaviGames.Cameras;
 using XaviGames.Car;
+using XaviGames.Server;
 using XaviGames.Services;
 
 namespace XaviGames.PlayerSystem
@@ -13,8 +14,8 @@ namespace XaviGames.PlayerSystem
         [SerializeField]
         private CarDatabase _carDatabase;
 
-        [SerializeField]
-        private UserSession _userSession;
+        [field: SerializeField]
+        public UserSession UserSession { get; private set; }
 
         [SerializeField]
         private PlayerInput _playerInput;
@@ -38,26 +39,18 @@ namespace XaviGames.PlayerSystem
                 return;
             }
 
-            CarParameter carParameter = _userSession.CarParameter;
-            SpawnCarServerRpc(carParameter.Id);
+            RegisterCarIdServer();
         }
 
-        [ServerRpc(RequireOwnership = true)]
-        private void SpawnCarServerRpc(string id)
+        public ClientCarReference RegisterCarIdServer()
         {
-            CarParameter parameter = _carDatabase.GetCarParameter(id);
-
-            if (parameter == null || parameter.CarGameObject == null)
+            GameLogger.Log($"Player {OwnerClientId} registered car ID: {UserSession.CarParameter.Id}", LogCategory.Client);
+            
+            return new ClientCarReference
             {
-                GameLogger.LogError($"CarParameter not found or GameObject is null for ID: {id}", LogCategory.Server);
-                return;
-            }
-
-            GameObject car = Instantiate(parameter.CarGameObject, transform.position, Quaternion.identity);
-            var networkObject = car.GetComponent<NetworkObject>();
-            networkObject.SpawnWithOwnership(OwnerClientId);
-
-            NotifyClientCarSpawnedClientRpc(networkObject.NetworkObjectId);
+                ClientId = OwnerClientId,
+                CarId = UserSession.CarParameter.Id
+            };
         }
 
         [ClientRpc]

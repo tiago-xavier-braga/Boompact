@@ -22,5 +22,16 @@ namespace XaviGames.Services
         [field: SerializeField]
         [field: Min(0)]
         public float StartDelayAfterMinPlayers { get; private set; }
+
+
+        private void OnValidate()
+        {
+            MinPlayersInMatch = Mathf.Max(2, MinPlayersInMatch);
+
+            if (MaxPlayersInMatch < MinPlayersInMatch)
+            {
+                MaxPlayersInMatch = MinPlayersInMatch;
+            }
+        }
     }
 }

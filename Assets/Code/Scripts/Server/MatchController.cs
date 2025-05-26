@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using XaviEssencials.Runtime;
 
 namespace XaviGames.Server
 {
@@ -14,9 +15,12 @@ namespace XaviGames.Server
         [SerializeField]
         private ServerManager _serverManager;
 
+        [SerializeField]
+        private CarSpawnController _carSpawnController;
+
         private readonly List<NetworkClient> _connectedPlayers = new();
-        private readonly List<NetworkClient> _playersWithBombs = new();
-        private readonly List<NetworkClient> _playersWithoutBombs = new();
+        private readonly List<NetworkClient> _playersStartingWithBombs = new();
+        private readonly List<NetworkClient> _playersStartingWithoutBombs = new();
 
         private void Start()
         {
@@ -24,7 +28,7 @@ namespace XaviGames.Server
             NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
         }
 
-        private void OnDisable()
+        private void OnDestroy()
         {
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
@@ -40,24 +44,24 @@ namespace XaviGames.Server
             //}
 
             DividePlayersWithAndWithoutBombs();
-
-            Debug.Log($"Assigned pumps. Players with bombs:{_playersWithBombs.Count}, without bomb: {_playersWithoutBombs.Count}");
-        
+            _carSpawnController.SpawnAllCars();
             _serverManager.SetServerState(ServerState.GameInProgress);
         }
 
         private void DividePlayersWithAndWithoutBombs()
         {
-            _playersWithBombs.Clear();
-            _playersWithoutBombs.Clear();
+            _playersStartingWithBombs.Clear();
+            _playersStartingWithoutBombs.Clear();
 
             var shuffledPlayers = new List<NetworkClient>(_connectedPlayers);
             ShuffleList(shuffledPlayers);
 
             int half = shuffledPlayers.Count / 2;
 
-            _playersWithBombs.AddRange(shuffledPlayers.Take(half));
-            _playersWithoutBombs.AddRange(shuffledPlayers.Skip(half));
+            _playersStartingWithBombs.AddRange(shuffledPlayers.Take(half));
+            _playersStartingWithoutBombs.AddRange(shuffledPlayers.Skip(half));
+
+            GameLogger.Log($"Assigned pumps. Players with bombs:{_playersStartingWithBombs.Count}, without bomb: {_playersStartingWithoutBombs.Count}", LogCategory.Server);
         }
 
         private void ShuffleList<T>(List<T> list)
@@ -72,6 +76,13 @@ namespace XaviGames.Server
         private void OnClientConnected(ulong clientId)
         {
             var client = NetworkManager.Singleton.ConnectedClients[clientId];
+
+            if (_connectedPlayers.Any(c => c.ClientId == clientId))
+            {
+                GameLogger.LogWarning($"Client {clientId} is already connected.", LogCategory.Server);
+                return;
+            }
+
             _connectedPlayers.Add(client);
         }
 

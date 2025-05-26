@@ -35,6 +35,9 @@ namespace XaviGames.Server
         private MatchController _MatchController;
 
         [SerializeField]
+        public CarSpawnController CarSpawnController { get; private set; }
+
+        [SerializeField]
         private SceneReference _sceneToLoad;
 
         public UnityAction<ServerState> OnChangeServerState;
