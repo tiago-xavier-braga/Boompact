@@ -20,17 +20,6 @@ namespace XaviGames.PlayerSystem
         [SerializeField]
         private PlayerInput _playerInput;
 
-        [SerializeField]
-        private GameObject _carVirtualCamera;
-
-        [SerializeField]
-        [ReadOnly]
-        private GameObject _spawnedCar;
-
-        [SerializeField]
-        [ReadOnly]
-        private GameObject _spawnedVirtualCamera;
-
         public override void OnNetworkSpawn()
         {
             if (!IsOwner)
@@ -51,34 +40,6 @@ namespace XaviGames.PlayerSystem
                 ClientId = OwnerClientId,
                 CarId = UserSession.CarParameter.Id
             };
-        }
-
-        [ClientRpc]
-        private void NotifyClientCarSpawnedClientRpc(ulong carNetId)
-        {
-            if (!IsOwner)
-            {
-                return;
-            }
-
-            NetworkObject carNetworkObject = NetworkManager.SpawnManager.SpawnedObjects[carNetId];
-            if (carNetworkObject == null)
-            {
-                GameLogger.LogError("Car network object not found on client", LogCategory.Client);
-                return;
-            }
-
-            _spawnedCar = carNetworkObject.gameObject;
-
-            _spawnedVirtualCamera = Instantiate(_carVirtualCamera);
-            if (_spawnedVirtualCamera.TryGetComponent(out CarFollowCamera virtualCam))
-            {
-                virtualCam.SetFollowTransform(_spawnedCar.transform);
-            }
-            else
-            {
-                GameLogger.LogError("VirtualCamera component not found on prefab", LogCategory.Client);
-            }
         }
     }
 }
