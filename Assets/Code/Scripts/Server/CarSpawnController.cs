@@ -39,9 +39,9 @@ namespace XaviGames.Server
                     continue;
                 }
 
-                //var spawn = _spawnPoints[i];
-                //var car = Instantiate(param.CarGameObject, spawn.position, spawn.rotation);
-                var car = Instantiate(param.CarGameObject, Vector3.zero, Quaternion.Euler(0f, 0f, 0f));
+                var spawn = _spawnPoints[i];
+                var car = Instantiate(param.CarGameObject, spawn.position, spawn.rotation);
+                //var car = Instantiate(param.CarGameObject, Vector3.zero, Quaternion.Euler(0f, 0f, 0f));
 
                 var netObj = car.GetComponent<NetworkObject>();
                 netObj.SpawnWithOwnership(idRef.ClientId);
