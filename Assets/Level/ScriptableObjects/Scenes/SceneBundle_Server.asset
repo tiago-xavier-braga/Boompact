@@ -15,4 +15,6 @@ MonoBehaviour:
   <SceneSingle>k__BackingField:
     _sceneAsset: {fileID: 102900000, guid: 24d9182bbc0020e47a5f35bd9e07debc, type: 3}
     <SceneName>k__BackingField: ServerScene
-  <ScenesAdditives>k__BackingField: []
+  <ScenesAdditives>k__BackingField:
+  - _sceneAsset: {fileID: 102900000, guid: 4eaad980f54bfcf4b8d8acfa3d4a7d97, type: 3}
+    <SceneName>k__BackingField: Environment
