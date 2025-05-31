@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 338734938}
   - component: {fileID: 338734939}
   - component: {fileID: 338734940}
+  - component: {fileID: 338734941}
   m_Layer: 0
   m_Name: Server Manager
   m_TagString: Untagged
@@ -284,6 +285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _serverManager: {fileID: 338734934}
   _carSpawnController: {fileID: 338734940}
+  _teamController: {fileID: 338734941}
 --- !u!114 &338734939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,6 +316,18 @@ MonoBehaviour:
   _spawnPoints:
   - {fileID: 2008953921}
   - {fileID: 182769646}
+--- !u!114 &338734941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338734933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35e075fef081c7a45a5321059d180684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1086370287
 GameObject:
   m_ObjectHideFlags: 0
