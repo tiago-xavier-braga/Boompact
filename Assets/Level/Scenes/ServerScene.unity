@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 338734939}
   - component: {fileID: 338734940}
   - component: {fileID: 338734941}
+  - component: {fileID: 338734942}
   m_Layer: 0
   m_Name: Server Manager
   m_TagString: Untagged
@@ -313,6 +314,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _carDatabase: {fileID: 11400000, guid: fae10f236217f1646a263170d382d167, type: 2}
+  _teamController: {fileID: 338734941}
   _spawnPoints:
   - {fileID: 2008953921}
   - {fileID: 182769646}
@@ -328,6 +330,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e075fef081c7a45a5321059d180684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1652712579 &338734942
+MultiplayerRolesData:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338734933}
+  m_GameObjectRolesMask: 2
+  m_ComponentsRolesMasks:
+  - m_Object: {fileID: 338734934}
+    m_RolesMask: 2
+  - m_Object: {fileID: 338734936}
+    m_RolesMask: 2
+  - m_Object: {fileID: 338734937}
+    m_RolesMask: 2
+  - m_Object: {fileID: 338734938}
+    m_RolesMask: 2
+  - m_Object: {fileID: 338734939}
+    m_RolesMask: 2
+  - m_Object: {fileID: 338734940}
+    m_RolesMask: 2
+  - m_Object: {fileID: 338734941}
+    m_RolesMask: 2
 --- !u!1 &1086370287
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,10 +12,10 @@ EditorBuildSettings:
     path: Assets/Level/Scenes/Client/MainMenu.unity
     guid: 54b15048c9d4f5b42a54fd1710df0aaa
   - enabled: 1
-    path: Assets/Level/Scenes/Server/ServerScene.unity
+    path: Assets/Level/Scenes/ServerScene.unity
     guid: 24d9182bbc0020e47a5f35bd9e07debc
   - enabled: 1
-    path: Assets/Level/Scenes/Client/ClientScene.unity
+    path: Assets/Level/Scenes/ClientScene.unity
     guid: d1602400a3fc6cf40ae473f54ac84c83
   - enabled: 1
     path: Assets/Level/Scenes/Environment/Environment.unity
