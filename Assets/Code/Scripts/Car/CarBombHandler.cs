@@ -42,59 +42,29 @@ namespace XaviGames.Car
             TransferBombServerRpc(fromClientId, toClientId);
         }
 
-        public void GiveBomb()
+        [Rpc(SendTo.NotServer)]
+        public void GiveBombRpc()
         {
             HasBomb = true;
-            GiveBombServerRpc();
-            GameLogger.Log($"Bomb given to {OwnerClientId}", LogCategory.Server);
-        }
 
-        [ServerRpc(RequireOwnership = false)]
-        private void GiveBombServerRpc(ServerRpcParams rpcParams = default)
-        {
-            ShowBombClientRpc();
-        }
-
-
-        [ClientRpc]
-        private void ShowBombClientRpc(ClientRpcParams rpcParams = default)
-        {
-            if (_bombCanvas == null)
+            if (IsOwner)
             {
-                return;
+                _bombCanvas.alpha = 0.5f;
+            }
+            else
+            {
+                _bombCanvas.alpha = 1f;
             }
 
-            _bombCanvas.gameObject.SetActive(true);
-
-            LeanTween.alphaCanvas(_bombCanvas, 1f, 0.5f)
-                    .setEase(LeanTweenType.easeInOutQuad);
         }
 
         public void RemoveBomb()
         {
             HasBomb = false;
-            RemoveBombServerRpc();
+            _bombCanvas.alpha = 0f;
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        private void RemoveBombServerRpc(ServerRpcParams rpcParams = default)
-        {
-            RemoveBombClientRpc();
-        }
-
-        [ClientRpc]
-        private void RemoveBombClientRpc(ClientRpcParams rpcParams = default)
-        {
-            if (_bombCanvas == null)
-            {
-                return;
-            }
-
-            LeanTween.alphaCanvas(_bombCanvas, 0f, 0.5f)
-                    .setEase(LeanTweenType.easeInOutQuad);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
+        [Rpc(SendTo.Server)]
         private void TransferBombServerRpc(ulong fromClientId, ulong toClientId)
         {
             var teamController = FindAnyObjectByType<TeamController>();
@@ -104,7 +74,7 @@ namespace XaviGames.Car
                 return;
             }
 
-            teamController.TransferBomb(fromClientId, toClientId);
+            teamController.TransferBombBetweenPlayers(fromClientId, toClientId);
         }
     }
 }

@@ -1,4 +1,4 @@
-//Boompact(c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
+// Boompact (c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
@@ -14,165 +14,127 @@ namespace XaviGames.Server
 {
     public class TeamController : MonoBehaviour
     {
-        public List<ulong> PlayersWithBomb { get; private set; } = new();
-        public List<ulong> PlayersWithoutBomb { get; private set; } = new();
-
-        private readonly List<ulong> _connectedPlayers = new();
+        public List<ulong> BombOwners { get; private set; } = new();
+        public List<ulong> NonBombOwners { get; private set; } = new();
+        private readonly List<ulong> _connectedPlayerIds = new();
 
         private void Start()
         {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+            NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnected;
         }
 
         private void OnDestroy()
         {
             if (NetworkManager.Singleton != null)
             {
-                NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-                NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
+                NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+                NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnected;
             }
         }
 
-        private void OnClientConnected(ulong clientId)
+        public void DistributeInitialBombs()
         {
-            if (_connectedPlayers.Contains(clientId))
+            BombOwners.Clear();
+            NonBombOwners.Clear();
+
+            var shuffledIds = _connectedPlayerIds.OrderBy(_ => Random.value).ToList();
+            int halfCount = shuffledIds.Count / 2;
+
+            BombOwners.AddRange(shuffledIds.Take(halfCount));
+            NonBombOwners.AddRange(shuffledIds.Skip(halfCount));
+
+            foreach (var clientId in BombOwners)
+            {
+                var bombHandler = GetCarBombHandler(clientId);
+                if (bombHandler != null)
+                {
+                    bombHandler.GiveBombRpc();
+                }
+            }
+
+            GameLogger.Log($"Bombs distributed. Owners: {BombOwners.Count}, Non-owners: {NonBombOwners.Count}", LogCategory.Server);
+        }
+
+        public void TransferBombBetweenPlayers(ulong fromClientId, ulong toClientId)
+        {
+            if (!NetworkManager.Singleton.IsServer)
+            {
+                GameLogger.LogWarning("TransferBombBetweenPlayers can only be called on the server.", LogCategory.Server);
+                return;
+            }
+
+            if (fromClientId == toClientId
+                || !BombOwners.Contains(fromClientId)
+                || BombOwners.Contains(toClientId))
+            {
+                GameLogger.LogWarning($"Invalid bomb transfer request from {fromClientId} to {toClientId}.", LogCategory.Server);
+                return;
+            }
+
+            BombOwners.Remove(fromClientId);
+            NonBombOwners.Add(fromClientId);
+
+            BombOwners.Add(toClientId);
+            NonBombOwners.Remove(toClientId);
+
+            var fromHandler = GetCarBombHandler(fromClientId);
+            fromHandler?.RemoveBomb();
+
+            var toHandler = GetCarBombHandler(toClientId);
+            toHandler?.GiveBombRpc();
+
+            GameLogger.Log($"Bomb transferred from {fromClientId} to {toClientId}.", LogCategory.Server);
+        }
+
+        private CarBombHandler GetCarBombHandler(ulong clientId)
+        {
+            if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out var netClient))
+            {
+                GameLogger.LogWarning($"Client {clientId} not found in ConnectedClients.", LogCategory.Server);
+                return null;
+            }
+
+            var playerObject = netClient.PlayerObject;
+            if (playerObject == null)
+            {
+                GameLogger.LogWarning($"PlayerObject is null for client {clientId}.", LogCategory.Server);
+                return null;
+            }
+
+            var playerController = playerObject.GetComponent<PlayerController>();
+            if (playerController == null || playerController.CarSpawned == null)
+            {
+                GameLogger.LogWarning($"PlayerController or CarSpawned is null for client {clientId}.", LogCategory.Server);
+                return null;
+            }
+
+            var bombHandler = playerController.CarSpawned.GetComponent<CarBombHandler>();
+            if (bombHandler == null)
+            {
+                GameLogger.LogWarning($"CarBombHandler not found on CarSpawned for client {clientId}.", LogCategory.Server);
+                return null;
+            }
+
+            return bombHandler;
+        }
+
+        private void HandleClientConnected(ulong clientId)
+        {
+            if (_connectedPlayerIds.Contains(clientId))
             {
                 GameLogger.LogWarning($"Client {clientId} is already connected.", LogCategory.Server);
                 return;
             }
 
-            _connectedPlayers.Add(clientId);
+            _connectedPlayerIds.Add(clientId);
         }
 
-        private void OnClientDisconnected(ulong clientId)
+        private void HandleClientDisconnected(ulong clientId)
         {
-            _connectedPlayers.RemoveAll(c => c == clientId);
-            PlayersWithBomb.RemoveAll(c => c == clientId);
-            PlayersWithoutBomb.RemoveAll(c => c == clientId);
-        }
-
-        public void DividePlayersWithAndWithoutBombs()
-        {
-            PlayersWithBomb.Clear();
-            PlayersWithoutBomb.Clear();
-
-            var shuffledPlayers = new List<ulong>(_connectedPlayers);
-            ShuffleList(shuffledPlayers);
-
-            int half = shuffledPlayers.Count / 2;
-
-            PlayersWithBomb.AddRange(shuffledPlayers.Take(half));
-            PlayersWithoutBomb.AddRange(shuffledPlayers.Skip(half));
-
-            foreach (var clientId in PlayersWithBomb)
-            {
-                if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out var networkClient))
-                {
-                    GameLogger.LogWarning($"Client {clientId} not found in connected list.", LogCategory.Server);
-                    continue;
-                }
-
-                var playerObj = networkClient.PlayerObject;
-                if (playerObj == null)
-                {
-                    GameLogger.LogWarning($"PlayerObject for client {clientId} is null.", LogCategory.Server);
-                    continue;
-                }
-
-                var playerController = playerObj.GetComponent<PlayerController>();
-                if (playerController == null)
-                {
-                    GameLogger.LogWarning($"PlayerController component not found on client {clientId}.", LogCategory.Server);
-                    continue;
-                }
-
-                var carGO = playerController.CarSpawned;
-                if (carGO == null)
-                {
-                    GameLogger.LogWarning($"CarSpawned for player {clientId} is null. Cannot give bomb.", LogCategory.Server);
-                    continue;
-                }
-
-                var bombHandler = carGO.GetComponent<CarBombHandler>();
-                if (bombHandler == null)
-                {
-                    GameLogger.LogWarning($"CarBombHandler not found on {carGO.name} (client {clientId}).", LogCategory.Server);
-                    continue;
-                }
-
-                bombHandler.GiveBomb();
-            }
-
-            GameLogger.Log($"Assigned bombs. Players with bombs: {PlayersWithBomb.Count}, without bomb: {PlayersWithoutBomb.Count}", LogCategory.Server);
-        }
-
-        public void TransferBomb(ulong clientFrom, ulong clientTo)
-        {
-            if (!NetworkManager.Singleton.IsServer)
-            {
-                GameLogger.LogWarning("TransferBomb só pode ser chamado no servidor.", LogCategory.Server);
-                return;
-            }
-
-            if (clientFrom == clientTo)
-            {
-                GameLogger.LogWarning("Invalid transfer request: mesma pessoa.", LogCategory.Server);
-                return;
-            }
-
-            if (!PlayersWithBomb.Contains(clientFrom) || PlayersWithBomb.Contains(clientTo))
-            {
-                GameLogger.LogWarning($"Transfer inválido de {clientFrom} para {clientTo}.", LogCategory.Server);
-                return;
-            }
-
-            PlayersWithBomb.Remove(clientFrom);
-            PlayersWithoutBomb.Add(clientFrom);
-
-            PlayersWithBomb.Add(clientTo);
-            PlayersWithoutBomb.Remove(clientTo);
-
-            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(clientFrom, out var fromNetClient))
-            {
-                var fromObj = fromNetClient.PlayerObject;
-                if (fromObj != null)
-                {
-                    var fromPC = fromObj.GetComponent<PlayerController>();
-                    if (fromPC != null && fromPC.CarSpawned != null)
-                    {
-                        var fromBombHandler = fromPC.CarSpawned.GetComponent<CarBombHandler>();
-                        if (fromBombHandler != null)
-                            fromBombHandler.RemoveBomb();
-                    }
-                }
-            }
-
-            if (NetworkManager.Singleton.ConnectedClients.TryGetValue(clientTo, out var toNetClient))
-            {
-                var toObj = toNetClient.PlayerObject;
-                if (toObj != null)
-                {
-                    var toPC = toObj.GetComponent<PlayerController>();
-                    if (toPC != null && toPC.CarSpawned != null)
-                    {
-                        var toBombHandler = toPC.CarSpawned.GetComponent<CarBombHandler>();
-                        if (toBombHandler != null)
-                            toBombHandler.GiveBomb();
-                    }
-                }
-            }
-
-            GameLogger.Log($"Bomb transferred from {clientFrom} to {clientTo}.", LogCategory.Server);
-        }
-
-        private void ShuffleList<T>(List<T> list)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
-            {
-                int randomIndex = Random.Range(0, i + 1);
-                (list[i], list[randomIndex]) = (list[randomIndex], list[i]);
-            }
+            _connectedPlayerIds.RemoveAll(id => id == clientId);
+            BombOwners.RemoveAll(id => id == clientId);
+            NonBombOwners.RemoveAll(id => id == clientId);
         }
     }
 }

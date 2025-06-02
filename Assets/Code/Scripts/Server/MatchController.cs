@@ -20,7 +20,7 @@ namespace XaviGames.Server
         public void StartMatch()
         {
             _carSpawnController.SpawnAllCars();
-            _teamController.DividePlayersWithAndWithoutBombs();
+            _teamController.DistributeInitialBombs();
             _serverManager.SetServerState(ServerState.GameInProgress);
         }
     }
