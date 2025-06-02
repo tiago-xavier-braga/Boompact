@@ -2,11 +2,7 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
-using System.Collections.Generic;
-using System.Linq;
-using Unity.Netcode;
 using UnityEngine;
-using XaviEssencials.Runtime;
 
 namespace XaviGames.Server
 {
@@ -23,10 +19,9 @@ namespace XaviGames.Server
 
         public void StartMatch()
         {
-            _teamController.DividePlayersWithAndWithoutBombs();
             _carSpawnController.SpawnAllCars();
+            _teamController.DividePlayersWithAndWithoutBombs();
             _serverManager.SetServerState(ServerState.GameInProgress);
         }
     }
-
 }
