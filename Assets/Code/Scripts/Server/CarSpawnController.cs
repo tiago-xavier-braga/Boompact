@@ -51,7 +51,7 @@ namespace XaviGames.Server
 
                 var spawn = _spawnPoints[i];
                 var car = Instantiate(param.CarGameObject, spawn.position, spawn.rotation);
-
+                car.name = $"Car_{client.ClientId}_{carId}";
                 playerController.SetCarGameObject(car);
                 var netObj = car.GetComponent<NetworkObject>();
                 netObj.SpawnWithOwnership(client.ClientId);

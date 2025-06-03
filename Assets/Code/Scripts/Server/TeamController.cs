@@ -79,7 +79,7 @@ namespace XaviGames.Server
             NonBombOwners.Remove(toClientId);
 
             var fromHandler = GetCarBombHandler(fromClientId);
-            fromHandler?.RemoveBomb();
+            fromHandler?.RemoveBombRpc();
 
             var toHandler = GetCarBombHandler(toClientId);
             toHandler?.GiveBombRpc();

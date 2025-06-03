@@ -11,16 +11,19 @@ namespace XaviGames.Car
 {
     public class CarBombHandler : NetworkBehaviour
     {
-        [field: SerializeField]
-        [field: ReadOnly]
-        public bool HasBomb { get; private set; } = false;
+        public NetworkVariable<bool> HasBomb = new NetworkVariable<bool>
+            (
+                false,
+                NetworkVariableReadPermission.Everyone,
+                NetworkVariableWritePermission.Owner
+            );
 
         [SerializeField]
         private CanvasGroup _bombCanvas;
 
         private void OnTriggerEnter(Collider other)
         {
-            if (!HasBomb)
+            if (!HasBomb.Value)
             {
                 return;
             }
@@ -31,7 +34,7 @@ namespace XaviGames.Car
                 return;
             }
 
-            if (otherHandler.HasBomb)
+            if (otherHandler.HasBomb.Value)
             {
                 return;
             }
@@ -45,10 +48,10 @@ namespace XaviGames.Car
         [Rpc(SendTo.NotServer)]
         public void GiveBombRpc()
         {
-            HasBomb = true;
-
             if (IsOwner)
             {
+                HasBomb.Value = true;
+                //TODO: Add visual feedback for the player who received the bomb
                 _bombCanvas.alpha = 0.5f;
             }
             else
@@ -58,9 +61,14 @@ namespace XaviGames.Car
 
         }
 
-        public void RemoveBomb()
+        [Rpc(SendTo.NotServer)]
+        public void RemoveBombRpc()
         {
-            HasBomb = false;
+            if (IsOwner)
+            {
+                HasBomb.Value = false;
+            }
+
             _bombCanvas.alpha = 0f;
         }
 
