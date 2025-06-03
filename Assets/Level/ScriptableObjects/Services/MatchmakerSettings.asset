@@ -15,4 +15,4 @@ MonoBehaviour:
   <QueueName>k__BackingField: 
   <MinPlayersInMatch>k__BackingField: 2
   <MaxPlayersInMatch>k__BackingField: 10
-  <StartDelayAfterMinPlayers>k__BackingField: 30
+  <StartDelayAfterMinPlayers>k__BackingField: 15
