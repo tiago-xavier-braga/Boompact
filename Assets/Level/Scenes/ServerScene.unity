@@ -221,9 +221,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ServerState>k__BackingField: 0
   _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
+  _matchmakerSettings: {fileID: 11400000, guid: 6215fb4da8211e34c904f12705e3fdf6, type: 2}
   _multiplayEventHandler: {fileID: 338734936}
   _backfillController: {fileID: 338734937}
   _MatchController: {fileID: 338734938}
+  _connectedPlayersController: {fileID: 338734939}
   _sceneToLoad:
     _sceneAsset: {fileID: 102900000, guid: 4eaad980f54bfcf4b8d8acfa3d4a7d97, type: 3}
     <SceneName>k__BackingField: Environment
@@ -287,6 +289,7 @@ MonoBehaviour:
   _serverManager: {fileID: 338734934}
   _carSpawnController: {fileID: 338734940}
   _teamController: {fileID: 338734941}
+  _matchSettings: {fileID: 11400000, guid: 9e03e722c77c8b24cae8de6331e5e98d, type: 2}
 --- !u!114 &338734939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,7 +317,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _carDatabase: {fileID: 11400000, guid: fae10f236217f1646a263170d382d167, type: 2}
-  _teamController: {fileID: 338734941}
   _spawnPoints:
   - {fileID: 2008953921}
   - {fileID: 182769646}
@@ -330,6 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e075fef081c7a45a5321059d180684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _serverManager: {fileID: 338734934}
 --- !u!1652712579 &338734942
 MultiplayerRolesData:
   m_ObjectHideFlags: 2
