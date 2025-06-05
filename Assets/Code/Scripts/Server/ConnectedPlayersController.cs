@@ -37,21 +37,16 @@ namespace XaviGames.Server
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
 
-        private void OnClientConnected(ulong clientId)
-        {
-            UpdatePlayerCount();
-            GameLogger.Log($"Player connected. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
-        }
-
-        private void OnClientDisconnected(ulong clientId)
-        {
-            UpdatePlayerCount();
-            GameLogger.Log($"Player disconnected. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
-        }
-
-        private void UpdatePlayerCount()
+        public void UpdatePlayerCount()
         {
             ServerState currentState = _serverManager.ServerState;
+
+            if(currentState == ServerState.GameInProgress && _connectedPlayers == 0)
+            {
+                GameLogger.LogWarning("No players connected. Resetting match.", LogCategory.Matchmaker);
+                _serverManager.ResetMatch();
+                return;
+            }
 
             if (currentState != ServerState.WaitingForPlayers)
             {
@@ -88,6 +83,18 @@ namespace XaviGames.Server
 
                 GameLogger.Log($"Waiting for more players. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
             }
+        }
+
+        private void OnClientConnected(ulong clientId)
+        {
+            UpdatePlayerCount();
+            GameLogger.Log($"Player connected. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
+        }
+
+        private void OnClientDisconnected(ulong clientId)
+        {
+            UpdatePlayerCount();
+            GameLogger.Log($"Player disconnected. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
         }
 
         private IEnumerator StartMatchCountdown()

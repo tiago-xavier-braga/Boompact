@@ -14,6 +14,9 @@ namespace XaviGames.Server
 {
     public class TeamController : MonoBehaviour
     {
+        [SerializeField]
+        private ServerManager _serverManager;
+
         public List<ulong> BombOwners { get; private set; } = new();
         public List<ulong> NonBombOwners { get; private set; } = new();
         private readonly List<ulong> _connectedPlayerIds = new();
@@ -61,6 +64,11 @@ namespace XaviGames.Server
             if (!NetworkManager.Singleton.IsServer)
             {
                 GameLogger.LogWarning("TransferBombBetweenPlayers can only be called on the server.", LogCategory.Server);
+                return;
+            }
+
+            if (_serverManager.ServerState != ServerState.GameInProgress)
+            {
                 return;
             }
 

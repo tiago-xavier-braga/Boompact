@@ -26,6 +26,9 @@ namespace XaviGames.Server
         private ServicesSettings _servicesSettings;
 
         [SerializeField]
+        private MatchmakerSettings _matchmakerSettings;
+
+        [SerializeField]
         private MultiplayEventHandler _multiplayEventHandler;
 
         [SerializeField]
@@ -33,6 +36,9 @@ namespace XaviGames.Server
 
         [SerializeField]
         private MatchController _MatchController;
+
+        [SerializeField]
+        private ConnectedPlayersController _connectedPlayersController;
 
         [SerializeField]
         public CarSpawnController CarSpawnController { get; private set; }
@@ -61,17 +67,36 @@ namespace XaviGames.Server
             _MatchController.StartMatch();
         }
 
+        public async void ResetMatch()
+        {
+            if (NetworkManager.Singleton.ConnectedClientsList.Count == _matchmakerSettings.MaxPlayersInMatch)
+            {
+                SetServerState(ServerState.StartingGame);
+                StartMatch();
+            }
+            else
+            {
+                SetServerState(ServerState.WaitingForPlayers);
+                await _backfillController.CreateBackfillTicket();
+                _connectedPlayersController.UpdatePlayerCount();
+            }
+        }
+
         private async Task StartServer()
         {
             await InitializeUnityServicesAndTransport();
             StartNetworkServer();
-
-            NetworkManager.Singleton.SceneManager.LoadScene(_sceneToLoad.SceneName,
-                UnityEngine.SceneManagement.LoadSceneMode.Single);
-
+            LoadScene();
             await SubscribeMultiplayCallbacksIfNeeded();
             SetServerState(ServerState.WaitingForPlayers);
             await _backfillController.CreateBackfillTicket();
+        }
+
+        private void LoadScene()
+        {
+            NetworkManager.Singleton.SceneManager.LoadScene(_sceneToLoad.SceneName,
+                UnityEngine.SceneManagement.LoadSceneMode.Single);
+
         }
 
         private async Task InitializeUnityServicesAndTransport()
