@@ -13,6 +13,7 @@ using XaviEssencials.Runtime;
 using Unity.Services.Multiplay;
 using XaviGames.Services;
 using UnityEngine.Events;
+using XaviGames.Manager;
 
 namespace XaviGames.Server
 {
@@ -36,6 +37,9 @@ namespace XaviGames.Server
 
         [SerializeField]
         private MatchController _MatchController;
+
+        [SerializeField]
+        private NetworkSceneLoader _networkSceneLoader;
 
         [SerializeField]
         private ConnectedPlayersController _connectedPlayersController;
@@ -86,7 +90,7 @@ namespace XaviGames.Server
         {
             await InitializeUnityServicesAndTransport();
             StartNetworkServer();
-            LoadScene();
+            await _networkSceneLoader.LoadSceneAsyncServer(_sceneToLoad);
             await SubscribeMultiplayCallbacksIfNeeded();
             SetServerState(ServerState.WaitingForPlayers);
             await _backfillController.CreateBackfillTicket();
