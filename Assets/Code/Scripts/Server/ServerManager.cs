@@ -14,10 +14,12 @@ using Unity.Services.Multiplay;
 using XaviGames.Services;
 using UnityEngine.Events;
 using XaviGames.Manager;
+using System.Collections.Generic;
+using UnityEditor;
 
 namespace XaviGames.Server
 {
-    public class ServerManager : MonoBehaviour
+    public sealed class ServerManager : MonoBehaviour
     {
         [field: SerializeField]
         [field: ReadOnly]
@@ -48,7 +50,10 @@ namespace XaviGames.Server
         public CarSpawnController CarSpawnController { get; private set; }
 
         [SerializeField]
-        private SceneReference _sceneToLoad;
+        private SceneReference _serverScene;
+
+        [SerializeField]
+        private SceneBundle _clientSceneBundle;
 
         public UnityAction<ServerState> OnChangeServerState;
 
@@ -73,34 +78,20 @@ namespace XaviGames.Server
 
         public async void ResetMatch()
         {
-            if (NetworkManager.Singleton.ConnectedClientsList.Count == _matchmakerSettings.MaxPlayersInMatch)
-            {
-                SetServerState(ServerState.StartingGame);
-                StartMatch();
-            }
-            else
-            {
-                SetServerState(ServerState.WaitingForPlayers);
-                await _backfillController.CreateBackfillTicket();
-                _connectedPlayersController.UpdatePlayerCount();
-            }
+            OnDisconnectedAllPlayers();
+            SetServerState(ServerState.WaitingForPlayers);
+            await _backfillController.CreateBackfillTicket();
+            _connectedPlayersController.UpdatePlayerCount();
         }
 
         private async Task StartServer()
         {
             await InitializeUnityServicesAndTransport();
             StartNetworkServer();
-            await _networkSceneLoader.LoadSceneAsyncServer(_sceneToLoad);
+            await _networkSceneLoader.LoadSceneAsyncServer(_serverScene);
             await SubscribeMultiplayCallbacksIfNeeded();
             SetServerState(ServerState.WaitingForPlayers);
             await _backfillController.CreateBackfillTicket();
-        }
-
-        private void LoadScene()
-        {
-            NetworkManager.Singleton.SceneManager.LoadScene(_sceneToLoad.SceneName,
-                UnityEngine.SceneManagement.LoadSceneMode.Single);
-
         }
 
         private async Task InitializeUnityServicesAndTransport()
@@ -157,6 +148,26 @@ namespace XaviGames.Server
 
                 await MultiplayService.Instance.SubscribeToServerEventsAsync(callbacks);
             }
+        }
+
+        private void OnDisconnectedAllPlayers()
+        {
+            List<ulong> clientsToDisonnect = new List<ulong>();
+
+            foreach (var client in NetworkManager.Singleton.ConnectedClientsList)
+            {
+                if (client != NetworkManager.Singleton.LocalClient)
+                {
+                    clientsToDisonnect.Add(client.ClientId);
+                }
+            }
+
+            foreach (var clientId in clientsToDisonnect)
+            {
+                NetworkManager.Singleton.DisconnectClient(clientId);
+            }
+
+            GameLogger.Log("All players disconnected from the server.", LogCategory.Server);
         }
     }
 }
