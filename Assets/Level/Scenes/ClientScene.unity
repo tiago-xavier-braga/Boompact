@@ -334,6 +334,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _servicesSettings: {fileID: 11400000, guid: 22dc5ccd81f8ba340a707b4f4a14a48c, type: 2}
+  _matchmakerSettings: {fileID: 11400000, guid: 6215fb4da8211e34c904f12705e3fdf6, type: 2}
+  _clientSceneBundle: {fileID: 11400000, guid: 0a7e53f0a01866e4ea2adb2b74202e7e, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

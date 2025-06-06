@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 338734940}
   - component: {fileID: 338734941}
   - component: {fileID: 338734942}
+  - component: {fileID: 338734943}
   m_Layer: 0
   m_Name: Server Manager
   m_TagString: Untagged
@@ -225,10 +226,12 @@ MonoBehaviour:
   _multiplayEventHandler: {fileID: 338734936}
   _backfillController: {fileID: 338734937}
   _MatchController: {fileID: 338734938}
+  _networkSceneLoader: {fileID: 338734943}
   _connectedPlayersController: {fileID: 338734939}
-  _sceneToLoad:
+  _serverScene:
     _sceneAsset: {fileID: 102900000, guid: 4eaad980f54bfcf4b8d8acfa3d4a7d97, type: 3}
     <SceneName>k__BackingField: Environment
+  _clientSceneBundle: {fileID: 11400000, guid: 0a7e53f0a01866e4ea2adb2b74202e7e, type: 2}
 --- !u!4 &338734935
 Transform:
   m_ObjectHideFlags: 0
@@ -356,6 +359,18 @@ MultiplayerRolesData:
     m_RolesMask: 2
   - m_Object: {fileID: 338734941}
     m_RolesMask: 2
+--- !u!114 &338734943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 338734933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c3086c5dcdc62d458dc79f6e54c1823, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1086370287
 GameObject:
   m_ObjectHideFlags: 0
