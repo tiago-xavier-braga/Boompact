@@ -80,7 +80,7 @@ namespace XaviGames.Server
             }
         }
 
-        public async Task DeleteBackfillTicket()
+        public async Task  DeleteBackfillTicket()
         {
             if (string.IsNullOrWhiteSpace(_ticketId))
             {
