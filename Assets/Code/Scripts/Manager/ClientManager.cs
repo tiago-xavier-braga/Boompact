@@ -9,6 +9,7 @@ using Unity.Services.Matchmaker.Models;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
+using XaviGames.Ui;
 
 namespace XaviGames.Manager
 {
@@ -20,21 +21,8 @@ namespace XaviGames.Manager
         [SerializeField]
         private MatchmakerSettings _matchmakerSettings;
 
-        [SerializeField]
-        private SceneBundle _clientSceneBundle;
-
         private bool _initialized;
         public static ClientManager Instance { get; private set; } = null;
-
-        private void OnEnable()
-        {
-            NetworkManager.Singleton.OnClientDisconnectCallback += (_) => OnClientDisconnect();
-        }
-
-        private void OnDisable()
-        {
-            NetworkManager.Singleton.OnClientDisconnectCallback -= (_) => OnClientDisconnect();
-        }
 
         private void Awake()
         {
@@ -51,6 +39,7 @@ namespace XaviGames.Manager
         private async void Start()
         {
             await StartServices();
+            LoadingController.Instance.DisableLoading();
         }
 
         private async Task StartServices()
@@ -140,9 +129,5 @@ namespace XaviGames.Manager
             GameLogger.Log($"Client started local connection: {success}", LogCategory.Test);
         }
 
-        private void OnClientDisconnect()
-        {
-            _clientSceneBundle.LoadScenesAsync();
-        }
     }
 }
