@@ -7,7 +7,7 @@ using XaviEssencials.Runtime;
 
 namespace XaviGames.Ui
 {
-    public class LoadingController : MonoBehaviour
+    public class LoadingCanvasController : MonoBehaviour
     {
         [SerializeField]
         private CanvasGroup _loadingCanvasGroup;
@@ -18,7 +18,7 @@ namespace XaviGames.Ui
         [SerializeField]
         private float _loadingDuration = 0.5f;
 
-        public static LoadingController Instance { get; private set; }
+        public static LoadingCanvasController Instance { get; private set; }
 
         private void Awake()
         {

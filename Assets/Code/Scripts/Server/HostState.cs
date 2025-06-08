@@ -4,9 +4,9 @@
 
 namespace XaviGames.Server
 {
-    public enum ServerState
+    public enum HostState
     {
-        ServerOff = 0,
+        Off = 0,
         WaitingForPlayers = 1,
         StartingGame = 2,
         GameInProgress = 3,

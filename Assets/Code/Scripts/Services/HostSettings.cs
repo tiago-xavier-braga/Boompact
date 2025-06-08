@@ -6,12 +6,10 @@ using UnityEngine;
 
 namespace XaviGames.Services
 {
-    [CreateAssetMenu(fileName = "MatchmakerSettings", menuName = "Xavi Games/Services/MatchmakerSettings")]
-    public class MatchmakerSettings : ScriptableObject
+    [CreateAssetMenu(fileName = nameof(HostSettings), menuName = "Xavi Games/Services/Host Settings")]
+    public class HostSettings : ScriptableObject
     {
-        [field: Header("Unity Matchmaker")]
-        [field: SerializeField]
-        public string QueueName { get; private set; }
+        [field: Header("Unity Host")]
 
         [field: SerializeField]
         public int MinPlayersInMatch { get; private set; }
@@ -32,6 +30,17 @@ namespace XaviGames.Services
             {
                 MaxPlayersInMatch = MinPlayersInMatch;
             }
+        }
+
+        public string GetConnectionType()
+        {
+#if UNITY_WEBGL
+    return "wss";
+#elif UNITY_ANDROID || UNITY_IOS
+    return "dtls";
+#else
+            return "udp";
+#endif
         }
     }
 }

@@ -15,7 +15,7 @@ namespace XaviGames.Server
     public class TeamController : MonoBehaviour
     {
         [SerializeField]
-        private ServerManager _serverManager;
+        private HostManager _serverManager;
 
         public List<ulong> BombOwners { get; private set; } = new();
         public List<ulong> NonBombOwners { get; private set; } = new();
@@ -67,7 +67,7 @@ namespace XaviGames.Server
                 return;
             }
 
-            if (_serverManager.ServerState != ServerState.GameInProgress)
+            if (_serverManager.HostState != HostState.GameInProgress)
             {
                 return;
             }

@@ -15,7 +15,7 @@ namespace XaviGames.Server
     public class MatchController : MonoBehaviour
     {
         [SerializeField]
-        private ServerManager _serverManager;
+        private HostManager _serverManager;
 
         [SerializeField]
         private CarSpawnController _carSpawnController;
@@ -30,7 +30,7 @@ namespace XaviGames.Server
         {
             _carSpawnController.SpawnAllCars();
             _teamController.DistributeInitialBombs();
-            _serverManager.SetServerState(ServerState.GameInProgress);
+            _serverManager.SetServerState(HostState.GameInProgress);
             StartCoroutine(StartCountdown());
         }
 
@@ -62,9 +62,9 @@ namespace XaviGames.Server
 
         private void FinishMatch()
         {
-            _serverManager.SetServerState(ServerState.GameEnded);
+            _serverManager.SetServerState(HostState.GameEnded);
             ShowWinnersClientRpc();
-            _serverManager.ResetMatch();
+            //_serverManager.ResetMatch();
         }
 
         [Rpc(SendTo.NotServer)]

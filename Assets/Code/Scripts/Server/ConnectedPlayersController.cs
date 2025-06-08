@@ -2,7 +2,6 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
-using System;
 using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
@@ -14,10 +13,10 @@ namespace XaviGames.Server
     public class ConnectedPlayersController : MonoBehaviour
     {
         [SerializeField]
-        private MatchmakerSettings _matchmakerSettings;
+        private HostSettings _matchmakerSettings;
 
         [SerializeField]
-        private ServerManager _serverManager;
+        private HostManager _serverManager;
 
         [SerializeField]
         [ReadOnly]
@@ -39,16 +38,16 @@ namespace XaviGames.Server
 
         public void UpdatePlayerCount()
         {
-            ServerState currentState = _serverManager.ServerState;
+            HostState currentState = _serverManager.HostState;
 
-            if(currentState == ServerState.GameInProgress && _connectedPlayers == 0)
+            if(currentState == HostState.GameInProgress && _connectedPlayers == 0)
             {
                 GameLogger.LogWarning("No players connected. Resetting match.", LogCategory.Matchmaker);
-                _serverManager.ResetMatch();
+                //_serverManager.ResetMatch();
                 return;
             }
 
-            if (currentState != ServerState.WaitingForPlayers)
+            if (currentState != HostState.WaitingForPlayers)
             {
                 return;
             }
@@ -60,7 +59,7 @@ namespace XaviGames.Server
                     StopCoroutine(_startMatchCountdownCoroutine);
                     _startMatchCountdownCoroutine = null;
                 }
-                _serverManager.StartMatch();
+                //_serverManager.StartMatch();
 
                 GameLogger.Log($"Maximum players reached. Starting game. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
             }
@@ -73,7 +72,7 @@ namespace XaviGames.Server
             }
             else
             {
-                _serverManager.SetServerState(ServerState.WaitingForPlayers);
+                _serverManager.SetServerState(HostState.WaitingForPlayers);
 
                 if (_startMatchCountdownCoroutine != null)
                 {
@@ -106,7 +105,7 @@ namespace XaviGames.Server
             if (_connectedPlayers >= _matchmakerSettings.MinPlayersInMatch)
             {
                 GameLogger.Log("Countdown finished. Starting match.", LogCategory.Matchmaker);
-                _serverManager.StartMatch();
+                //_serverManager.StartMatch();
             }
             else
             {
