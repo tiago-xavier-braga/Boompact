@@ -2,94 +2,81 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
+using XaviGames.Services;
 
-namespace XaviGames.Server
+namespace XaviGames.Host
 {
     public class MatchController : MonoBehaviour
     {
         [SerializeField]
-        private ServerManager _serverManager;
+        private HostManager _serverManager;
 
         [SerializeField]
         private CarSpawnController _carSpawnController;
 
-        private readonly List<NetworkClient> _connectedPlayers = new();
-        private readonly List<NetworkClient> _playersStartingWithBombs = new();
-        private readonly List<NetworkClient> _playersStartingWithoutBombs = new();
+        [SerializeField]
+        private TeamController _teamController;
 
-        private void Start()
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
-        }
-
-        private void OnDestroy()
-        {
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
-            NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
-        }
+        [SerializeField]
+        private HostSettings _hostSettings;
 
         public void StartMatch()
         {
-            //var state = _serverManager.ServerState;
-            //if (state != ServerState.StartingGame)
-            //{
-            //    Debug.LogWarning("The match has already started");
-            //    return;
-            //}
-
-            DividePlayersWithAndWithoutBombs();
             _carSpawnController.SpawnAllCars();
-            _serverManager.SetServerState(ServerState.GameInProgress);
+            _teamController.DistributeInitialBombs();
+            _serverManager.SetServerState(HostState.GameInProgress);
+            StartCoroutine(StartCountdown());
         }
 
-        private void DividePlayersWithAndWithoutBombs()
+        private IEnumerator StartCountdown()
         {
-            _playersStartingWithBombs.Clear();
-            _playersStartingWithoutBombs.Clear();
-
-            var shuffledPlayers = new List<NetworkClient>(_connectedPlayers);
-            ShuffleList(shuffledPlayers);
-
-            int half = shuffledPlayers.Count / 2;
-
-            _playersStartingWithBombs.AddRange(shuffledPlayers.Take(half));
-            _playersStartingWithoutBombs.AddRange(shuffledPlayers.Skip(half));
-
-            GameLogger.Log($"Assigned pumps. Players with bombs:{_playersStartingWithBombs.Count}, without bomb: {_playersStartingWithoutBombs.Count}", LogCategory.Server);
-        }
-
-        private void ShuffleList<T>(List<T> list)
-        {
-            for (int i = list.Count - 1; i > 0; i--)
+            if (!NetworkManager.Singleton.IsServer)
             {
-                int randomIndex = Random.Range(0, i + 1);
-                (list[i], list[randomIndex]) = (list[randomIndex], list[i]);
-            }
-        }
-
-        private void OnClientConnected(ulong clientId)
-        {
-            var client = NetworkManager.Singleton.ConnectedClients[clientId];
-
-            if (_connectedPlayers.Any(c => c.ClientId == clientId))
-            {
-                GameLogger.LogWarning($"Client {clientId} is already connected.", LogCategory.Server);
-                return;
+                GameLogger.LogWarning("StartMatch called on client. Aborting.", LogCategory.Server);
+                yield return null;
             }
 
-            _connectedPlayers.Add(client);
+            if (_hostSettings is null)
+            {
+                GameLogger.LogWarning("MatchSettings is not set. Cannot start countdown.", LogCategory.Server);
+                yield return null;
+            }
+
+            int currentSeconds = _hostSettings.MinutesMatchDuration * 60;
+            while (currentSeconds > 0)
+            {
+                currentSeconds--;
+                UpdateCountdownClientRpc(currentSeconds);
+                GameLogger.Log($"Match countdown: {currentSeconds} seconds remaining", LogCategory.Server);
+                yield return new WaitForSeconds(1f);
+            }
+
+            FinishMatch();
         }
 
-        private void OnClientDisconnected(ulong clientId)
+        private void FinishMatch()
         {
-            _connectedPlayers.RemoveAll(c => c.ClientId == clientId);
+            _serverManager.SetServerState(HostState.GameEnded);
+            ShowWinnersClientRpc();
+            //_serverManager.ResetMatch();
+        }
+
+        [Rpc(SendTo.NotServer)]
+        private void UpdateCountdownClientRpc(int remainingSeconds)
+        {
+            var minutes = remainingSeconds / 60;
+            var secs = remainingSeconds % 60;
+            //HudManager.Instance.SetMatchTimer($"{minutes:D2}:{secs:D2}");
+        }
+
+        [Rpc(SendTo.NotServer)]
+        private void ShowWinnersClientRpc()
+        {
+            //MenuManager.Instance.ShowResults(_teamController.BombOwners);
         }
     }
-
 }

@@ -1,10 +1,12 @@
+// Boompact(c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
+// Unauthorized use, copying, or distribution is prohibited.
+// For inquiries: xavigames.company@gmail.com
+
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using XaviEssencials.Runtime;
-using XaviGames.Cameras;
 using XaviGames.Car;
-using XaviGames.Server;
 using XaviGames.Services;
 
 namespace XaviGames.PlayerSystem
@@ -17,8 +19,14 @@ namespace XaviGames.PlayerSystem
         [field: SerializeField]
         public UserSession UserSession { get; private set; }
 
+        [field: SerializeField]
+        [field: ReadOnly]
+        public GameObject CarSpawned { get; private set; } = null;
+
         [SerializeField]
         private PlayerInput _playerInput;
+
+        private string _carId = string.Empty;
 
         public override void OnNetworkSpawn()
         {
@@ -28,18 +36,31 @@ namespace XaviGames.PlayerSystem
                 return;
             }
 
-            RegisterCarIdServer();
+            string id = UserSession.CarParameter.Id;
+            SubmitCarIdServerRpc(id);
         }
 
-        public ClientCarReference RegisterCarIdServer()
+        [ServerRpc(RequireOwnership = true)]
+        private void SubmitCarIdServerRpc(string carId)
         {
-            GameLogger.Log($"Player {OwnerClientId} registered car ID: {UserSession.CarParameter.Id}", LogCategory.Client);
-            
-            return new ClientCarReference
+            _carId = carId;
+        }
+
+        public string GetCarId()
+        {
+            return _carId;
+        }
+
+        public void SetCarGameObject(GameObject gameObject)
+        {
+            if (gameObject == null)
             {
-                ClientId = OwnerClientId,
-                CarId = UserSession.CarParameter.Id
-            };
+                GameLogger.LogError("CarSpawned is null. Cannot set car game object.", LogCategory.Unity);
+                return;
+            }
+
+            CarSpawned = gameObject;
+            GameLogger.Log($"Car game object set for player {OwnerClientId}. Car Name: {CarSpawned.name}", LogCategory.Unity);
         }
     }
 }

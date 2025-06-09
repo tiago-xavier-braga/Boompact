@@ -1,26 +1,27 @@
-using System.Collections.Generic;
+// Boompact (c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
+// Unauthorized use, copying, or distribution is prohibited.
+// For inquiries: xavigames.company@gmail.com
+
+using System;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
-using Unity.Services.Matchmaker;
-using Unity.Services.Matchmaker.Models;
+using Unity.Services.Relay;
+using Unity.Services.Relay.Models;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
+using XaviGames.Ui;
 
 namespace XaviGames.Manager
 {
     public class ClientManager : MonoBehaviour
     {
         [SerializeField]
-        private ServicesSettings _servicesSettings;
+        private HostSettings _hostSettings;
 
-        [SerializeField]
-        private MatchmakerSettings _matchmakerSettings;
-
-        private bool _initialized;
         public static ClientManager Instance { get; private set; } = null;
 
         private void Awake()
@@ -35,97 +36,38 @@ namespace XaviGames.Manager
             DontDestroyOnLoad(gameObject);
         }
 
-        private async void Start()
+        private void Start()
         {
-            await StartServices();
+            LoadingCanvasController.Instance.DisableLoading();
         }
 
-        private async Task StartServices()
+        public async void StartClientWithRelay(string joinCode, Action<bool> callback)
         {
-            if (!_initialized)
+            bool isSuccess = await StartClientWithRelay(joinCode, _hostSettings.GetConnectionType());
+            callback?.Invoke(isSuccess);
+        }
+
+        private async Task<bool> StartClientWithRelay(string joinCode, string connectionType)
+        {
+            try
             {
                 await UnityServices.InitializeAsync();
-                AuthenticationService.Instance.SwitchProfile(UnityEngine.Random.Range(0, 1000000).ToString());
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                _initialized = true;
-            }
-        }
-
-        public async Task StartSearch()
-        {
-            var serviceType = _servicesSettings.ClientServiceType;
-            if (serviceType == ServiceType.Local)
-            {
-                ConnectToMockServer();
-                return;
-            }
-
-            var players = new List<Player>
-            {
-                new(AuthenticationService.Instance.PlayerId, new Dictionary<string, object>())
-            };
-
-            var attributes = new Dictionary<string, object>();
-            var options = new CreateTicketOptions(_matchmakerSettings.QueueName, attributes);
-
-            while (!await FindMatch(players, options))
-            {
-                await Awaitable.WaitForSecondsAsync(1f);
-            }
-        }
-
-        private async Task<bool> FindMatch(List<Player> players, CreateTicketOptions options)
-        {
-            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            var ticketResponse = await MatchmakerService.Instance.CreateTicketAsync(players, options);
-
-            while (true)
-            {
-                await Awaitable.WaitForSecondsAsync(1f);
-
-                GameLogger.Log("Polling", LogCategory.Client);
-                
-                var ticketStatusResponse = await MatchmakerService.Instance.GetTicketAsync(ticketResponse.Id);
-                if (ticketStatusResponse?.Value is MultiplayAssignment assignment)
+                if (!AuthenticationService.Instance.IsSignedIn)
                 {
-                    GameLogger.Log($"Response {assignment.Status}", LogCategory.Client);
-                    
-                    switch (assignment.Status)
-                    {
-                        case MultiplayAssignment.StatusOptions.Found:
-                            {
-                                if (assignment.Port.HasValue)
-                                {
-                                    transport.SetConnectionData(assignment.Ip, (ushort)assignment.Port);
-                                    bool result = NetworkManager.Singleton.StartClient();
-
-
-                                    GameLogger.Log($"Start Client {result}", LogCategory.Client);
-                                    return result;
-                                }
-
-                                GameLogger.LogError("No port found", LogCategory.Client);
-                                return false;
-                            }
-                        case MultiplayAssignment.StatusOptions.Timeout:
-                        case MultiplayAssignment.StatusOptions.Failed:
-                            {
-                                GameLogger.LogError(assignment.ToString(), LogCategory.Client);
-                                return false;
-                            }
-                    }
+                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
                 }
+
+                var allocation = await RelayService.Instance.JoinAllocationAsync(joinCode: joinCode);
+                NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, connectionType));
             }
+            catch (System.Exception e)
+            {
+                GameLogger.LogError($"Failed to start client with relay: {e.Message}", LogCategory.Client);
+                LoadingCanvasController.Instance.DisableLoading();
+                return false;
+            }
+
+            return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
         }
-
-        private void ConnectToMockServer()
-        {
-            var transport = NetworkManager.Singleton.GetComponent<UnityTransport>();
-            transport.SetConnectionData(_servicesSettings.TestServerIP, _servicesSettings.TestServerPort);
-            var success = NetworkManager.Singleton.StartClient();
-
-            GameLogger.Log($"Client started local connection: {success}", LogCategory.Test);
-        }
-
     }
 }

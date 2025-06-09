@@ -9,7 +9,7 @@ using XaviEssencials.Runtime;
 using XaviGames.Car;
 using XaviGames.PlayerSystem;
 
-namespace XaviGames.Server
+namespace XaviGames.Host
 {
     public class CarSpawnController : MonoBehaviour
     {
@@ -19,10 +19,14 @@ namespace XaviGames.Server
         [SerializeField]
         private List<Transform> _spawnPoints;
 
-        private List<ClientCarReference> _playersCars = new();
-
         public void SpawnAllCars()
         {
+            if (!NetworkManager.Singleton.IsServer)
+            {
+                GameLogger.LogError("CarSpawnController can only be used on the server.", LogCategory.Server);
+                return;
+            }
+
             var clients = NetworkManager.Singleton.ConnectedClientsList;
             GameLogger.Log($"Spawning cars for {clients.Count} players", LogCategory.Server);
 
@@ -31,9 +35,15 @@ namespace XaviGames.Server
                 var client = clients[i];
                 var playerObj = client.PlayerObject;
                 var playerController = playerObj.GetComponent<PlayerController>();
-                var idRef = playerController.RegisterCarIdServer();
 
-                var param = _carDatabase.GetCarParameter(idRef.CarId);
+                string carId = playerController.GetCarId();
+                if (string.IsNullOrEmpty(carId))
+                {
+                    GameLogger.LogWarning($"Player {client.ClientId} has no car ID set. Skipping car spawn.", LogCategory.Server);
+                    continue;
+                }
+
+                var param = _carDatabase.GetCarParameter(carId);
                 if (param == null)
                 {
                     continue;
@@ -41,10 +51,10 @@ namespace XaviGames.Server
 
                 var spawn = _spawnPoints[i];
                 var car = Instantiate(param.CarGameObject, spawn.position, spawn.rotation);
-                //var car = Instantiate(param.CarGameObject, Vector3.zero, Quaternion.Euler(0f, 0f, 0f));
-
+                car.name = $"Car_{client.ClientId}_{carId}";
+                playerController.SetCarGameObject(car);
                 var netObj = car.GetComponent<NetworkObject>();
-                netObj.SpawnWithOwnership(idRef.ClientId);
+                netObj.SpawnWithOwnership(client.ClientId);
             }
         }
     }

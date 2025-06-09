@@ -10,33 +10,9 @@ namespace XaviGames.Manager
         [SerializeField]
         private SceneBundle _clientSceneBundle;
 
-
-        [SerializeField]
-        private SceneBundle _serverSceneBundle;
-
-        [Header("Build Settings")]
-        [SerializeField]
-        private ServicesSettings _servicesSettings;
-
-        private async void Start()
+        private void Start()
         {
-#if UNITY_SERVER && !UNITY_EDITOR
-            await LoadScenesFromBundleAsync(_serverSceneBundle);
-#elif !UNITY_SERVER && !UNITY_EDITOR
-            await LoadScenesFromBundleAsync(_clientSceneBundle);
-#endif
-
-#if UNITY_EDITOR
-            var buildType = _servicesSettings.BuildType;
-            if (buildType == BuildType.Client)
-            {
-                await LoadScenesFromBundleAsync(_clientSceneBundle);
-            }
-            else
-            {
-                await LoadScenesFromBundleAsync(_serverSceneBundle);
-            }
-#endif
+            _ = LoadScenesFromBundleAsync(_clientSceneBundle);
         }
 
         private async Task LoadScenesFromBundleAsync(SceneBundle sceneBundle)
