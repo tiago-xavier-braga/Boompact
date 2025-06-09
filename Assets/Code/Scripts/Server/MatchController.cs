@@ -26,8 +26,8 @@ namespace XaviGames.Host
 
         public void StartMatch()
         {
-            _carSpawnController.SpawnAllCars();
-            _teamController.DistributeInitialBombs();
+            //_carSpawnController.SpawnAllCars();
+            //_teamController.DistributeInitialBombs();
             _serverManager.SetServerState(HostState.GameInProgress);
             StartCoroutine(StartCountdown());
         }
