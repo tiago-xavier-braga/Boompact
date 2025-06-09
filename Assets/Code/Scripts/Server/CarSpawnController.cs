@@ -9,7 +9,7 @@ using XaviEssencials.Runtime;
 using XaviGames.Car;
 using XaviGames.PlayerSystem;
 
-namespace XaviGames.Server
+namespace XaviGames.Host
 {
     public class CarSpawnController : MonoBehaviour
     {

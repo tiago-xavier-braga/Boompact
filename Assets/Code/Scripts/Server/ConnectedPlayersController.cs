@@ -8,7 +8,7 @@ using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
 
-namespace XaviGames.Server
+namespace XaviGames.Host
 {
     public class ConnectedPlayersController : MonoBehaviour
     {

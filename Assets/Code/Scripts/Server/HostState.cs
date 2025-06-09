@@ -2,7 +2,7 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
-namespace XaviGames.Server
+namespace XaviGames.Host
 {
     public enum HostState
     {

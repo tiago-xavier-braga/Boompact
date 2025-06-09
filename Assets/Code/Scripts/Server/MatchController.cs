@@ -3,14 +3,12 @@
 // For inquiries: xavigames.company@gmail.com
 
 using System.Collections;
-using System.Collections.Generic;
-using Unity.Multiplayer.Center.NetcodeForGameObjectsExample.DistributedAuthority;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
 
-namespace XaviGames.Server
+namespace XaviGames.Host
 {
     public class MatchController : MonoBehaviour
     {
@@ -24,7 +22,7 @@ namespace XaviGames.Server
         private TeamController _teamController;
 
         [SerializeField]
-        private MatchSettings _matchSettings;
+        private HostSettings _hostSettings;
 
         public void StartMatch()
         {
@@ -42,13 +40,13 @@ namespace XaviGames.Server
                 yield return null;
             }
 
-            if (_matchSettings is null)
+            if (_hostSettings is null)
             {
                 GameLogger.LogWarning("MatchSettings is not set. Cannot start countdown.", LogCategory.Server);
                 yield return null;
             }
 
-            int currentSeconds = _matchSettings.MinutesMatchDuration * 60;
+            int currentSeconds = _hostSettings.MinutesMatchDuration * 60;
             while (currentSeconds > 0)
             {
                 currentSeconds--;
