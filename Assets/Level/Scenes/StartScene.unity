@@ -743,7 +743,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1920817164}
-  - component: {fileID: 1920817163}
+  - component: {fileID: 1920817165}
   m_Layer: 0
   m_Name: Loading Controller
   m_TagString: Untagged
@@ -751,21 +751,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1920817163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1920817162}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bca6687acd30c2a48badaefb3af6fab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _loadingCanvasGroup: {fileID: 1783510180}
-  _loadingTweenType: 4
-  _loadingDuration: 0.5
 --- !u!4 &1920817164
 Transform:
   m_ObjectHideFlags: 0
@@ -782,6 +767,21 @@ Transform:
   - {fileID: 1783510179}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1920817165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920817162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b36f43e95d41c444e9a975609e3036c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _loadingCanvasGroup: {fileID: 1783510180}
+  _loadingTweenType: 4
+  _loadingDuration: 0.5
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
