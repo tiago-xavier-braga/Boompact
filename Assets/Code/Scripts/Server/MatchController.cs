@@ -13,7 +13,7 @@ namespace XaviGames.Host
     public class MatchController : MonoBehaviour
     {
         [SerializeField]
-        private HostManager _serverManager;
+        private HostManager _hostManager;
 
         [SerializeField]
         private CarSpawnController _carSpawnController;
@@ -26,15 +26,15 @@ namespace XaviGames.Host
 
         public void StartMatch()
         {
-            //_carSpawnController.SpawnAllCars();
-            //_teamController.DistributeInitialBombs();
-            _serverManager.SetServerState(HostState.GameInProgress);
+            _carSpawnController.SpawnAllCars();
+            _teamController.DistributeInitialBombs();
+            _hostManager.SetServerState(HostState.GameInProgress);
             StartCoroutine(StartCountdown());
         }
 
         private IEnumerator StartCountdown()
         {
-            if (!NetworkManager.Singleton.IsServer)
+            if (!NetworkManager.Singleton.IsHost)
             {
                 GameLogger.LogWarning("StartMatch called on client. Aborting.", LogCategory.Server);
                 yield return null;
@@ -60,7 +60,7 @@ namespace XaviGames.Host
 
         private void FinishMatch()
         {
-            _serverManager.SetServerState(HostState.GameEnded);
+            _hostManager.SetServerState(HostState.GameEnded);
             ShowWinnersClientRpc();
             //_serverManager.ResetMatch();
         }

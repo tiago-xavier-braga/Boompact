@@ -79,8 +79,6 @@ namespace XaviGames.Host
 
             NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoadingHandler;
             NetworkManager.Singleton.SceneManager.LoadScene(_environmentScene.SceneName, LoadSceneMode.Single);
-
-            _matchController.StartMatch();
         }
 
         private async Task<bool> StartHostWithRelay(int maxConnections, string connectionType)
@@ -136,6 +134,7 @@ namespace XaviGames.Host
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
 
             LoadingCanvasController.Instance.DisableLoading();
+            _matchController.StartMatch();
         }
 
     }
