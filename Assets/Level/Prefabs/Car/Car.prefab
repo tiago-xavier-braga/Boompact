@@ -1330,7 +1330,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   NetworkRigidbodyBaseExpanded: 0
   UseRigidBodyForMotion: 1
-  AutoUpdateKinematicState: 1
+  AutoUpdateKinematicState: 0
   AutoSetKinematicOnDespawn: 1
 --- !u!114 &3195238330943901347
 MonoBehaviour:
@@ -1370,12 +1370,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c522972d8cb1724bbc948d75f65e708, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   _wheelTrailRenderers:
   - {fileID: 7307881114928927354}
   - {fileID: 6092542789915564133}
   - {fileID: 5532751801039106286}
   - {fileID: 2262729321102030740}
-  _onCarDrifting: {fileID: 11400000, guid: a5ce75bd2d07c2f43a6a5e0b5cb5f37c, type: 2}
+  _handbrakeInputAction: {fileID: -8161986239912819779, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &7552242248031139657
 MonoBehaviour:
   m_ObjectHideFlags: 0
