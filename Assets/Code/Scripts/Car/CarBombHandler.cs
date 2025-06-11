@@ -2,6 +2,7 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
@@ -18,12 +19,33 @@ namespace XaviGames.Car
                 NetworkVariableWritePermission.Owner
             );
 
+        public NetworkVariable<bool> CanTransferBomb = new NetworkVariable<bool>
+    (
+        false,
+        NetworkVariableReadPermission.Everyone,
+        NetworkVariableWritePermission.Owner
+    );
+
         [SerializeField]
         private CanvasGroup _bombCanvas;
 
+        [SerializeField]
+        private float _bombCanvasOwnerAlpha = 0.5f;
+
+        [SerializeField]
+        private float _bombCanvasOtherAlpha = 1f;
+
+        [SerializeField]
+        private float _transferCooldown = 2f;
+        
         private void OnTriggerEnter(Collider other)
         {
             if (!HasBomb.Value)
+            {
+                return;
+            }
+
+            if (!CanTransferBomb.Value)
             {
                 return;
             }
@@ -39,41 +61,41 @@ namespace XaviGames.Car
                 return;
             }
 
-            ulong fromClientId = OwnerClientId;
             ulong toClientId = otherHandler.OwnerClientId;
 
-            TransferBombServerRpc(fromClientId, toClientId);
+            TransferBombServerRpc(toClientId);
         }
 
-        [Rpc(SendTo.NotServer)]
+        [Rpc(SendTo.ClientsAndHost)]
         public void GiveBombRpc()
         {
             if (IsOwner)
             {
                 HasBomb.Value = true;
-                //TODO: Add visual feedback for the player who received the bomb
-                _bombCanvas.alpha = 0.5f;
+                _bombCanvas.alpha = _bombCanvasOwnerAlpha;
+                CanTransferBomb.Value = false;
+                StartCoroutine(Countdown());
             }
             else
             {
-                _bombCanvas.alpha = 1f;
+                _bombCanvas.alpha = _bombCanvasOtherAlpha;
             }
-
         }
 
-        [Rpc(SendTo.NotServer)]
+        [Rpc(SendTo.ClientsAndHost)]
         public void RemoveBombRpc()
         {
             if (IsOwner)
             {
                 HasBomb.Value = false;
+                CanTransferBomb.Value = true;
             }
 
             _bombCanvas.alpha = 0f;
         }
 
         [Rpc(SendTo.Server)]
-        private void TransferBombServerRpc(ulong fromClientId, ulong toClientId)
+        private void TransferBombServerRpc(ulong toClientId)
         {
             var teamController = FindAnyObjectByType<TeamController>();
             if (teamController == null)
@@ -82,7 +104,13 @@ namespace XaviGames.Car
                 return;
             }
 
-            teamController.TransferBombBetweenPlayers(fromClientId, toClientId);
+            teamController.TransferBombBetweenPlayers(OwnerClientId, toClientId);
+        }
+
+        private IEnumerator Countdown()
+        {
+            yield return new WaitForSeconds(_transferCooldown);
+            CanTransferBomb.Value = true;
         }
     }
 }

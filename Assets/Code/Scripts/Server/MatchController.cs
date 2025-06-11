@@ -62,7 +62,7 @@ namespace XaviGames.Host
         {
             _hostManager.SetServerState(HostState.GameEnded);
             ShowWinnersClientRpc();
-            //_serverManager.ResetMatch();
+            //_hostManager.ResetMatch();
         }
 
         [Rpc(SendTo.NotServer)]

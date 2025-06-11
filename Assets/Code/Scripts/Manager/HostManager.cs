@@ -73,7 +73,7 @@ namespace XaviGames.Host
             callback?.Invoke(isSuccess);
         }
 
-        public async void StartMatch()
+        public void StartMatch()
         {
             LoadingCanvasController.Instance.EnableLoading();
 
