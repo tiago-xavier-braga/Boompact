@@ -74,10 +74,9 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   _carDatabase: {fileID: 11400000, guid: fae10f236217f1646a263170d382d167, type: 2}
   <UserSession>k__BackingField: {fileID: 11400000, guid: 33a5e95cd65abfb408f574500cda88ab, type: 2}
+  <CarSpawned>k__BackingField: {fileID: 0}
   _playerInput: {fileID: 2977189341284256756}
-  _carVirtualCamera: {fileID: 4748842373785820941, guid: c4632edb28d73c142bd70507afc34def, type: 3}
-  _spawnedCar: {fileID: 0}
-  _spawnedVirtualCamera: {fileID: 0}
+  _ghostCamera: {fileID: 402634147007609872, guid: 4b817bb1edc98c240a0c3238d237566d, type: 3}
 --- !u!114 &2977189341284256756
 MonoBehaviour:
   m_ObjectHideFlags: 0
