@@ -1,37 +1,55 @@
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
-using XaviEssencials.Runtime;
+using UnityEngine.InputSystem;
 
 namespace XaviGames.Car
 {
-    public class CarEffectsManager : MonoBehaviour
+    public class CarEffectsManager : NetworkBehaviour
     {
         [Header("Trail Renderers")]
-        [SerializeField] 
+        [SerializeField]
         private List<TrailRenderer> _wheelTrailRenderers;
 
-        [Header("Event Channels")]
-        [SerializeField] 
-        private EventChannel _onCarDrifting;
+        [Header("Input Actions")]
+        [SerializeField]
+        private InputActionReference _handbrakeInputAction;
 
         private void OnEnable()
         {
-            _onCarDrifting.OnEventRaisedWithContext += OnCarDrifting;
+            _handbrakeInputAction.action.performed += OnCarDrifting;
+            _handbrakeInputAction.action.canceled += OnCarDrifting;
         }
 
         private void OnDisable()
         {
-            _onCarDrifting.OnEventRaisedWithContext -= OnCarDrifting;
+            _handbrakeInputAction.action.performed -= OnCarDrifting;
+            _handbrakeInputAction.action.canceled -= OnCarDrifting;
         }
 
-        private void OnCarDrifting(object state)
+        private void OnCarDrifting(InputAction.CallbackContext context)
         {
-            if (state is bool isDrifting)
+            if (!IsOwner)
             {
-                foreach (var trail in _wheelTrailRenderers)
-                {
-                    trail.emitting = isDrifting;
-                }
+                return;
+            }
+
+            bool isDrifting = context.phase == InputActionPhase.Performed;
+            SetTrailsActiveServerRpc(isDrifting);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        private void SetTrailsActiveServerRpc(bool isActive, ServerRpcParams rpcParams = default)
+        {
+            UpdateTrailsClientRpc(isActive);
+        }
+
+        [ClientRpc]
+        private void UpdateTrailsClientRpc(bool isActive, ClientRpcParams clientRpcParams = default)
+        {
+            foreach (var trail in _wheelTrailRenderers)
+            {
+                trail.emitting = isActive;
             }
         }
     }

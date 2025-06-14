@@ -21,7 +21,7 @@ namespace XaviGames.Host
 
         public void SpawnAllCars()
         {
-            if (!NetworkManager.Singleton.IsServer)
+            if (!NetworkManager.Singleton.IsHost)
             {
                 GameLogger.LogError("CarSpawnController can only be used on the server.", LogCategory.Server);
                 return;

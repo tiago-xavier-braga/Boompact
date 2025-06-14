@@ -13,10 +13,10 @@ namespace XaviGames.Host
     public class ConnectedPlayersController : MonoBehaviour
     {
         [SerializeField]
-        private HostSettings _matchmakerSettings;
+        private HostSettings _hostSettings;
 
         [SerializeField]
-        private HostManager _serverManager;
+        private HostManager _hostManager;
 
         [SerializeField]
         [ReadOnly]
@@ -38,21 +38,14 @@ namespace XaviGames.Host
 
         public void UpdatePlayerCount()
         {
-            HostState currentState = _serverManager.HostState;
-
-            if(currentState == HostState.GameInProgress && _connectedPlayers == 0)
-            {
-                GameLogger.LogWarning("No players connected. Resetting match.", LogCategory.Matchmaker);
-                //_serverManager.ResetMatch();
-                return;
-            }
+            HostState currentState = _hostManager.HostState;
 
             if (currentState != HostState.WaitingForPlayers)
             {
                 return;
             }
 
-            if (_connectedPlayers == _matchmakerSettings.MaxPlayersInMatch)
+            if (_connectedPlayers == _hostSettings.MaxPlayersInMatch)
             {
                 if (_startMatchCountdownCoroutine != null)
                 {
@@ -63,7 +56,7 @@ namespace XaviGames.Host
 
                 GameLogger.Log($"Maximum players reached. Starting game. Players in match: {_connectedPlayers}", LogCategory.Matchmaker);
             }
-            else if (_connectedPlayers >= _matchmakerSettings.MinPlayersInMatch)
+            else if (_connectedPlayers >= _hostSettings.MinPlayersInMatch)
             {
                 if (_startMatchCountdownCoroutine == null)
                 {
@@ -72,7 +65,7 @@ namespace XaviGames.Host
             }
             else
             {
-                _serverManager.SetServerState(HostState.WaitingForPlayers);
+                _hostManager.SetServerState(HostState.WaitingForPlayers);
 
                 if (_startMatchCountdownCoroutine != null)
                 {
@@ -98,14 +91,14 @@ namespace XaviGames.Host
 
         private IEnumerator StartMatchCountdown()
         {
-            GameLogger.Log($"Minimum players reached. Starting match in {_matchmakerSettings.StartDelayAfterMinPlayers} seconds...", LogCategory.Matchmaker);
+            GameLogger.Log($"Minimum players reached. Starting match in {_hostSettings.StartDelayAfterMinPlayers} seconds...", LogCategory.Matchmaker);
 
-            yield return new WaitForSeconds(_matchmakerSettings.StartDelayAfterMinPlayers);
+            yield return new WaitForSeconds(_hostSettings.StartDelayAfterMinPlayers);
 
-            if (_connectedPlayers >= _matchmakerSettings.MinPlayersInMatch)
+            if (_connectedPlayers >= _hostSettings.MinPlayersInMatch)
             {
                 GameLogger.Log("Countdown finished. Starting match.", LogCategory.Matchmaker);
-                //_serverManager.StartMatch();
+                _hostManager.StartMatch();
             }
             else
             {

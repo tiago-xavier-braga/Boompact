@@ -3,6 +3,7 @@
 // For inquiries: xavigames.company@gmail.com
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -11,8 +12,10 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
+using XaviGames.Ui;
 
 namespace XaviGames.Host
 {
@@ -24,6 +27,14 @@ namespace XaviGames.Host
 
         [SerializeField]
         private HostSettings _hostSettings;
+
+        [Header("Services")]
+        [SerializeField]
+        private MatchController _matchController;
+
+        [Header("Scenes")]
+        [SerializeField]
+        private SceneReference _environmentScene;
 
         private string _joinCode = string.Empty;
         public static HostManager Instance { get; private set; } = null;
@@ -49,7 +60,25 @@ namespace XaviGames.Host
         public async void StartHostWithRelay(Action<bool> callback)
         {
             bool isSuccess = await StartHostWithRelay(_hostSettings.MaxPlayersInMatch, _hostSettings.GetConnectionType());
+
+            if (isSuccess)
+            {
+                SetServerState(HostState.WaitingForPlayers);
+            }
+            else
+            {
+                SetServerState(HostState.Off);
+            }
+            
             callback?.Invoke(isSuccess);
+        }
+
+        public void StartMatch()
+        {
+            LoadingCanvasController.Instance.EnableLoading();
+
+            NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoadingHandler;
+            NetworkManager.Singleton.SceneManager.LoadScene(_environmentScene.SceneName, LoadSceneMode.Single);
         }
 
         private async Task<bool> StartHostWithRelay(int maxConnections, string connectionType)
@@ -88,6 +117,24 @@ namespace XaviGames.Host
                 $"Join Code {_joinCode}", LogCategory.Relay);
 
             return true;
+        }
+
+        private void OnSceneLoadingHandler(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+        {
+            if (NetworkManager.Singleton.LocalClientId != clientId)
+            {
+                return;
+            }
+
+            if (sceneName != _environmentScene.SceneName)
+            { 
+                return;
+            }
+
+            NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
+
+            LoadingCanvasController.Instance.DisableLoading();
+            _matchController.StartMatch();
         }
 
     }
