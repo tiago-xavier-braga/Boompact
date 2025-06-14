@@ -2,6 +2,7 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
+using System.Threading.Tasks;
 using UnityEngine;
 using XaviEssencials.Runtime;
 
@@ -48,6 +49,32 @@ namespace XaviGames.Ui
 
             _loadingCanvasGroup.interactable = true;
             _loadingCanvasGroup.blocksRaycasts = true;
+        }
+
+        public async Task EnableLoadingAsync()
+        {
+            if (_loadingCanvasGroup is null)
+            {
+                GameLogger.LogError("Loading Canvas Group is null", LogCategory.Client);
+                return;
+            }
+
+            LeanTween.cancel(gameObject);
+
+            var tcs = new TaskCompletionSource<bool>();
+
+            LeanTween.alphaCanvas(_loadingCanvasGroup, 1f, _loadingDuration)
+                .setEase(LeanTweenType.easeInOutQuad)
+                .setOnComplete(() =>
+                {
+                    GameLogger.Log("Loading enabled", LogCategory.Client);
+                    tcs.SetResult(true);
+                });
+
+            _loadingCanvasGroup.interactable = true;
+            _loadingCanvasGroup.blocksRaycasts = true;
+
+            await tcs.Task;
         }
 
         public void DisableLoading()

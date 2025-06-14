@@ -3,7 +3,6 @@
 // For inquiries: xavigames.company@gmail.com
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
@@ -71,14 +70,13 @@ namespace XaviGames.Host
             }
             
             callback?.Invoke(isSuccess);
+
+            LoadingScenes();
         }
 
         public void StartMatch()
         {
-            LoadingCanvasController.Instance.EnableLoading();
-
-            NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoadingHandler;
-            NetworkManager.Singleton.SceneManager.LoadScene(_environmentScene.SceneName, LoadSceneMode.Single);
+            _matchController.StartMatch();
         }
 
         private async Task<bool> StartHostWithRelay(int maxConnections, string connectionType)
@@ -119,6 +117,12 @@ namespace XaviGames.Host
             return true;
         }
 
+        private void LoadingScenes()
+        {
+            NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoadingHandler;
+            NetworkManager.Singleton.SceneManager.LoadScene(_environmentScene.SceneName, LoadSceneMode.Single);
+        }
+
         private void OnSceneLoadingHandler(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
         {
             if (NetworkManager.Singleton.LocalClientId != clientId)
@@ -134,8 +138,6 @@ namespace XaviGames.Host
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
 
             LoadingCanvasController.Instance.DisableLoading();
-            _matchController.StartMatch();
         }
-
     }
 }

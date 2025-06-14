@@ -14,7 +14,7 @@ namespace XaviGames.Ui
         [SerializeField]
         private TMP_InputField _joinCodeInputField;
 
-        public void StartHost()
+        public async void StartHost()
         {
             if (HostManager.Instance is null)
             {
@@ -22,6 +22,7 @@ namespace XaviGames.Ui
                 return;
             }
 
+            await LoadingCanvasController.Instance.EnableLoadingAsync();
             HostManager.Instance.StartHostWithRelay(HandleServiceResponse);
         }
 
@@ -41,6 +42,7 @@ namespace XaviGames.Ui
                 return;
             }
 
+            LoadingCanvasController.Instance.EnableLoading();
             ClientManager.Instance.StartClientWithRelay(joinCode, HandleServiceResponse);
         }
 
@@ -52,6 +54,7 @@ namespace XaviGames.Ui
             }
             else
             {
+                LoadingCanvasController.Instance.DisableLoading();
                 GameLogger.LogError("Unable to access this service", LogCategory.Client);
             }
         }
