@@ -49,7 +49,7 @@ namespace XaviGames.Camera
 
         private void Start()
         {
-            LoadingCanvasController.Instance.DisableLoading();
+            CanvasManager.Instance.LoadingCanvasController.DisableLoading();
             Vector3 angles = transform.eulerAngles;
             _yaw = angles.y;
             _pitch = angles.x;

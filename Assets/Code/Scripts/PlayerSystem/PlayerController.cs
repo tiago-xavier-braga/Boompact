@@ -74,7 +74,7 @@ namespace XaviGames.PlayerSystem
             if (_ghostCamera is null)
             {
                 GameLogger.Log("Ghost Camera object is null", LogCategory.Client);
-                LoadingCanvasController.Instance.EnableLoading();
+                CanvasManager.Instance.LoadingCanvasController.EnableLoading();
                 return;
             }
 

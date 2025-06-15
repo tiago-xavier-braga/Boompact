@@ -38,7 +38,7 @@ namespace XaviGames.Manager
 
         private void Start()
         {
-            LoadingCanvasController.Instance.DisableLoading();
+            CanvasManager.Instance.LoadingCanvasController.DisableLoading();
         }
 
         public async void StartClientWithRelay(string joinCode, Action<bool> callback)
@@ -63,7 +63,7 @@ namespace XaviGames.Manager
             catch (System.Exception e)
             {
                 GameLogger.LogError($"Failed to start client with relay: {e.Message}", LogCategory.Client);
-                LoadingCanvasController.Instance.DisableLoading();
+                CanvasManager.Instance.LoadingCanvasController.DisableLoading();
                 return false;
             }
 

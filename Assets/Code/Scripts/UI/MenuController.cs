@@ -1,18 +1,25 @@
+//Boompact(c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
+// Unauthorized use, copying, or distribution is prohibited.
+// For inquiries: xavigames.company@gmail.com
+
 using TMPro;
 using UnityEngine;
 using XaviEssencials.Runtime;
-using XaviGames.Manager;
 using XaviGames.Host;
+using XaviGames.Manager;
 
 namespace XaviGames.Ui
 {
-    public class MenuManager : MonoBehaviour
+    public class MenuController : MonoBehaviour
     {
         [SerializeField]
         private TMP_InputField _joinCodeText;
 
         [SerializeField]
         private TMP_InputField _joinCodeInputField;
+
+        [SerializeField]
+        private CanvasManager _canvasManager;
 
         public async void StartHost()
         {
@@ -22,7 +29,7 @@ namespace XaviGames.Ui
                 return;
             }
 
-            await LoadingCanvasController.Instance.EnableLoadingAsync();
+            await _canvasManager.LoadingCanvasController.EnableLoadingAsync();
             HostManager.Instance.StartHostWithRelay(HandleServiceResponse);
         }
 
@@ -42,7 +49,7 @@ namespace XaviGames.Ui
                 return;
             }
 
-            LoadingCanvasController.Instance.EnableLoading();
+            _canvasManager.LoadingCanvasController.EnableLoading();
             ClientManager.Instance.StartClientWithRelay(joinCode, HandleServiceResponse);
         }
 
@@ -54,7 +61,7 @@ namespace XaviGames.Ui
             }
             else
             {
-                LoadingCanvasController.Instance.DisableLoading();
+                _canvasManager.LoadingCanvasController.DisableLoading();
                 GameLogger.LogError("Unable to access this service", LogCategory.Client);
             }
         }
