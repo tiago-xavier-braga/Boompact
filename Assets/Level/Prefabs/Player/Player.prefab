@@ -114,7 +114,7 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: d9a7f70d-5c27-49b5-bcd5-e8c7e0fe8f74
     m_ActionName: 'Player/Camera[/Mouse/delta]'
-  m_NeverAutoSwitchControlSchemes: 1
+  m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
