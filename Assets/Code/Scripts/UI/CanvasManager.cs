@@ -14,6 +14,17 @@ namespace XaviGames.Ui
         [field: SerializeField]
         public LoadingCanvasController LoadingCanvasController { get; private set; }
 
+
+        [field: Header("Canvas Group Controller")]
+        [field: SerializeField]
+        public float EnableCanvasScale { get; private set; } = 1f;
+
+        [field: SerializeField]
+        public float DisableCanvasScale { get; private set; } = 0.8f;
+
+        [field: SerializeField]
+        public float AnimationDuration { get; private set; } = 0.5f;
+
         public static CanvasManager Instance { get; private set; } = null;
 
         private void Awake()
