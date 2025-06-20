@@ -19,6 +19,9 @@ namespace XaviGames.Host
         [SerializeField]
         private List<Transform> _spawnPoints;
 
+        [SerializeField]
+        private List<GameObject> _spawnedCars;
+
         public void SpawnAllCars()
         {
             if (!NetworkManager.Singleton.IsHost)
@@ -27,6 +30,7 @@ namespace XaviGames.Host
                 return;
             }
 
+            DestroyAllCar();
             var clients = NetworkManager.Singleton.ConnectedClientsList;
             GameLogger.Log($"Spawning cars for {clients.Count} players", LogCategory.Server);
 
@@ -51,10 +55,29 @@ namespace XaviGames.Host
 
                 var spawn = _spawnPoints[i];
                 var car = Instantiate(param.CarGameObject, spawn.position, spawn.rotation);
+                _spawnedCars.Add(car);
                 car.name = $"Car_{client.ClientId}_{carId}";
+                car.transform.SetParent(playerObj.transform);
                 playerController.SetCarGameObject(car);
                 var netObj = car.GetComponent<NetworkObject>();
                 netObj.SpawnWithOwnership(client.ClientId);
+            }
+        }
+
+        public void DestroyAllCar()
+        {
+            if (!NetworkManager.Singleton.IsHost)
+            {
+                GameLogger.LogError("CarSpawnController can only be used on the server.", LogCategory.Server);
+                return;
+            }
+
+            foreach (var car in _spawnedCars)
+            {
+                if (car != null)
+                {
+                    car.GetComponent<NetworkObject>().Despawn();
+                }
             }
         }
     }

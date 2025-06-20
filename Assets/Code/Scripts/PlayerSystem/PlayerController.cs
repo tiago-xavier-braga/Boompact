@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 using XaviEssencials.Runtime;
 using XaviGames.Car;
 using XaviGames.Services;
+using XaviGames.Ui;
 
 namespace XaviGames.PlayerSystem
 {
@@ -26,7 +27,11 @@ namespace XaviGames.PlayerSystem
         [SerializeField]
         private PlayerInput _playerInput;
 
+        [SerializeField]
+        private GameObject _ghostCamera;
+
         private string _carId = string.Empty;
+        private GameObject _ghostCameraInstance;
 
         public override void OnNetworkSpawn()
         {
@@ -38,9 +43,10 @@ namespace XaviGames.PlayerSystem
 
             string id = UserSession.CarParameter.Id;
             SubmitCarIdServerRpc(id);
+            SpawnGhostCamera();
         }
 
-        [ServerRpc(RequireOwnership = true)]
+        [Rpc(SendTo.Server)]
         private void SubmitCarIdServerRpc(string carId)
         {
             _carId = carId;
@@ -61,6 +67,20 @@ namespace XaviGames.PlayerSystem
 
             CarSpawned = gameObject;
             GameLogger.Log($"Car game object set for player {OwnerClientId}. Car Name: {CarSpawned.name}", LogCategory.Unity);
+        }
+
+        private void SpawnGhostCamera()
+        {
+            if (_ghostCamera is null)
+            {
+                GameLogger.Log("Ghost Camera object is null", LogCategory.Client);
+                CanvasManager.Instance.LoadingCanvasController.EnableLoading();
+                return;
+            }
+
+            _ghostCameraInstance = Instantiate(_ghostCamera, transform.position, Quaternion.identity);
+            _ghostCameraInstance.name = $"GhostCamera_{OwnerClientId}";
+            _ghostCameraInstance.transform.SetParent(transform);
         }
     }
 }
