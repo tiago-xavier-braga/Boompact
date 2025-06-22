@@ -14,6 +14,9 @@ namespace XaviGames.Ui
         [field: SerializeField]
         public LoadingCanvasController LoadingCanvasController { get; private set; }
 
+        [field: SerializeField]
+        public RoomConnectSelector RoomConnectSelector { get; private set; }
+
 
         [field: Header("Canvas Group Controller")]
         [field: SerializeField]

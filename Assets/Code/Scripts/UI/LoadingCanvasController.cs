@@ -19,47 +19,12 @@ namespace XaviGames.Ui
         [SerializeField]
         private float _loadingDuration = 0.5f;
 
-        public void EnableLoading()
-        {
-            if (_loadingCanvasGroup is null)
-            {
-                GameLogger.LogError("Loading Canvas Group is null", LogCategory.Client);
-                return;
-            }
-
-            LeanTween.cancel(gameObject);
-
-            LeanTween.alphaCanvas(_loadingCanvasGroup, 1f, _loadingDuration)
-                .setEase(LeanTweenType.easeInOutQuad)
-                .setOnComplete(() => GameLogger.Log("Loading enabled", LogCategory.Client));
-
-            _loadingCanvasGroup.interactable = true;
-            _loadingCanvasGroup.blocksRaycasts = true;
-        }
+        public void EnableLoading() => StartLoadingAnimation();
 
         public async Task EnableLoadingAsync()
         {
-            if (_loadingCanvasGroup is null)
-            {
-                GameLogger.LogError("Loading Canvas Group is null", LogCategory.Client);
-                return;
-            }
-
-            LeanTween.cancel(gameObject);
-
             var tcs = new TaskCompletionSource<bool>();
-
-            LeanTween.alphaCanvas(_loadingCanvasGroup, 1f, _loadingDuration)
-                .setEase(LeanTweenType.easeInOutQuad)
-                .setOnComplete(() =>
-                {
-                    GameLogger.Log("Loading enabled", LogCategory.Client);
-                    tcs.SetResult(true);
-                });
-
-            _loadingCanvasGroup.interactable = true;
-            _loadingCanvasGroup.blocksRaycasts = true;
-
+            StartLoadingAnimation(() => tcs.SetResult(true));
             await tcs.Task;
         }
 
@@ -79,6 +44,20 @@ namespace XaviGames.Ui
 
             _loadingCanvasGroup.interactable = false;
             _loadingCanvasGroup.blocksRaycasts = false;
+        }
+
+        private void StartLoadingAnimation(System.Action onComplete = null)
+        {
+            LeanTween.cancel(gameObject);
+            LeanTween.alphaCanvas(_loadingCanvasGroup, 1f, _loadingDuration)
+                .setEase(_loadingTweenType)
+                .setOnComplete(() => {
+                    GameLogger.Log("Loading enabled", LogCategory.Client);
+                    onComplete?.Invoke();
+                });
+
+            _loadingCanvasGroup.interactable = true;
+            _loadingCanvasGroup.blocksRaycasts = true;
         }
     }
 }

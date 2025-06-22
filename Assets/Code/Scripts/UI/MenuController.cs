@@ -13,13 +13,11 @@ namespace XaviGames.Ui
     public class MenuController : MonoBehaviour
     {
         [SerializeField]
-        private TMP_InputField _joinCodeText;
-
-        [SerializeField]
-        private TMP_InputField _joinCodeInputField;
-
-        [SerializeField]
         private CanvasManager _canvasManager;
+
+        [field: Header("Info")]
+        [field: SerializeField]
+        public string JoinCode { get; private set; } = string.Empty;
 
         public async void StartHost()
         {
@@ -41,7 +39,7 @@ namespace XaviGames.Ui
                 return;
             }
 
-            string joinCode = _joinCodeInputField.text.Trim();
+            string joinCode = JoinCode.Trim();
 
             if (string.IsNullOrEmpty(joinCode))
             {
@@ -51,6 +49,18 @@ namespace XaviGames.Ui
 
             _canvasManager.LoadingCanvasController.EnableLoading();
             ClientManager.Instance.StartClientWithRelay(joinCode, HandleServiceResponse);
+        }
+
+        public void SetJoinCode(string joinCode)
+        {
+            if (string.IsNullOrEmpty(joinCode))
+            {
+                GameLogger.LogError("Join code cannot be empty.", LogCategory.Client);
+                return;
+            }
+
+            JoinCode = joinCode.Trim();
+            GameLogger.Log($"Join code set to: {JoinCode}", LogCategory.Client);
         }
 
         private void HandleServiceResponse(bool isSuccess)

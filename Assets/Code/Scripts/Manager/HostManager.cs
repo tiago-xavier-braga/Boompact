@@ -3,18 +3,22 @@
 // For inquiries: xavigames.company@gmail.com
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UTP;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Relay;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
 using XaviGames.Ui;
+using System.Collections;
 
 namespace XaviGames.Host
 {
@@ -36,6 +40,9 @@ namespace XaviGames.Host
         private SceneReference _environmentScene;
 
         private string _joinCode = string.Empty;
+        private Lobby _lobby;
+        private Coroutine _heartbeatCoroutine;
+
         public static HostManager Instance { get; private set; } = null;
 
         private void Awake()
@@ -48,6 +55,19 @@ namespace XaviGames.Host
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+
+        private async void OnAplicationQuit()
+        {
+            if (_lobby != null)
+            {
+                if (_heartbeatCoroutine != null)
+                {
+                    StopCoroutine(_heartbeatCoroutine);
+                }
+
+                await LobbyService.Instance.DeleteLobbyAsync(_lobby.Id);
+            }
         }
 
         public void SetServerState(HostState state)
@@ -96,6 +116,24 @@ namespace XaviGames.Host
             
                 var joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
                 _joinCode = joinCode;
+
+
+                var createLobbyOptions = new CreateLobbyOptions
+                {
+                    IsPrivate = false,
+                    Data = new Dictionary<string, DataObject>
+                    {
+                        {"joinCode", new DataObject(DataObject.VisibilityOptions.Public, joinCode)}
+                    }
+                };
+
+                _lobby = await LobbyService.Instance.CreateLobbyAsync(
+                        Guid.NewGuid().ToString("N").Substring(0, 8),
+                         maxConnections,
+                         createLobbyOptions
+                    );
+
+                _heartbeatCoroutine = StartCoroutine(HeartbeatLobbyCoroutine(_lobby.Id));
             }
             catch (System.Exception e)
             {
@@ -112,7 +150,8 @@ namespace XaviGames.Host
             GameLogger.Log($"Starting host with Relay." +
                 $" Max players: {_hostSettings.MaxPlayersInMatch}, " +
                 $"Connection type: {_hostSettings.GetConnectionType()}. " +
-                $"Join Code {_joinCode}", LogCategory.Relay);
+                $"Join Code {_joinCode}, " +
+                $"Lobby: {_lobby.Name}", LogCategory.Relay);
 
             return true;
         }
@@ -138,6 +177,17 @@ namespace XaviGames.Host
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
 
             CanvasManager.Instance.LoadingCanvasController.DisableLoading();
+        }
+
+        private IEnumerator HeartbeatLobbyCoroutine(string lobbyId)
+        {
+            var delay = new WaitForSeconds(15);
+
+            while (true)
+            {
+                LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
+                yield return delay;
+            }
         }
     }
 }

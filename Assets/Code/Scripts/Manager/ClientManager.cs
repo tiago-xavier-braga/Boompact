@@ -22,6 +22,7 @@ namespace XaviGames.Manager
         [SerializeField]
         private HostSettings _hostSettings;
 
+        private bool _initialized = false;
         public static ClientManager Instance { get; private set; } = null;
 
         private void Awake()
@@ -38,7 +39,19 @@ namespace XaviGames.Manager
 
         private void Start()
         {
+            InitializeUnityServicesAsync();
             CanvasManager.Instance.LoadingCanvasController.DisableLoading();
+        }
+
+        private async Task InitializeUnityServicesAsync()
+        {
+            if (!_initialized)
+            {
+                await UnityServices.InitializeAsync();
+                AuthenticationService.Instance.SwitchProfile(UnityEngine.Random.Range(0, 1000000).ToString());
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                _initialized = true;
+            }
         }
 
         public async void StartClientWithRelay(string joinCode, Action<bool> callback)
