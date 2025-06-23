@@ -32,7 +32,7 @@ namespace XaviGames.Host
 
         private void OnDisable()
         {
-            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            //NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
 

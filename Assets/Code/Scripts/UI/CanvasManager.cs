@@ -2,6 +2,7 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace XaviGames.Ui
@@ -13,6 +14,24 @@ namespace XaviGames.Ui
 
         [field: SerializeField]
         public LoadingCanvasController LoadingCanvasController { get; private set; }
+
+        [field: SerializeField]
+        public RoomConnectSelector RoomConnectSelector { get; private set; }
+
+
+        [field: Header("Canvas Group Controller")]
+        [field: SerializeField]
+        public float EnableCanvasScale { get; private set; } = 1f;
+
+        [field: SerializeField]
+        public float DisableCanvasScale { get; private set; } = 0.8f;
+
+        [field: SerializeField]
+        public float AnimationDuration { get; private set; } = 0.5f;
+
+        [field: Space]
+        [field: SerializeField]
+        public List<CanvasGroupController> CanvasGroupControllerRefs { get; private set; } = new();
 
         public static CanvasManager Instance { get; private set; } = null;
 
@@ -26,6 +45,14 @@ namespace XaviGames.Ui
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+
+        public void DisableAllCanvasGroups()
+        {
+            foreach (var controller in CanvasGroupControllerRefs)
+            {
+                controller.InstantDisableCanvas();
+            }
         }
 
     }

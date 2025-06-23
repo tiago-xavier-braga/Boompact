@@ -2,7 +2,6 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
-using TMPro;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Host;
@@ -13,13 +12,12 @@ namespace XaviGames.Ui
     public class MenuController : MonoBehaviour
     {
         [SerializeField]
-        private TMP_InputField _joinCodeText;
-
-        [SerializeField]
-        private TMP_InputField _joinCodeInputField;
-
-        [SerializeField]
         private CanvasManager _canvasManager;
+
+        [field: Header("Info")]
+        [field: SerializeField]
+        [field: ReadOnly]
+        public string JoinCode { get; private set; } = string.Empty;
 
         public async void StartHost()
         {
@@ -41,7 +39,7 @@ namespace XaviGames.Ui
                 return;
             }
 
-            string joinCode = _joinCodeInputField.text.Trim();
+            string joinCode = JoinCode.Trim();
 
             if (string.IsNullOrEmpty(joinCode))
             {
@@ -53,15 +51,28 @@ namespace XaviGames.Ui
             ClientManager.Instance.StartClientWithRelay(joinCode, HandleServiceResponse);
         }
 
+        public void SetJoinCode(string joinCode)
+        {
+            if (string.IsNullOrEmpty(joinCode))
+            {
+                GameLogger.LogError("Join code cannot be empty.", LogCategory.Client);
+                return;
+            }
+
+            JoinCode = joinCode.Trim();
+            GameLogger.Log($"Join code set to: {JoinCode}", LogCategory.Client);
+        }
+
         private void HandleServiceResponse(bool isSuccess)
         {
             if (isSuccess)
             {
                 GameLogger.Log("Service successfully completed", LogCategory.Client);
+                //_canvasManager.LoadingCanvasController.DisableLoading();
             }
             else
             {
-                _canvasManager.LoadingCanvasController.DisableLoading();
+                //_canvasManager.LoadingCanvasController.DisableLoading();
                 GameLogger.LogError("Unable to access this service", LogCategory.Client);
             }
         }
