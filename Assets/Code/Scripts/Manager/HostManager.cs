@@ -175,7 +175,7 @@ namespace XaviGames.Host
             }
 
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
-
+            CanvasManager.Instance.DisableAllCanvasGroups();
             CanvasManager.Instance.LoadingCanvasController.DisableLoading();
         }
 

@@ -47,6 +47,16 @@ namespace XaviGames.Ui
 
             OnCanvasStatus?.Invoke(false);
         }
+
+        public void InstantDisableCanvas()
+        {
+            LeanTween.cancel(gameObject);
+            _canvasGroup.alpha = 0f;
+            _canvasGroup.interactable = false;
+            _canvasGroup.blocksRaycasts = false;
+
+            OnCanvasStatus?.Invoke(false);
+        }
     }
 }
 

@@ -2,6 +2,7 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace XaviGames.Ui
@@ -28,6 +29,10 @@ namespace XaviGames.Ui
         [field: SerializeField]
         public float AnimationDuration { get; private set; } = 0.5f;
 
+        [field: Space]
+        [field: SerializeField]
+        public List<CanvasGroupController> CanvasGroupControllerRefs { get; private set; } = new();
+
         public static CanvasManager Instance { get; private set; } = null;
 
         private void Awake()
@@ -40,6 +45,14 @@ namespace XaviGames.Ui
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
+        }
+
+        public void DisableAllCanvasGroups()
+        {
+            foreach (var controller in CanvasGroupControllerRefs)
+            {
+                controller.InstantDisableCanvas();
+            }
         }
 
     }

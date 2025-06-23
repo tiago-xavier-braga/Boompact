@@ -11,6 +11,7 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
 using XaviGames.Ui;
@@ -21,6 +22,10 @@ namespace XaviGames.Manager
     {
         [SerializeField]
         private HostSettings _hostSettings;
+
+        [Header("Scenes")]
+        [SerializeField]
+        private SceneReference _environmentScene;
 
         private bool _initialized = false;
         public static ClientManager Instance { get; private set; } = null;
@@ -57,6 +62,7 @@ namespace XaviGames.Manager
         public async void StartClientWithRelay(string joinCode, Action<bool> callback)
         {
             bool isSuccess = await StartClientWithRelay(joinCode, _hostSettings.GetConnectionType());
+            NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoadingHandler;
             callback?.Invoke(isSuccess);
         }
 
@@ -81,6 +87,23 @@ namespace XaviGames.Manager
             }
 
             return !string.IsNullOrEmpty(joinCode) && NetworkManager.Singleton.StartClient();
+        }
+
+        private void OnSceneLoadingHandler(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+        {
+            if (NetworkManager.Singleton.LocalClientId != clientId)
+            {
+                return;
+            }
+
+            if (sceneName != _environmentScene.SceneName)
+            {
+                return;
+            }
+
+            NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
+            CanvasManager.Instance.DisableAllCanvasGroups();
+            CanvasManager.Instance.LoadingCanvasController.DisableLoading();
         }
     }
 }

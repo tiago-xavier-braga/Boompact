@@ -2,7 +2,6 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
-using TMPro;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Host;
@@ -17,6 +16,7 @@ namespace XaviGames.Ui
 
         [field: Header("Info")]
         [field: SerializeField]
+        [field: ReadOnly]
         public string JoinCode { get; private set; } = string.Empty;
 
         public async void StartHost()
@@ -68,10 +68,11 @@ namespace XaviGames.Ui
             if (isSuccess)
             {
                 GameLogger.Log("Service successfully completed", LogCategory.Client);
+                //_canvasManager.LoadingCanvasController.DisableLoading();
             }
             else
             {
-                _canvasManager.LoadingCanvasController.DisableLoading();
+                //_canvasManager.LoadingCanvasController.DisableLoading();
                 GameLogger.LogError("Unable to access this service", LogCategory.Client);
             }
         }

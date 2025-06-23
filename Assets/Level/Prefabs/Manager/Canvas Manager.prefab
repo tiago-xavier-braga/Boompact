@@ -110,7 +110,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00008606911}
+  m_AnchoredPosition: {x: 0, y: -0.000076293945}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &7394470255449346634
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 0
+    m_Right: 44
     m_Top: 65
     m_Bottom: 0
   m_ChildAlignment: 1
@@ -660,9 +660,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <MenuController>k__BackingField: {fileID: 9022329344195267400}
   <LoadingCanvasController>k__BackingField: {fileID: 4443881462530691980}
+  <RoomConnectSelector>k__BackingField: {fileID: 5410862087997518714}
   <EnableCanvasScale>k__BackingField: 1
   <DisableCanvasScale>k__BackingField: 0.8
   <AnimationDuration>k__BackingField: 0.5
+  <CanvasGroupControllerRefs>k__BackingField: []
 --- !u!114 &9022329344195267400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -675,9 +677,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 945b2488a85bf7f4da891bfa8b1aad2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _joinCodeText: {fileID: 2641069928269459096}
-  _joinCodeInputField: {fileID: 2641069928269459096}
   _canvasManager: {fileID: 2097515268141993198}
+  <JoinCode>k__BackingField: 
 --- !u!114 &4443881462530691980
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3395,6 +3396,34 @@ PrefabInstance:
     - target: {fileID: 6687664929588572642, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
       propertyPath: m_enableVertexGradient
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061096149215089844, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061096149215089844, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061096149215089844, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 9022329344195267400}
+    - target: {fileID: 8061096149215089844, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061096149215089844, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: JoinGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061096149215089844, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: XaviGames.Ui.MenuController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8061096149215089844, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 9000754822848314130, guid: 8bf72a7bc004d3e409fbe652c8c26a1d, type: 3}
       propertyPath: m_Pivot.x
