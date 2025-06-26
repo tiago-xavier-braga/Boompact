@@ -20,6 +20,7 @@ namespace XaviGames.Host
         private List<Transform> _spawnPoints;
 
         [SerializeField]
+        [ReadOnly]
         private List<GameObject> _spawnedCars;
 
         public void SpawnAllCars()

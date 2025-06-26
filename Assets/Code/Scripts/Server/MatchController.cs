@@ -7,6 +7,7 @@ using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Services;
+using XaviGames.Ui;
 
 namespace XaviGames.Host
 {
@@ -58,10 +59,11 @@ namespace XaviGames.Host
             FinishMatch();
         }
 
-        private void FinishMatch()
+        private async void FinishMatch()
         {
             _hostManager.SetServerState(HostState.GameEnded);
-            ShowWinnersClientRpc();
+            await CanvasManager.Instance.MatchEndHandler.ShowOverMatch();
+            await CanvasManager.Instance.MatchEndHandler.ShowWinnerMatch(_teamController.BombOwners);
             StartMatch();
         }
 
@@ -70,13 +72,7 @@ namespace XaviGames.Host
         {
             var minutes = remainingSeconds / 60;
             var secs = remainingSeconds % 60;
-            //HudManager.Instance.SetMatchTimer($"{minutes:D2}:{secs:D2}");
-        }
-
-        [Rpc(SendTo.NotServer)]
-        private void ShowWinnersClientRpc()
-        {
-            //MenuManager.Instance.ShowResults(_teamController.BombOwners);
+            
         }
     }
 }

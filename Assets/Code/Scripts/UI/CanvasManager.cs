@@ -18,6 +18,8 @@ namespace XaviGames.Ui
         [field: SerializeField]
         public RoomConnectSelector RoomConnectSelector { get; private set; }
 
+        [field: SerializeField]
+        public MatchEndHandler MatchEndHandler { get; private set; }
 
         [field: Header("Canvas Group Controller")]
         [field: SerializeField]
