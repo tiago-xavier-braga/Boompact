@@ -27,11 +27,11 @@ namespace XaviGames.Services
 
         [field: SerializeField]
         [field: Min(0)]
-        public float MatchOverBannerDelay { get; private set; } = 5f;
+        public int MatchOverBannerDelay { get; private set; } = 5;
 
         [field: SerializeField]
         [field: Min(0)]
-        public float MatchEndDelay { get; private set; } = 15f;
+        public int MatchEndDelay { get; private set; } = 15;
 
         private void OnValidate()
         {

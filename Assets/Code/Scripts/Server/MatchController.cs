@@ -3,6 +3,7 @@
 // For inquiries: xavigames.company@gmail.com
 
 using System.Collections;
+using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
@@ -62,8 +63,7 @@ namespace XaviGames.Host
         private void FinishMatch()
         {
             _hostManager.SetServerState(HostState.GameEnded);
-            SendResultForClients();
-            // StartMatch();
+            StartCoroutine(ShowMatchOverBannerAsync());
         }
 
         [Rpc(SendTo.NotServer)]
@@ -72,6 +72,35 @@ namespace XaviGames.Host
             int minutes = remainingSeconds / 60;
             int seconds = remainingSeconds % 60;
             //CanvasManager.Instance.MatchHud.UpdateTimer(minutes, seconds);
+        }
+
+        private IEnumerator ShowMatchOverBannerAsync()
+        {
+            CanvasManager.Instance.MatchEndHandler.EnableMatchOverBannerRpc();
+            int remainingSeconds = _hostSettings.MatchOverBannerDelay;
+            while (remainingSeconds > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                remainingSeconds--;
+            }
+            CanvasManager.Instance.MatchEndHandler.DisableMatchOverBannerRpc();
+
+            StartCoroutine(ShowCanvasResultsAsync());
+        }
+
+        private IEnumerator ShowCanvasResultsAsync()
+        {
+            SendResultForClients();
+
+            int remainingSeconds = _hostSettings.MatchEndDelay;
+            while (remainingSeconds > 0)
+            {
+                yield return new WaitForSeconds(1f);
+                remainingSeconds--;
+            }
+
+            CanvasManager.Instance.MatchEndHandler.DisableCanvasResultRpc();
+            StartMatch();
         }
 
         private void SendResultForClients()

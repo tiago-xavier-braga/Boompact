@@ -7,6 +7,7 @@ using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
+using XaviGames.Services;
 
 namespace XaviGames.Ui
 {
@@ -14,15 +15,18 @@ namespace XaviGames.Ui
     {
         [SerializeField] 
         private CanvasGroupController _matchEndCanvas;
-        
+
+        [SerializeField]
+        private CanvasGroupController _matchOverBannerCanvas;
+
         [SerializeField] 
         private TextMeshProUGUI _winnerText;
         
         [SerializeField] 
         private TextMeshProUGUI _timeText;
-        
-        [SerializeField] 
-        private int _resetDelaySeconds = 10;
+
+        [SerializeField]
+        private HostSettings _hostSettings;
 
         [Rpc(SendTo.SpecifiedInParams)]
         public void SendPlayerResultRpc(bool isWinner, RpcParams rpcParams = default)
@@ -32,9 +36,28 @@ namespace XaviGames.Ui
             StartCoroutine(CountdownSeconds());
         }
 
+        [Rpc(SendTo.ClientsAndHost)]
+        public void DisableCanvasResultRpc()
+        {
+            _matchEndCanvas.DisableCanvas();
+            _timeText.text = string.Empty;
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        public void EnableMatchOverBannerRpc()
+        {
+            _matchOverBannerCanvas.EnableCanvas();
+        }
+
+        [Rpc(SendTo.ClientsAndHost)]
+        public void DisableMatchOverBannerRpc()
+        {
+            _matchOverBannerCanvas.DisableCanvas();
+        }
+
         private IEnumerator CountdownSeconds()
         {
-            int remainingSeconds = _resetDelaySeconds;
+            int remainingSeconds = _hostSettings.MatchEndDelay;
             while (remainingSeconds > 0)
             {
                 _timeText.text = $"Reset in {remainingSeconds} seconds...";
