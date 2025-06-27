@@ -80,6 +80,8 @@ namespace XaviGames.Host
                     car.GetComponent<NetworkObject>().Despawn();
                 }
             }
+
+            _spawnedCars.Clear();
         }
     }
 }

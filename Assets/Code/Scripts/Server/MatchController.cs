@@ -1,4 +1,4 @@
-//Boompact(c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
+// Boompact (c) 2025 Tiago Xavier Braga - XaviGames. All rights reserved.
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
@@ -13,16 +13,16 @@ namespace XaviGames.Host
 {
     public class MatchController : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField] 
         private HostManager _hostManager;
-
-        [SerializeField]
+        
+        [SerializeField] 
         private CarSpawnController _carSpawnController;
-
-        [SerializeField]
+        
+        [SerializeField] 
         private TeamController _teamController;
-
-        [SerializeField]
+        
+        [SerializeField] 
         private HostSettings _hostSettings;
 
         public void StartMatch()
@@ -38,13 +38,13 @@ namespace XaviGames.Host
             if (!NetworkManager.Singleton.IsHost)
             {
                 GameLogger.LogWarning("StartMatch called on client. Aborting.", LogCategory.Server);
-                yield return null;
+                yield break;
             }
 
-            if (_hostSettings is null)
+            if (_hostSettings == null)
             {
                 GameLogger.LogWarning("MatchSettings is not set. Cannot start countdown.", LogCategory.Server);
-                yield return null;
+                yield break;
             }
 
             int currentSeconds = _hostSettings.MinutesMatchDuration * 60;
@@ -59,20 +59,30 @@ namespace XaviGames.Host
             FinishMatch();
         }
 
-        private async void FinishMatch()
+        private void FinishMatch()
         {
             _hostManager.SetServerState(HostState.GameEnded);
-            await CanvasManager.Instance.MatchEndHandler.ShowOverMatch();
-            await CanvasManager.Instance.MatchEndHandler.ShowWinnerMatch(_teamController.BombOwners);
-            StartMatch();
+            SendResultForClients();
+            // StartMatch();
         }
 
         [Rpc(SendTo.NotServer)]
         private void UpdateCountdownClientRpc(int remainingSeconds)
         {
-            var minutes = remainingSeconds / 60;
-            var secs = remainingSeconds % 60;
-            
+            int minutes = remainingSeconds / 60;
+            int seconds = remainingSeconds % 60;
+            //CanvasManager.Instance.MatchHud.UpdateTimer(minutes, seconds);
+        }
+
+        private void SendResultForClients()
+        {
+            foreach (ulong playerId in NetworkManager.Singleton.ConnectedClientsIds)
+            {
+                bool isWinner = _teamController.NonBombOwners.Contains(playerId);
+
+                CanvasManager.Instance.MatchEndHandler.SendPlayerResultRpc(
+                    isWinner, CanvasManager.Instance.MatchEndHandler.RpcTarget.Single(playerId, RpcTargetUse.Temp));
+            }
         }
     }
 }

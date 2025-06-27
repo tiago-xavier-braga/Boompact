@@ -18,11 +18,20 @@ namespace XaviGames.Services
         public int MaxPlayersInMatch { get; private set; }
 
         [field: SerializeField]
+        [field: Min(0)]
         public int MinutesMatchDuration { get; private set; } = 2;
 
         [field: SerializeField]
         [field: Min(0)]
         public float StartDelayAfterMinPlayers { get; private set; }
+
+        [field: SerializeField]
+        [field: Min(0)]
+        public float MatchOverBannerDelay { get; private set; } = 5f;
+
+        [field: SerializeField]
+        [field: Min(0)]
+        public float MatchEndDelay { get; private set; } = 15f;
 
         private void OnValidate()
         {
