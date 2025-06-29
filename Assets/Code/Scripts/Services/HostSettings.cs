@@ -9,7 +9,16 @@ namespace XaviGames.Services
     [CreateAssetMenu(fileName = nameof(HostSettings), menuName = "Xavi Games/Services/Host Settings")]
     public class HostSettings : ScriptableObject
     {
+        private enum ConnectionType
+        {
+            WSS,
+            DTLS,
+            UDP
+        }
+
         [field: Header("Unity Host")]
+        [SerializeField]
+        private ConnectionType _connectionType;
 
         [field: SerializeField]
         public int MinPlayersInMatch { get; private set; }
@@ -45,13 +54,18 @@ namespace XaviGames.Services
 
         public string GetConnectionType()
         {
-#if UNITY_WEBGL
-    return "wss";
-#elif UNITY_ANDROID || UNITY_IOS
-    return "dtls";
-#else
-            return "udp";
-#endif
+            if (_connectionType == ConnectionType.WSS)
+            {
+                return "wss";
+            }
+            else if (_connectionType == ConnectionType.DTLS)
+            {
+                return "dtls";
+            }
+            else
+            {
+                return "udp";
+            }
         }
     }
 }
