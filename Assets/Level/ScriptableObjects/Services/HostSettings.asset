@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1acac9a601b15a049a4dc305ff3598e9, type: 3}
   m_Name: HostSettings
   m_EditorClassIdentifier: 
+  _connectionType: 2
   <MinPlayersInMatch>k__BackingField: 2
   <MaxPlayersInMatch>k__BackingField: 10
-  <MinutesMatchDuration>k__BackingField: 1
+  <MinutesMatchDuration>k__BackingField: 2
   <StartDelayAfterMinPlayers>k__BackingField: 5
+  <MatchOverBannerDelay>k__BackingField: 5
+  <MatchEndDelay>k__BackingField: 15
