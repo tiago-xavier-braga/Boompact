@@ -245,6 +245,17 @@
                 },
                 {
                     "name": "",
+                    "id": "8cdd8e13-76a6-4757-aa06-719a42b3588e",
+                    "path": "<Touchscreen>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Touch",
+                    "action": "Camera",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "5ada68f1-b659-4eeb-8408-c39c45af792c",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
