@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using XaviEssencials.Runtime;
+using XaviGames.Ui;
 
 namespace XaviGames.Car
 {
@@ -48,24 +50,25 @@ namespace XaviGames.Car
         
         private float _defaultAngularDamping;
 
-        public void OnEnable()
-        {
-            _moveInputAction.action.performed += OnMoveInput;
-            _moveInputAction.action.canceled += OnMoveInput;
-            _handbrakeInputAction.action.performed += OnHandbrake;
-            _handbrakeInputAction.action.canceled += OnHandbrake;
-        }
+        //public void OnEnable()
+        //{
+        //    _moveInputAction.action.performed += OnMoveInput;
+        //    _moveInputAction.action.canceled += OnMoveInput;
+        //    _handbrakeInputAction.action.performed += OnHandbrake;
+        //    _handbrakeInputAction.action.canceled += OnHandbrake;
+        //}
 
-        public void OnDisable()
-        {
-            _moveInputAction.action.performed -= OnMoveInput;
-            _moveInputAction.action.canceled -= OnMoveInput;
-            _handbrakeInputAction.action.performed -= OnHandbrake;
-            _handbrakeInputAction.action.canceled -= OnHandbrake;
-        }
+        //public void OnDisable()
+        //{
+        //    _moveInputAction.action.performed -= OnMoveInput;
+        //    _moveInputAction.action.canceled -= OnMoveInput;
+        //    _handbrakeInputAction.action.performed -= OnHandbrake;
+        //    _handbrakeInputAction.action.canceled -= OnHandbrake;
+        //}
 
         public override void OnNetworkSpawn()
         {
+            SetUiButtonReferences();
             ApplyCenterMass();
             ConfigureWheelSettings();
 
@@ -107,6 +110,50 @@ namespace XaviGames.Car
                     break;
             }
         }
+
+        private void SetUiButtonReferences()
+        {
+            HudController hud = CanvasManager.Instance.HudController;
+
+            AddTriggerEvent(hud.LeftButton, EventTriggerType.PointerDown, () => DirectionInput(-1f));
+            AddTriggerEvent(hud.LeftButton, EventTriggerType.PointerUp, () => DirectionInput(0f));
+
+            AddTriggerEvent(hud.RightButton, EventTriggerType.PointerDown, () => DirectionInput(1f));
+            AddTriggerEvent(hud.RightButton, EventTriggerType.PointerUp, () => DirectionInput(0f));
+
+            AddTriggerEvent(hud.AcceleratorButton, EventTriggerType.PointerDown, () => AccelerationInput(1f));
+            AddTriggerEvent(hud.AcceleratorButton, EventTriggerType.PointerUp, () => AccelerationInput(0f));
+
+            AddTriggerEvent(hud.BrakeButton, EventTriggerType.PointerDown, () => AccelerationInput(-1f));
+            AddTriggerEvent(hud.BrakeButton, EventTriggerType.PointerUp, () => AccelerationInput(0f));
+
+            //AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerDown, () => SetHandbrake(true));
+            //AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerUp, () => SetHandbrake(false));
+        }
+
+        private void AddTriggerEvent(EventTrigger trigger, EventTriggerType eventType, UnityEngine.Events.UnityAction action)
+        {
+            trigger.triggers.RemoveAll(e => e.eventID == eventType);
+
+            EventTrigger.Entry entry = new EventTrigger.Entry
+            {
+                eventID = eventType
+            };
+            entry.callback.AddListener((_) => action.Invoke());
+            trigger.triggers.Add(entry);
+        }
+
+
+        private void DirectionInput(float value)
+        {
+            _inputVector.x = value;
+        }
+
+        private void AccelerationInput(float value)
+        {
+            _inputVector.y = value;
+        }
+
         private void ApplyCenterMass()
         {
             Vector3 centerOfMass = _rigidbody.centerOfMass;

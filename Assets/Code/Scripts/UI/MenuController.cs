@@ -68,7 +68,6 @@ namespace XaviGames.Ui
             if (isSuccess)
             {
                 GameLogger.Log("Service successfully completed", LogCategory.Client);
-                //_canvasManager.LoadingCanvasController.DisableLoading();
             }
             else
             {

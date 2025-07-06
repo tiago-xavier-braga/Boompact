@@ -175,8 +175,10 @@ namespace XaviGames.Host
             }
 
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
-            CanvasManager.Instance.DisableAllCanvasGroups();
-            CanvasManager.Instance.LoadingCanvasController.DisableLoading();
+            CanvasManager canvasManager = CanvasManager.Instance;
+            canvasManager.DisableAllCanvasGroups();
+            canvasManager.HudController.EnableCanvas();
+            canvasManager.LoadingCanvasController.DisableLoading();
         }
 
         private IEnumerator HeartbeatLobbyCoroutine(string lobbyId)

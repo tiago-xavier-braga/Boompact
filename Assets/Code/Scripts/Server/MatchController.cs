@@ -76,7 +76,11 @@ namespace XaviGames.Host
 
         private IEnumerator ShowMatchOverBannerAsync()
         {
-            CanvasManager.Instance.MatchEndHandler.EnableMatchOverBannerRpc();
+            CanvasManager canvasManager = CanvasManager.Instance;
+
+            canvasManager.HudController.DisableCanvas();
+            canvasManager.MatchEndHandler.EnableMatchOverBannerRpc();
+
             int remainingSeconds = _hostSettings.MatchOverBannerDelay;
             while (remainingSeconds > 0)
             {

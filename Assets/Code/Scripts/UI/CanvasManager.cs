@@ -21,6 +21,9 @@ namespace XaviGames.Ui
         [field: SerializeField]
         public MatchEndHandler MatchEndHandler { get; private set; }
 
+        [field: SerializeField]
+        public HudController HudController { get; private set; }
+
         [field: Header("Canvas Group Controller")]
         [field: SerializeField]
         public float EnableCanvasScale { get; private set; } = 1f;
