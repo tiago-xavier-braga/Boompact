@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using XaviGames.Ui;
 
 namespace XaviGames.Car
 {
@@ -11,31 +13,39 @@ namespace XaviGames.Car
         [SerializeField]
         private List<TrailRenderer> _wheelTrailRenderers;
 
-        [Header("Input Actions")]
-        [SerializeField]
-        private InputActionReference _handbrakeInputAction;
-
-        private void OnEnable()
+        public override void OnNetworkSpawn()
         {
-            _handbrakeInputAction.action.performed += OnCarDrifting;
-            _handbrakeInputAction.action.canceled += OnCarDrifting;
+            base.OnNetworkSpawn();
+
+            if (IsOwner)
+            {
+                SetUiButtonReferences();
+            }
         }
 
-        private void OnDisable()
-        {
-            _handbrakeInputAction.action.performed -= OnCarDrifting;
-            _handbrakeInputAction.action.canceled -= OnCarDrifting;
-        }
-
-        private void OnCarDrifting(InputAction.CallbackContext context)
+        private void SetUiButtonReferences()
         {
             if (!IsOwner)
             {
                 return;
             }
 
-            bool isDrifting = context.phase == InputActionPhase.Performed;
-            SetTrailsActiveServerRpc(isDrifting);
+            HudController hud = CanvasManager.Instance.HudController;
+
+            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerDown, () => SetTrailsActiveServerRpc(true));
+            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerUp, () => SetTrailsActiveServerRpc(false));
+        }
+
+        private void AddTriggerEvent(EventTrigger trigger, EventTriggerType eventType, UnityEngine.Events.UnityAction action)
+        {
+            trigger.triggers.RemoveAll(e => e.eventID == eventType);
+
+            EventTrigger.Entry entry = new EventTrigger.Entry
+            {
+                eventID = eventType
+            };
+            entry.callback.AddListener((_) => action.Invoke());
+            trigger.triggers.Add(entry);
         }
 
         [ServerRpc(RequireOwnership = false)]

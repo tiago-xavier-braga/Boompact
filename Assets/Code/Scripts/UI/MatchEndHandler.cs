@@ -6,13 +6,15 @@ using System.Collections;
 using TMPro;
 using Unity.Netcode;
 using UnityEngine;
-using XaviEssencials.Runtime;
 using XaviGames.Services;
 
 namespace XaviGames.Ui
 {
     public class MatchEndHandler : NetworkBehaviour
     {
+        [SerializeField]
+        private HudController _hudController;
+
         [SerializeField] 
         private CanvasGroupController _matchEndCanvas;
 
@@ -39,6 +41,7 @@ namespace XaviGames.Ui
         [Rpc(SendTo.ClientsAndHost)]
         public void DisableCanvasResultRpc()
         {
+            _hudController.EnableCanvas();
             _matchEndCanvas.DisableCanvas();
             _timeText.text = string.Empty;
         }
@@ -46,6 +49,7 @@ namespace XaviGames.Ui
         [Rpc(SendTo.ClientsAndHost)]
         public void EnableMatchOverBannerRpc()
         {
+            _hudController.DisableCanvas();
             _matchOverBannerCanvas.EnableCanvas();
         }
 

@@ -21,25 +21,10 @@ namespace XaviGames.Car
         [SerializeField]
         private List<WheelController> _wheelControllers;
 
-        [Header("Input References")]
-        [SerializeField]
-        private InputActionReference _moveInputAction;
-
-        [SerializeField]
-        private InputActionReference _handbrakeInputAction;
-
-        [Header("Car Evetns")]
-        [SerializeField]
-        private EventChannel _onCarDrifting;
-
         [Header("Info")]
         [SerializeField]
         [ReadOnly]
         private Vector2 _inputVector;
-
-        [SerializeField]
-        [ReadOnly]
-        private bool _inputHandbrake;
 
         [SerializeField]
         [ReadOnly]
@@ -49,22 +34,6 @@ namespace XaviGames.Car
         private WheelFrictionCurve _driftSidewaysFriction = new();
         
         private float _defaultAngularDamping;
-
-        //public void OnEnable()
-        //{
-        //    _moveInputAction.action.performed += OnMoveInput;
-        //    _moveInputAction.action.canceled += OnMoveInput;
-        //    _handbrakeInputAction.action.performed += OnHandbrake;
-        //    _handbrakeInputAction.action.canceled += OnHandbrake;
-        //}
-
-        //public void OnDisable()
-        //{
-        //    _moveInputAction.action.performed -= OnMoveInput;
-        //    _moveInputAction.action.canceled -= OnMoveInput;
-        //    _handbrakeInputAction.action.performed -= OnHandbrake;
-        //    _handbrakeInputAction.action.canceled -= OnHandbrake;
-        //}
 
         public override void OnNetworkSpawn()
         {
@@ -90,29 +59,13 @@ namespace XaviGames.Car
             _inputVector = context.ReadValue<Vector2>();
         }
 
-        public void OnHandbrake(InputAction.CallbackContext context)
+        private void SetUiButtonReferences()
         {
             if (!IsOwner)
             {
                 return;
             }
 
-            switch (context.phase)
-            {
-                case InputActionPhase.Performed:
-                    ApplyDriftWheelSettings();
-                    _onCarDrifting?.Raise(true);
-                    break;
-
-                case InputActionPhase.Canceled:
-                    ApplyDefaultWheelSettings();
-                    _onCarDrifting?.Raise(false);
-                    break;
-            }
-        }
-
-        private void SetUiButtonReferences()
-        {
             HudController hud = CanvasManager.Instance.HudController;
 
             AddTriggerEvent(hud.LeftButton, EventTriggerType.PointerDown, () => DirectionInput(-1f));
@@ -127,8 +80,8 @@ namespace XaviGames.Car
             AddTriggerEvent(hud.BrakeButton, EventTriggerType.PointerDown, () => AccelerationInput(-1f));
             AddTriggerEvent(hud.BrakeButton, EventTriggerType.PointerUp, () => AccelerationInput(0f));
 
-            //AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerDown, () => SetHandbrake(true));
-            //AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerUp, () => SetHandbrake(false));
+            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerDown, () => ApplyDriftWheelSettings());
+            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerUp, () => ApplyDefaultWheelSettings());
         }
 
         private void AddTriggerEvent(EventTrigger trigger, EventTriggerType eventType, UnityEngine.Events.UnityAction action)
