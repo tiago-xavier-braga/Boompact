@@ -38,8 +38,6 @@ namespace XaviGames.Car
 
         private void AddTriggerEvent(EventTrigger trigger, EventTriggerType eventType, UnityEngine.Events.UnityAction action)
         {
-            trigger.triggers.RemoveAll(e => e.eventID == eventType);
-
             EventTrigger.Entry entry = new EventTrigger.Entry
             {
                 eventID = eventType

@@ -13,7 +13,7 @@ namespace XaviGames.Manager
     {
         [SerializeField]
         [ReadOnly]
-        private int _MaxFps = 60;
+        private int _MaxFps = 120;
 
         public static GameManager Instance { get; private set; } = null;
 
