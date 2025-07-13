@@ -422,8 +422,8 @@ GameObject:
   - component: {fileID: 6774160736232837937}
   - component: {fileID: 3903770177611431428}
   - component: {fileID: 7690184053272876251}
-  - component: {fileID: 931326528332818532}
   - component: {fileID: 1161045120972719030}
+  - component: {fileID: 192454691202036873}
   m_Layer: 0
   m_Name: Right Button
   m_TagString: Untagged
@@ -532,19 +532,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &931326528332818532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 986887349212373934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates: []
 --- !u!114 &1161045120972719030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -565,6 +552,19 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
+--- !u!114 &192454691202036873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 986887349212373934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlPath: <Keyboard>/d
 --- !u!1 &1197915513451662927
 GameObject:
   m_ObjectHideFlags: 0
@@ -970,7 +970,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3717914397
+  GlobalObjectIdHash: 3832742052
   InScenePlacedSourceGlobalObjectIdHash: 3832742052
   DeferredDespawnTick: 0
   Ownership: 1
@@ -1661,7 +1661,7 @@ GameObject:
   - component: {fileID: 4486722569742601484}
   - component: {fileID: 1603539884132477720}
   - component: {fileID: 5109902574460564653}
-  - component: {fileID: 3528144403895841083}
+  - component: {fileID: 8645931407392151060}
   m_Layer: 0
   m_Name: Break Button
   m_TagString: Untagged
@@ -1770,7 +1770,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &3528144403895841083
+--- !u!114 &8645931407392151060
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1779,10 +1779,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 4066749720037595498}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates: []
+  m_ControlPath: <Keyboard>/s
 --- !u!1 &4190380686110741952
 GameObject:
   m_ObjectHideFlags: 0
@@ -2250,11 +2250,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasManager: {fileID: 2097515268141993198}
   _canvasGroup: {fileID: 0}
-  <LeftButton>k__BackingField: {fileID: 2342852921749730772}
-  <RightButton>k__BackingField: {fileID: 931326528332818532}
-  <AcceleratorButton>k__BackingField: {fileID: 2242673435314239444}
-  <BrakeButton>k__BackingField: {fileID: 3528144403895841083}
-  <HandbrakeButton>k__BackingField: {fileID: 8073958317761636060}
+  <LeftButton>k__BackingField: {fileID: 0}
+  <RightButton>k__BackingField: {fileID: 0}
+  <AcceleratorButton>k__BackingField: {fileID: 0}
+  <BrakeButton>k__BackingField: {fileID: 0}
+  <HandbrakeButton>k__BackingField: {fileID: 0}
 --- !u!1 &5226816222410495369
 GameObject:
   m_ObjectHideFlags: 0
@@ -3056,8 +3056,8 @@ GameObject:
   - component: {fileID: 719023166030453724}
   - component: {fileID: 8731085642066038591}
   - component: {fileID: 874360567322213230}
-  - component: {fileID: 2342852921749730772}
   - component: {fileID: 42239644514179272}
+  - component: {fileID: 4582396598402170863}
   m_Layer: 0
   m_Name: Left Button
   m_TagString: Untagged
@@ -3166,19 +3166,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2342852921749730772
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7764926545904519994}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates: []
 --- !u!114 &42239644514179272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3199,6 +3186,19 @@ MonoBehaviour:
   m_FlexibleWidth: 1
   m_FlexibleHeight: 1
   m_LayoutPriority: 1
+--- !u!114 &4582396598402170863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7764926545904519994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ControlPath: <Keyboard>/a
 --- !u!1 &7769154154755635999
 GameObject:
   m_ObjectHideFlags: 0
@@ -3555,7 +3555,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5157078583612208254}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3768,7 +3768,7 @@ GameObject:
   - component: {fileID: 3500926224185890649}
   - component: {fileID: 3698457133346689672}
   - component: {fileID: 8999964533956953365}
-  - component: {fileID: 8073958317761636060}
+  - component: {fileID: 5328137687823467509}
   m_Layer: 0
   m_Name: Hardbrake Button
   m_TagString: Untagged
@@ -3877,7 +3877,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &8073958317761636060
+--- !u!114 &5328137687823467509
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3886,10 +3886,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8786853596978644774}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates: []
+  m_ControlPath: <Keyboard>/space
 --- !u!1 &8798540585488154043
 GameObject:
   m_ObjectHideFlags: 0
@@ -3902,7 +3902,7 @@ GameObject:
   - component: {fileID: 8238758634623128967}
   - component: {fileID: 6265278110159826709}
   - component: {fileID: 5911478972996744677}
-  - component: {fileID: 2242673435314239444}
+  - component: {fileID: 4229730732054501430}
   m_Layer: 0
   m_Name: Accelerator Button
   m_TagString: Untagged
@@ -4011,7 +4011,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2242673435314239444
+--- !u!114 &4229730732054501430
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4020,10 +4020,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8798540585488154043}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Delegates: []
+  m_ControlPath: <Keyboard>/w
 --- !u!1 &9068288787551245988
 GameObject:
   m_ObjectHideFlags: 0
