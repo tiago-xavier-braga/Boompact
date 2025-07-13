@@ -21,6 +21,13 @@ namespace XaviGames.Car
         [SerializeField]
         private List<WheelController> _wheelControllers;
 
+        [Header("Input References")]
+        [SerializeField]
+        private InputActionReference _moveInputAction;
+
+        [SerializeField]
+        private InputActionReference _handbrakeInputAction;
+
         [Header("Info")]
         [SerializeField]
         [ReadOnly]
@@ -35,9 +42,24 @@ namespace XaviGames.Car
         
         private float _defaultAngularDamping;
 
+        public void OnEnable()
+        {
+            _moveInputAction.action.performed += OnMoveInput;
+            _moveInputAction.action.canceled += OnMoveInput;
+            _handbrakeInputAction.action.performed += OnHandbrake;
+            _handbrakeInputAction.action.canceled += OnHandbrake;
+        }
+
+        public void OnDisable()
+        {
+            _moveInputAction.action.performed -= OnMoveInput;
+            _moveInputAction.action.canceled -= OnMoveInput;
+            _handbrakeInputAction.action.performed -= OnHandbrake;
+            _handbrakeInputAction.action.canceled -= OnHandbrake;
+        }
+
         public override void OnNetworkSpawn()
         {
-            SetUiButtonReferences();
             ApplyCenterMass();
             ConfigureWheelSettings();
 
@@ -59,50 +81,23 @@ namespace XaviGames.Car
             _inputVector = context.ReadValue<Vector2>();
         }
 
-        private void SetUiButtonReferences()
+        public void OnHandbrake(InputAction.CallbackContext context)
         {
             if (!IsOwner)
             {
                 return;
             }
 
-            HudController hud = CanvasManager.Instance.HudController;
-
-            AddTriggerEvent(hud.LeftButton, EventTriggerType.PointerDown, () => DirectionInput(-1f));
-            AddTriggerEvent(hud.LeftButton, EventTriggerType.PointerUp, () => DirectionInput(0f));
-
-            AddTriggerEvent(hud.RightButton, EventTriggerType.PointerDown, () => DirectionInput(1f));
-            AddTriggerEvent(hud.RightButton, EventTriggerType.PointerUp, () => DirectionInput(0f));
-
-            AddTriggerEvent(hud.AcceleratorButton, EventTriggerType.PointerDown, () => AccelerationInput(1f));
-            AddTriggerEvent(hud.AcceleratorButton, EventTriggerType.PointerUp, () => AccelerationInput(0f));
-
-            AddTriggerEvent(hud.BrakeButton, EventTriggerType.PointerDown, () => AccelerationInput(-1f));
-            AddTriggerEvent(hud.BrakeButton, EventTriggerType.PointerUp, () => AccelerationInput(0f));
-
-            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerDown, () => ApplyDriftWheelSettings());
-            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerUp, () => ApplyDefaultWheelSettings());
-        }
-
-        private void AddTriggerEvent(EventTrigger trigger, EventTriggerType eventType, UnityEngine.Events.UnityAction action)
-        {
-            EventTrigger.Entry entry = new EventTrigger.Entry
+            switch (context.phase)
             {
-                eventID = eventType
-            };
-            entry.callback.AddListener((_) => action.Invoke());
-            trigger.triggers.Add(entry);
-        }
+                case InputActionPhase.Performed:
+                    ApplyDriftWheelSettings();
+                    break;
 
-
-        private void DirectionInput(float value)
-        {
-            _inputVector.x = value;
-        }
-
-        private void AccelerationInput(float value)
-        {
-            _inputVector.y = value;
+                case InputActionPhase.Canceled:
+                    ApplyDefaultWheelSettings();
+                    break;
+            }
         }
 
         private void ApplyCenterMass()

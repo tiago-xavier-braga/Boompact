@@ -249,7 +249,7 @@
                     "path": "<Touchscreen>/delta",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Touch",
+                    "groups": ";Touch;Keyboard&Mouse",
                     "action": "Camera",
                     "isComposite": false,
                     "isPartOfComposite": false

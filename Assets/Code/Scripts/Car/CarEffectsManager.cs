@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using XaviGames.Ui;
 
 namespace XaviGames.Car
 {
@@ -13,37 +11,31 @@ namespace XaviGames.Car
         [SerializeField]
         private List<TrailRenderer> _wheelTrailRenderers;
 
-        public override void OnNetworkSpawn()
-        {
-            base.OnNetworkSpawn();
+        [Header("Input Actions")]
+        [SerializeField]
+        private InputActionReference _handbrakeInputAction;
 
-            if (IsOwner)
-            {
-                SetUiButtonReferences();
-            }
+        private void OnEnable()
+        {
+            _handbrakeInputAction.action.performed += OnCarDrifting;
+            _handbrakeInputAction.action.canceled += OnCarDrifting;
         }
 
-        private void SetUiButtonReferences()
+        private void OnDisable()
+        {
+            _handbrakeInputAction.action.performed -= OnCarDrifting;
+            _handbrakeInputAction.action.canceled -= OnCarDrifting;
+        }
+
+        private void OnCarDrifting(InputAction.CallbackContext context)
         {
             if (!IsOwner)
             {
                 return;
             }
 
-            HudController hud = CanvasManager.Instance.HudController;
-
-            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerDown, () => SetTrailsActiveServerRpc(true));
-            AddTriggerEvent(hud.HandbrakeButton, EventTriggerType.PointerUp, () => SetTrailsActiveServerRpc(false));
-        }
-
-        private void AddTriggerEvent(EventTrigger trigger, EventTriggerType eventType, UnityEngine.Events.UnityAction action)
-        {
-            EventTrigger.Entry entry = new EventTrigger.Entry
-            {
-                eventID = eventType
-            };
-            entry.callback.AddListener((_) => action.Invoke());
-            trigger.triggers.Add(entry);
+            bool isDrifting = context.phase == InputActionPhase.Performed;
+            SetTrailsActiveServerRpc(isDrifting);
         }
 
         [ServerRpc(RequireOwnership = false)]
