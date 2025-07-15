@@ -66,7 +66,7 @@ namespace XaviGames.Host
             StartCoroutine(ShowMatchOverBannerAsync());
         }
 
-        [Rpc(SendTo.NotServer)]
+        [Rpc(SendTo.ClientsAndHost)]
         private void UpdateCountdownClientRpc(int remainingSeconds)
         {
             int minutes = remainingSeconds / 60;
@@ -76,7 +76,7 @@ namespace XaviGames.Host
 
         private IEnumerator ShowMatchOverBannerAsync()
         {
-            CanvasManager.Instance.HudController.DisableCanvas();
+            CanvasManager.Instance.MatchEndHandler.EnableMatchOverBannerRpc();
             int remainingSeconds = _hostSettings.MatchOverBannerDelay;
             while (remainingSeconds > 0)
             {

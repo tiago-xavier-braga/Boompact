@@ -2,7 +2,7 @@
 // Unauthorized use, copying, or distribution is prohibited.
 // For inquiries: xavigames.company@gmail.com
 
-using System.Globalization;
+using Unity.Cinemachine;
 using Unity.Netcode;
 using UnityEngine;
 using XaviGames.Cameras;
@@ -24,7 +24,11 @@ namespace XaviGames.Car
             }
 
             _virtualCamera = Instantiate(_virtualCameraPrefab);
-            _virtualCamera.GetComponent<CarFollowCamera>().SetFollowTransform(transform);
+
+            CinemachineCamera virtualCameraComponent = _virtualCamera.GetComponent<CinemachineCamera>();
+            CameraTarget cameraTarget = virtualCameraComponent.Target;
+            cameraTarget.TrackingTarget = transform;
+            virtualCameraComponent.Target = cameraTarget;
         }
 
         public override void OnNetworkDespawn()

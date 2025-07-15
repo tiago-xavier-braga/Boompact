@@ -13,7 +13,7 @@ namespace XaviGames.Ui
     public class MatchEndHandler : NetworkBehaviour
     {
         [SerializeField]
-        private HudController _hudController;
+        private CanvasGroupController _hudController;
 
         [SerializeField] 
         private CanvasGroupController _matchEndCanvas;

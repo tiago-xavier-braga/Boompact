@@ -22,7 +22,7 @@ namespace XaviGames.Ui
         public MatchEndHandler MatchEndHandler { get; private set; }
 
         [field: SerializeField]
-        public HudController HudController { get; private set; }
+        public CanvasGroupController HudCanvasController { get; private set; }
 
         [field: Header("Canvas Group Controller")]
         [field: SerializeField]
