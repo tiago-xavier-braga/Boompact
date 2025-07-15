@@ -1224,10 +1224,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5651255189271374991}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1500
-  m_Drag: 0.2
-  m_AngularDrag: 1.8
+  m_LinearDamping: 0.2
+  m_AngularDamping: 1.8
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1354,9 +1354,7 @@ MonoBehaviour:
   - {fileID: 1075047790244852423}
   _moveInputAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _handbrakeInputAction: {fileID: -8161986239912819779, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  _onCarDrifting: {fileID: 11400000, guid: a5ce75bd2d07c2f43a6a5e0b5cb5f37c, type: 2}
   _inputVector: {x: 0, y: 0}
-  _inputHandbrake: 0
   _kmPerHour: 0
 --- !u!114 &3474693717029918408
 MonoBehaviour:
@@ -1390,7 +1388,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
-  _virtualCameraPrefab: {fileID: 4748842373785820941, guid: c4632edb28d73c142bd70507afc34def, type: 3}
+  _virtualCameraPrefab: {fileID: 5871279421204866713, guid: c4632edb28d73c142bd70507afc34def, type: 3}
 --- !u!114 &4340690916026104733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1406,7 +1404,12 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   HasBomb:
     m_InternalValue: 0
+  CanTransferBomb:
+    m_InternalValue: 0
   _bombCanvas: {fileID: 7671025159088562880}
+  _bombCanvasOwnerAlpha: 0.5
+  _bombCanvasOtherAlpha: 1
+  _transferCooldown: 2
 --- !u!64 &939933596055950704
 MeshCollider:
   m_ObjectHideFlags: 0

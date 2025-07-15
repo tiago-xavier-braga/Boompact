@@ -119,6 +119,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &824544058 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5180943041883365532, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
+  m_PrefabInstance: {fileID: 1798955849193963451}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1030845065
 GameObject:
   m_ObjectHideFlags: 0
@@ -370,22 +375,36 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e69677c2cee589c4190e7d58aa104134, type: 3}
---- !u!114 &1596893186 stripped
+--- !u!114 &1596893192
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2480155166965596429, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
-  m_PrefabInstance: {fileID: 1798955849193963451}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 824544058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6669fa8eaad858b43a9609503263e99d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8d026b0bec284444d924f1326204ac08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasManager: {fileID: 1628938021}
+  _canvasGroup: {fileID: 0}
 --- !u!4 &1628938016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7666376930194925347, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
   m_PrefabInstance: {fileID: 1798955849193963451}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1628938021 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2097515268141993198, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
+  m_PrefabInstance: {fileID: 1798955849193963451}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b6854a536bd8e949b9b1a0f2c46dfa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1729009768
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,13 +681,29 @@ PrefabInstance:
       propertyPath: m_BlocksRaycasts
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2097515268141993198, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
+      propertyPath: <HudController>k__BackingField
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097515268141993198, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
+      propertyPath: <HudCanvasController>k__BackingField
+      value: 
+      objectReference: {fileID: 1596893192}
+    - target: {fileID: 2097515268141993198, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
+      propertyPath: <CanvasGroupControllerRefs>k__BackingField.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2097515268141993198, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
+      propertyPath: '<CanvasGroupControllerRefs>k__BackingField.Array.data[5]'
+      value: 
+      objectReference: {fileID: 1596893192}
     - target: {fileID: 2301651236631570722, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2301651236631570722, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00008773804
+      value: -0.00007247925
       objectReference: {fileID: 0}
     - target: {fileID: 2724597191353740137, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
       propertyPath: m_AnchorMax.y
@@ -793,14 +828,18 @@ PrefabInstance:
     - target: {fileID: 8213399610054065513, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
       propertyPath: _hudController
       value: 
-      objectReference: {fileID: 1596893186}
-    m_RemovedComponents: []
+      objectReference: {fileID: 1596893192}
+    m_RemovedComponents:
+    - {fileID: 2480155166965596429, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 7666376930194925347, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
       insertIndex: 3
       addedObject: {fileID: 1815283025}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5180943041883365532, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1596893192}
   m_SourcePrefab: {fileID: 100100000, guid: 6af85e713f38c824583ecfe0686c1265, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
