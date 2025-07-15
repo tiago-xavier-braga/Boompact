@@ -119,8 +119,8 @@ MonoBehaviour:
     Wrap: 1
     Recentering:
       Enabled: 1
-      Wait: 1
-      Time: 2
+      Wait: 0.25
+      Time: 0.5
     Restrictions: 0
   VerticalAxis:
     Value: 17.5
@@ -129,8 +129,8 @@ MonoBehaviour:
     Wrap: 0
     Recentering:
       Enabled: 1
-      Wait: 1
-      Time: 2
+      Wait: 0.25
+      Time: 0.5
     Restrictions: 0
   RadialAxis:
     Value: 1
@@ -223,7 +223,7 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -1694954397187473038, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-        Gain: 1
+        Gain: 4
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
@@ -234,7 +234,7 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -1694954397187473038, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-        Gain: -1
+        Gain: -4
         CancelDeltaTime: 0
       InputValue: 0
       Driver:
