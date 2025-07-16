@@ -12,6 +12,16 @@ namespace XaviGames.Ui
         private float elapsed;
         private int frames;
 
+
+        private void Start()
+        {
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+            gameObject.SetActive(true);
+            return;
+#endif
+            gameObject.SetActive(false);
+        }
+
         private void Update()
         {
             elapsed += Time.unscaledDeltaTime;

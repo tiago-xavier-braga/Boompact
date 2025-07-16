@@ -21,10 +21,10 @@ namespace XaviGames.Ui
         [SerializeField]
         private CanvasGroupController _matchOverBannerCanvas;
 
-        [SerializeField] 
+        [SerializeField]
         private TextMeshProUGUI _winnerText;
         
-        [SerializeField] 
+        [SerializeField]
         private TextMeshProUGUI _timeText;
 
         [SerializeField]

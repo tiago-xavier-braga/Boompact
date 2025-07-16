@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using XaviEssencials.Runtime;
+using XaviGames.UI;
 
 namespace XaviGames.Ui
 {
@@ -8,14 +9,12 @@ namespace XaviGames.Ui
     public class CanvasGroupController : MonoBehaviour
     {
         [SerializeField]
-        private CanvasManager _canvasManager;
+        private CanvasTransitionSO _canvasTransitionSO;
 
         [Header("Info")]
         [SerializeField]
         [ReadOnly]
         private CanvasGroup _canvasGroup;
-
-        public UnityAction<bool> OnCanvasStatus;
 
         private void Start()
         {
@@ -25,27 +24,23 @@ namespace XaviGames.Ui
         public virtual void EnableCanvas()
         {
             LeanTween.cancel(gameObject);
-            LeanTween.alphaCanvas(_canvasGroup, 1f, _canvasManager.AnimationDuration)
+            LeanTween.alphaCanvas(_canvasGroup, 1f, _canvasTransitionSO.AnimationDuration)
                 .setEase(LeanTweenType.easeInOutQuad);
-            LeanTween.scale(gameObject, Vector3.one * _canvasManager.EnableCanvasScale, _canvasManager.AnimationDuration)
+            LeanTween.scale(gameObject, Vector3.one * _canvasTransitionSO.EnableCanvasScale, _canvasTransitionSO.AnimationDuration)
                 .setEase(LeanTweenType.easeInOutQuad);
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
-
-            OnCanvasStatus?.Invoke(true);
         }
         
         public virtual void DisableCanvas()
         {
             LeanTween.cancel(gameObject);
-            LeanTween.alphaCanvas(_canvasGroup, 0f, _canvasManager.AnimationDuration)
+            LeanTween.alphaCanvas(_canvasGroup, 0f, _canvasTransitionSO.AnimationDuration)
                 .setEase(LeanTweenType.easeInOutQuad);
-            LeanTween.scale(gameObject, Vector3.one * _canvasManager.DisableCanvasScale, _canvasManager.AnimationDuration)
+            LeanTween.scale(gameObject, Vector3.one * _canvasTransitionSO.DisableCanvasScale, _canvasTransitionSO.AnimationDuration)
                 .setEase(LeanTweenType.easeInOutQuad);
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
-
-            OnCanvasStatus?.Invoke(false);
         }
 
         public void InstantDisableCanvas()
@@ -54,8 +49,6 @@ namespace XaviGames.Ui
             _canvasGroup.alpha = 0f;
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
-
-            OnCanvasStatus?.Invoke(false);
         }
     }
 }

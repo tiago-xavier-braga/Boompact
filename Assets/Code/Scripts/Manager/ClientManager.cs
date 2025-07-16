@@ -28,6 +28,9 @@ namespace XaviGames.Manager
         private SceneReference _environmentScene;
 
         private bool _initialized = false;
+        
+        private LoadingCanvasController _loadingController;
+
         public static ClientManager Instance { get; private set; } = null;
 
         private void Awake()
@@ -45,7 +48,8 @@ namespace XaviGames.Manager
         private void Start()
         {
             InitializeUnityServicesAsync();
-            CanvasManager.Instance.LoadingCanvasController.DisableLoading();
+            _loadingController = LoadingCanvasController.Instance;
+            _loadingController.DisableLoading();
         }
 
         private async Task InitializeUnityServicesAsync()
@@ -82,7 +86,7 @@ namespace XaviGames.Manager
             catch (System.Exception e)
             {
                 GameLogger.LogError($"Failed to start client with relay: {e.Message}", LogCategory.Client);
-                CanvasManager.Instance.LoadingCanvasController.DisableLoading();
+                _loadingController.DisableLoading();
                 return false;
             }
 
