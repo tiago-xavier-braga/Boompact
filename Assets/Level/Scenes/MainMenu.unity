@@ -734,7 +734,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1544954454}
+      - m_Target: {fileID: 1544954457}
         m_TargetAssemblyTypeName: XaviGames.Ui.RoomConnectSelector, Assembly-CSharp
         m_MethodName: EnableCanvas
         m_Mode: 1
@@ -1066,7 +1066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasTransitionSO: {fileID: 11400000, guid: 5f2e6c8a57df77d4e956dd32a1e33f2e, type: 2}
-  _canvasGroup: {fileID: 0}
+  _canvasGroup: {fileID: 324222956}
 --- !u!225 &324222956
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1446,7 +1446,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canvasTransitionSO: {fileID: 11400000, guid: 5f2e6c8a57df77d4e956dd32a1e33f2e, type: 2}
-  _canvasGroup: {fileID: 0}
+  _canvasGroup: {fileID: 705144647}
 --- !u!225 &705144647
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1509,6 +1509,7 @@ GameObject:
   - component: {fileID: 715401616}
   - component: {fileID: 715401615}
   - component: {fileID: 715401614}
+  - component: {fileID: 715401617}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -1602,6 +1603,20 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &715401617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715401612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4df567b812ced3d4383cb69f75213798, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <RoomConnectSelector>k__BackingField: {fileID: 1544954457}
+  <JoinCode>k__BackingField: 
 --- !u!1 &804556294
 GameObject:
   m_ObjectHideFlags: 0
@@ -2553,7 +2568,7 @@ GameObject:
   - component: {fileID: 1544954453}
   - component: {fileID: 1544954456}
   - component: {fileID: 1544954455}
-  - component: {fileID: 1544954454}
+  - component: {fileID: 1544954457}
   m_Layer: 5
   m_Name: Select Way Enter Game
   m_TagString: Untagged
@@ -2582,23 +2597,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1544954454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1544954452}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05667ab227c7f3144afd41287aae9760, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _canvasTransitionSO: {fileID: 11400000, guid: 5f2e6c8a57df77d4e956dd32a1e33f2e, type: 2}
-  _canvasGroup: {fileID: 0}
-  _roomListItemPrefab: {fileID: 4183417346020643144, guid: 682bab253270d3641af8f74347387827, type: 3}
-  _content: {fileID: 823346705}
-  _maxListCount: 25
 --- !u!225 &1544954455
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2619,6 +2617,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1544954452}
   m_CullTransparentMesh: 1
+--- !u!114 &1544954457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1544954452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05667ab227c7f3144afd41287aae9760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canvasTransitionSO: {fileID: 11400000, guid: 5f2e6c8a57df77d4e956dd32a1e33f2e, type: 2}
+  _canvasGroup: {fileID: 1544954455}
+  _roomListItemPrefab: {fileID: 4183417346020643144, guid: 682bab253270d3641af8f74347387827, type: 3}
+  _content: {fileID: 823346705}
+  _maxListCount: 30
 --- !u!1 &1644470899
 GameObject:
   m_ObjectHideFlags: 0
@@ -2733,8 +2748,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: XaviGames.Ui.MenuController, Assembly-CSharp
+      - m_Target: {fileID: 715401617}
+        m_TargetAssemblyTypeName: XaviGames.Ui.MenuUIController, Assembly-CSharp
         m_MethodName: JoinGame
         m_Mode: 1
         m_Arguments:
@@ -3203,7 +3218,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1544954454}
+      - m_Target: {fileID: 1544954457}
         m_TargetAssemblyTypeName: XaviGames.Ui.RoomConnectSelector, Assembly-CSharp
         m_MethodName: DisableCanvas
         m_Mode: 1
@@ -4197,8 +4212,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: XaviGames.Ui.MenuController, Assembly-CSharp
+      - m_Target: {fileID: 715401617}
+        m_TargetAssemblyTypeName: XaviGames.Ui.MenuUIController, Assembly-CSharp
         m_MethodName: StartHost
         m_Mode: 1
         m_Arguments:
