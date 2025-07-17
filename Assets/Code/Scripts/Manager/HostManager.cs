@@ -57,19 +57,6 @@ namespace XaviGames.Host
             DontDestroyOnLoad(gameObject);
         }
 
-        private async void OnAplicationQuit()
-        {
-            if (_lobby != null)
-            {
-                if (_heartbeatCoroutine != null)
-                {
-                    StopCoroutine(_heartbeatCoroutine);
-                }
-
-                await LobbyService.Instance.DeleteLobbyAsync(_lobby.Id);
-            }
-        }
-
         public void SetServerState(HostState state)
         {
             HostState = state;
@@ -175,10 +162,11 @@ namespace XaviGames.Host
             }
 
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
-            CanvasManager canvasManager = CanvasManager.Instance;
-            canvasManager.DisableAllCanvasGroups();
-            canvasManager.HudCanvasController.EnableCanvas();
-            canvasManager.LoadingCanvasController.DisableLoading();
+            
+            MatchUIController matchUIController = MatchUIController.Instance;
+
+            matchUIController.HudCanvasController.EnableCanvas();
+            LoadingCanvasController.Instance.DisableLoading();
         }
 
         private IEnumerator HeartbeatLobbyCoroutine(string lobbyId)

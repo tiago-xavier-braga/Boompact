@@ -106,10 +106,10 @@ namespace XaviGames.Manager
             }
 
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
-            CanvasManager canvasManager = CanvasManager.Instance;
-            canvasManager.DisableAllCanvasGroups();
-            canvasManager.HudCanvasController.EnableCanvas();
-            canvasManager.LoadingCanvasController.DisableLoading();
+            
+            MatchUIController matchUIController = MatchUIController.Instance;
+            matchUIController.HudCanvasController.EnableCanvas();
+            LoadingCanvasController.Instance.DisableLoading();
         }
     }
 }

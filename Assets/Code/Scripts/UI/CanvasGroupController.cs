@@ -11,15 +11,8 @@ namespace XaviGames.Ui
         [SerializeField]
         private CanvasTransitionSO _canvasTransitionSO;
 
-        [Header("Info")]
         [SerializeField]
-        [ReadOnly]
         private CanvasGroup _canvasGroup;
-
-        private void Start()
-        {
-            _canvasGroup = GetComponent<CanvasGroup>();
-        }
 
         public virtual void EnableCanvas()
         {

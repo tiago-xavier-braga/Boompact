@@ -3,7 +3,6 @@
 // For inquiries: xavigames.company@gmail.com
 
 using System.Collections;
-using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
@@ -76,14 +75,14 @@ namespace XaviGames.Host
 
         private IEnumerator ShowMatchOverBannerAsync()
         {
-            CanvasManager.Instance.MatchEndHandler.EnableMatchOverBannerRpc();
+            MatchUIController.Instance.MatchEndHandler.EnableMatchOverBannerRpc();
             int remainingSeconds = _hostSettings.MatchOverBannerDelay;
             while (remainingSeconds > 0)
             {
                 yield return new WaitForSeconds(1f);
                 remainingSeconds--;
             }
-            CanvasManager.Instance.MatchEndHandler.DisableMatchOverBannerRpc();
+            MatchUIController.Instance.MatchEndHandler.DisableMatchOverBannerRpc();
 
             StartCoroutine(ShowCanvasResultsAsync());
         }
@@ -99,7 +98,7 @@ namespace XaviGames.Host
                 remainingSeconds--;
             }
 
-            CanvasManager.Instance.MatchEndHandler.DisableCanvasResultRpc();
+            MatchUIController.Instance.MatchEndHandler.DisableCanvasResultRpc();
             StartMatch();
         }
 
@@ -109,8 +108,8 @@ namespace XaviGames.Host
             {
                 bool isWinner = _teamController.NonBombOwners.Contains(playerId);
 
-                CanvasManager.Instance.MatchEndHandler.SendPlayerResultRpc(
-                    isWinner, CanvasManager.Instance.MatchEndHandler.RpcTarget.Single(playerId, RpcTargetUse.Temp));
+                MatchUIController.Instance.MatchEndHandler.SendPlayerResultRpc(
+                    isWinner, MatchUIController.Instance.MatchEndHandler.RpcTarget.Single(playerId, RpcTargetUse.Temp));
             }
         }
     }

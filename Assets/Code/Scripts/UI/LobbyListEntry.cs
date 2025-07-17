@@ -39,11 +39,11 @@ namespace XaviGames.Ui
         [field: ReadOnly]
         public string RelayCode { get; private set; } = string.Empty;
         
-        private MenuController _menuController;
+        private MenuUIController _menuUiController;
 
         private void Start()
         {
-            _menuController = CanvasManager.Instance.MenuController;
+            _menuUiController = MenuUIController.Instance;
             _button.onClick.AddListener(OnButtonClicked);
         }
 
@@ -83,14 +83,14 @@ namespace XaviGames.Ui
         {
             if (_isSelected)
             {
-                _menuController.SetJoinCode(string.Empty);
+                _menuUiController.SetJoinCode(string.Empty);
                 _button.image.sprite = _unselectedButtonSprite;
             }
             else
             {
-                _menuController.SetJoinCode(RelayCode);
+                _menuUiController.SetJoinCode(RelayCode);
                 _button.image.sprite = _selectedButtonSprite;
-                CanvasManager.Instance.RoomConnectSelector.UnselectedAllButton();
+                _menuUiController.RoomConnectSelector.UnselectedAllButton();
             }
 
             _isSelected = !_isSelected;

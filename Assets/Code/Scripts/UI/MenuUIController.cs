@@ -7,6 +7,10 @@ namespace XaviGames.Ui
 {
     public class MenuUIController : MonoBehaviour
     {
+        [field: Header("Scripts References")]
+        [field: SerializeField]
+        public RoomConnectSelector RoomConnectSelector { get; private set; }
+
         [field: Header("Info")]
         [field: SerializeField]
         [field: ReadOnly]
@@ -14,9 +18,31 @@ namespace XaviGames.Ui
 
         private LoadingCanvasController _loadingController;
 
+        public static MenuUIController Instance { get; private set; } =  null;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
         private void Start()
         {
             _loadingController = LoadingCanvasController.Instance;
+        }
+
+        private void OnDestroy()
+        {
+            if (Instance == this)
+            {
+                Instance = null;
+            }
         }
 
         public async void StartHost()

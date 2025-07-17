@@ -19,7 +19,7 @@ namespace XaviGames.Ui
         [SerializeField]
         private float _loadingDuration = 0.5f;
 
-        public static LoadingCanvasController Instance { get; private set; }
+        public static LoadingCanvasController Instance { get; private set; } = null;
 
         private void Awake()
         {
@@ -31,7 +31,6 @@ namespace XaviGames.Ui
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
         }
 
         public void EnableLoading() => StartLoadingAnimation();
@@ -45,7 +44,7 @@ namespace XaviGames.Ui
 
         public void DisableLoading()
         {
-            if (_loadingCanvasGroup != null)
+            if (_loadingCanvasGroup == null)
             {
                 GameLogger.LogError("Loading Canvas Group is null", LogCategory.Client);
                 return;
