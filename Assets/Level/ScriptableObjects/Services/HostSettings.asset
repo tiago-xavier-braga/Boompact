@@ -15,7 +15,7 @@ MonoBehaviour:
   _connectionType: 2
   <MinPlayersInMatch>k__BackingField: 2
   <MaxPlayersInMatch>k__BackingField: 10
-  <MinutesMatchDuration>k__BackingField: 2
+  <MinutesMatchDuration>k__BackingField: 1
   <StartDelayAfterMinPlayers>k__BackingField: 5
   <MatchOverBannerDelay>k__BackingField: 5
   <MatchEndDelay>k__BackingField: 15
