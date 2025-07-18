@@ -1707,21 +1707,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: XaviGames.Ui.CanvasManager, Assembly-CSharp
-        m_MethodName: DisableAllCanvasGroups
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: XaviGames.Ui.CanvasGroupController, Assembly-CSharp
-        m_MethodName: EnableCanvas
+      - m_Target: {fileID: 1814573791}
+        m_TargetAssemblyTypeName: XaviGames.Ui.MatchUIController, Assembly-CSharp
+        m_MethodName: LeaveGameAsync
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2859,8 +2847,8 @@ GameObject:
   - component: {fileID: 1814573789}
   - component: {fileID: 1814573788}
   - component: {fileID: 1814573787}
-  - component: {fileID: 1814573791}
   - component: {fileID: 1814573792}
+  - component: {fileID: 1814573791}
   - component: {fileID: 1814573790}
   m_Layer: 5
   m_Name: Canvas
@@ -2986,8 +2974,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c0b96f8312025e4c85700ddeca9b1b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ShowTopMostFoldoutHeaderGroup: 1
   <HudCanvasController>k__BackingField: {fileID: 627963331}
   <MatchEndHandler>k__BackingField: {fileID: 1814573790}
+  _menuScene:
+    _sceneAsset: {fileID: 102900000, guid: 54b15048c9d4f5b42a54fd1710df0aaa, type: 3}
+    <SceneName>k__BackingField: MainMenu
 --- !u!114 &1814573792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3005,7 +2997,7 @@ MonoBehaviour:
   DeferredDespawnTick: 0
   Ownership: 1
   AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
+  SynchronizeTransform: 0
   ActiveSceneSynchronization: 0
   SceneMigrationSynchronization: 0
   SpawnWithObservers: 1
