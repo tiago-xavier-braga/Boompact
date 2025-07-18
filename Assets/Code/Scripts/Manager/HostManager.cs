@@ -40,6 +40,7 @@ namespace XaviGames.Host
         private SceneReference _environmentScene;
 
         private string _joinCode = string.Empty;
+        private Guid _allocationId = new();
         private Lobby _lobby;
         private Coroutine _heartbeatCoroutine;
 
@@ -54,7 +55,19 @@ namespace XaviGames.Host
             }
 
             Instance = this;
+            NetworkManager.Singleton.OnServerStopped += OnHostStopped;
+
             DontDestroyOnLoad(gameObject);
+        }
+
+
+
+        private void OnDestroy()
+        {
+            if (NetworkManager.Singleton != null)
+            {
+                NetworkManager.Singleton.OnServerStopped -= OnHostStopped;
+            }
         }
 
         public void SetServerState(HostState state)
@@ -97,7 +110,7 @@ namespace XaviGames.Host
                 }
 
                 var allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
-
+                _allocationId = allocation.AllocationId;
                 NetworkManager.Singleton.GetComponent<UnityTransport>()
                     .SetRelayServerData(AllocationUtils.ToRelayServerData(allocation, connectionType));
             
@@ -177,6 +190,31 @@ namespace XaviGames.Host
             {
                 LobbyService.Instance.SendHeartbeatPingAsync(lobbyId);
                 yield return delay;
+            }
+        }
+
+        private async void OnHostStopped(bool isHost)
+        {
+            if (!isHost)
+            {
+                return;
+            }
+
+            await DeleteLobbyAsync();
+        }
+
+        private async Task DeleteLobbyAsync()
+        {
+            if (_lobby != null)
+            {
+                try
+                {
+                    await LobbyService.Instance.DeleteLobbyAsync(_lobby.Id);
+                }
+                catch (LobbyServiceException e)
+                {
+                    GameLogger.LogError($"Failed to delete lobby [{_lobby.Id}]: {e.Message}", LogCategory.Lobby);
+                }
             }
         }
     }
