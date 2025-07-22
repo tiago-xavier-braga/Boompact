@@ -33,9 +33,9 @@ namespace XaviGames.Car
         [ReadOnly]
         private Vector2 _inputVector;
 
-        [SerializeField]
-        [ReadOnly]
-        private float _kmPerHour = 0f;
+        [field: SerializeField]
+        [field: ReadOnly]
+        public float _kmPerHour { get; private set; } = 0f;
 
         private WheelFrictionCurve _originalSidewaysFriction = new();
         private WheelFrictionCurve _driftSidewaysFriction = new();
