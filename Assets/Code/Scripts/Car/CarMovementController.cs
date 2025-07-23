@@ -35,7 +35,7 @@ namespace XaviGames.Car
 
         [field: SerializeField]
         [field: ReadOnly]
-        public float _kmPerHour { get; private set; } = 0f;
+        public float KmPerHour { get; private set; } = 0f;
 
         private WheelFrictionCurve _originalSidewaysFriction = new();
         private WheelFrictionCurve _driftSidewaysFriction = new();
@@ -137,7 +137,7 @@ namespace XaviGames.Car
 
         private void UpdatePhysics()
         {
-            _kmPerHour = _rigidbody.linearVelocity.magnitude * 3.6f;
+            KmPerHour = _rigidbody.linearVelocity.magnitude * 3.6f;
 
             float forwardSpeed = Vector3.Dot(transform.forward, _rigidbody.linearVelocity);
             float speedFactor = Mathf.InverseLerp(0f, _carParameter.TopSpeed, Mathf.Abs(forwardSpeed));
