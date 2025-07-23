@@ -1390,7 +1390,7 @@ MonoBehaviour:
   _moveInputAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _handbrakeInputAction: {fileID: -8161986239912819779, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   _inputVector: {x: 0, y: 0}
-  <_kmPerHour>k__BackingField: 0
+  <KmPerHour>k__BackingField: 0
 --- !u!114 &3474693717029918408
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1461,14 +1461,13 @@ MonoBehaviour:
   _idleAudioSource: {fileID: 3070110720008224159}
   _movingAudioSource: {fileID: 3829991467949665757}
   _idleClip: {fileID: 8300000, guid: 336648266cc15144cb36688e6cb06c8d, type: 3}
-  _idleVolume: 0.2
-  _movingClip: {fileID: 8300000, guid: c447e1d85bbc5f14f957b363b3f8d015, type: 3}
-  _movingVolume: 0.3
-  _minMovingPitch: 1.3
-  _maxMovingPitch: 1.7
+  _idleVolume: 0.6
+  _idlePitch: 0.7
+  _movingClip: {fileID: 8300000, guid: 336648266cc15144cb36688e6cb06c8d, type: 3}
+  _movingVolume: 1
+  _minMovingPitch: 1
+  _maxMovingPitch: 2
   _moveInputAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  _currentIdleVolume: 0
-  _currentMovingVolume: 0
 --- !u!64 &939933596055950704
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1784,10 +1783,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 5
+  MaxDistance: 100
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -1820,7 +1819,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -2318,10 +2317,10 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
+  MinDistance: 5
+  MaxDistance: 100
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -2354,7 +2353,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.5
       inSlope: 0
       outSlope: 0
       tangentMode: 0
