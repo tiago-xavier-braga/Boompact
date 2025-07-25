@@ -4,7 +4,7 @@
 
 namespace XaviGames.Host
 {
-    public enum HostState
+    public enum GameState
     {
         Off = 0,
         WaitingForPlayers = 1,
