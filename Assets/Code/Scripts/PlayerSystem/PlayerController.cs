@@ -28,7 +28,6 @@ namespace XaviGames.PlayerSystem
         private PlayerInput _playerInput;
 
         private string _carId = string.Empty;
-        private GameObject _ghostCameraInstance;
 
         public override void OnNetworkSpawn()
         {

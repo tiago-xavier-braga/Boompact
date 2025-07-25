@@ -8,6 +8,7 @@ using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
 using XaviGames.Car;
+using XaviGames.Manager;
 using XaviGames.PlayerSystem;
 
 namespace XaviGames.Host
@@ -15,7 +16,7 @@ namespace XaviGames.Host
     public class TeamController : MonoBehaviour
     {
         [SerializeField]
-        private HostManager _serverManager;
+        private GameManager _gameManager;
 
         public List<ulong> BombOwners { get; private set; } = new();
         public List<ulong> NonBombOwners { get; private set; } = new();
@@ -67,7 +68,7 @@ namespace XaviGames.Host
                 return;
             }
 
-            if (_serverManager.HostState != HostState.GameInProgress)
+            if (_gameManager.GameState != GameState.GameInProgress)
             {
                 return;
             }

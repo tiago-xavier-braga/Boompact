@@ -6,6 +6,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
+using XaviGames.Manager;
 using XaviGames.Services;
 
 namespace XaviGames.Host
@@ -17,6 +18,9 @@ namespace XaviGames.Host
 
         [SerializeField]
         private HostManager _hostManager;
+
+        [SerializeField]
+        private GameManager _gameManager;
 
         [SerializeField]
         [ReadOnly]
@@ -32,15 +36,15 @@ namespace XaviGames.Host
 
         private void OnDisable()
         {
-            //NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
+            NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
 
         public void UpdatePlayerCount()
         {
-            HostState currentState = _hostManager.HostState;
+            GameState currentState = _gameManager.GameState;
 
-            if (currentState != HostState.WaitingForPlayers)
+            if (currentState != GameState.WaitingForPlayers)
             {
                 return;
             }
@@ -65,7 +69,7 @@ namespace XaviGames.Host
             }
             else
             {
-                _hostManager.SetServerState(HostState.WaitingForPlayers);
+                _gameManager.SetGameStateRpc(GameState.WaitingForPlayers);
 
                 if (_startMatchCountdownCoroutine != null)
                 {

@@ -19,15 +19,12 @@ using XaviEssencials.Runtime;
 using XaviGames.Services;
 using XaviGames.Ui;
 using System.Collections;
+using XaviGames.Manager;
 
 namespace XaviGames.Host
 {
     public sealed class HostManager : MonoBehaviour
     {
-        [field: SerializeField]
-        [field: ReadOnly]
-        public HostState HostState { get; private set; } = HostState.Off;
-
         [SerializeField]
         private HostSettings _hostSettings;
 
@@ -60,8 +57,6 @@ namespace XaviGames.Host
             DontDestroyOnLoad(gameObject);
         }
 
-
-
         private void OnDestroy()
         {
             if (NetworkManager.Singleton != null)
@@ -70,23 +65,19 @@ namespace XaviGames.Host
             }
         }
 
-        public void SetServerState(HostState state)
-        {
-            HostState = state;
-            GameLogger.Log($"Server state changed to: {state}", LogCategory.Server);
-        }
 
         public async void StartHostWithRelay(Action<bool> callback)
         {
             bool isSuccess = await StartHostWithRelay(_hostSettings.MaxPlayersInMatch, _hostSettings.GetConnectionType());
 
+            GameManager gameManager = GameManager.Instance;
             if (isSuccess)
             {
-                SetServerState(HostState.WaitingForPlayers);
+                gameManager.SetGameStateRpc(GameState.WaitingForPlayers);
             }
             else
             {
-                SetServerState(HostState.Off);
+                gameManager.SetGameStateRpc(GameState.Off);
             }
             
             callback?.Invoke(isSuccess);

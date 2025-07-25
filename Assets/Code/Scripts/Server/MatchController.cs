@@ -6,6 +6,7 @@ using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 using XaviEssencials.Runtime;
+using XaviGames.Manager;
 using XaviGames.Services;
 using XaviGames.Ui;
 
@@ -14,7 +15,7 @@ namespace XaviGames.Host
     public class MatchController : MonoBehaviour
     {
         [SerializeField] 
-        private HostManager _hostManager;
+        private GameManager _gameManager;
         
         [SerializeField] 
         private CarSpawnController _carSpawnController;
@@ -29,7 +30,7 @@ namespace XaviGames.Host
         {
             _carSpawnController.SpawnAllCars();
             _teamController.DistributeInitialBombs();
-            _hostManager.SetServerState(HostState.GameInProgress);
+            _gameManager.SetGameStateRpc(GameState.GameInProgress);
             StartCoroutine(StartCountdown());
         }
 
@@ -61,7 +62,7 @@ namespace XaviGames.Host
 
         private void FinishMatch()
         {
-            _hostManager.SetServerState(HostState.GameEnded);
+            _gameManager.SetGameStateRpc(GameState.GameEnded);
             StartCoroutine(ShowMatchOverBannerAsync());
         }
 

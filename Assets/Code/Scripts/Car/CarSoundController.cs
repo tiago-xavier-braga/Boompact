@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using XaviEssencials.Runtime;
 using XaviGames.Audio;
 using XaviGames.Host;
+using XaviGames.Manager;
 
 namespace XaviGames.Car
 {
@@ -48,7 +49,7 @@ namespace XaviGames.Car
 
         private void Update()
         {
-            if (HostManager.Instance.HostState != HostState.GameInProgress)
+            if (GameManager.Instance.GameState != GameState.GameInProgress)
             {
                 if (_idleAudioSource.isPlaying)
                 {
