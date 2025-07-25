@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _connectionType: 2
   <MinPlayersInMatch>k__BackingField: 2
-  <MaxPlayersInMatch>k__BackingField: 10
+  <MaxPlayersInMatch>k__BackingField: 6
   <MinutesMatchDuration>k__BackingField: 1
   <StartDelayAfterMinPlayers>k__BackingField: 5
   <MatchOverBannerDelay>k__BackingField: 5

@@ -1370,7 +1370,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 896422444}
   m_HandleRect: {fileID: 896422442}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3380,6 +3380,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1787818740}
   m_CullTransparentMesh: 1
+--- !u!114 &1799187780 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3011620064334835878, guid: e69677c2cee589c4190e7d58aa104134, type: 3}
+  m_PrefabInstance: {fileID: 1297798970}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7f65acd770f5724f8318286d5acf81b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1814573785
 GameObject:
   m_ObjectHideFlags: 0
@@ -4029,7 +4040,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a6763427479ae74b8976b89e2a4c17e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <HostState>k__BackingField: 0
   _hostSettings: {fileID: 11400000, guid: c45c451a0c3d07f45a069d42b09a3026, type: 2}
   _matchController: {fileID: 1992881573}
   _environmentScene:
@@ -4049,6 +4059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hostSettings: {fileID: 11400000, guid: c45c451a0c3d07f45a069d42b09a3026, type: 2}
   _hostManager: {fileID: 1992881569}
+  _gameManager: {fileID: 1799187780}
 --- !u!114 &1992881571
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4061,7 +4072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e075fef081c7a45a5321059d180684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _serverManager: {fileID: 1992881569}
+  _gameManager: {fileID: 1799187780}
 --- !u!114 &1992881572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4095,7 +4106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c250a5d66de1e74abc5715c0106a610, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hostManager: {fileID: 1992881569}
+  _gameManager: {fileID: 1799187780}
   _carSpawnController: {fileID: 1992881572}
   _teamController: {fileID: 1992881571}
   _hostSettings: {fileID: 11400000, guid: c45c451a0c3d07f45a069d42b09a3026, type: 2}
