@@ -4040,7 +4040,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a6763427479ae74b8976b89e2a4c17e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hostSettings: {fileID: 11400000, guid: c45c451a0c3d07f45a069d42b09a3026, type: 2}
+  _hostSettings: {fileID: 11400000, guid: 8c8f86fd370529948a2c845d93f6c5ea, type: 2}
   _matchController: {fileID: 1992881573}
   _environmentScene:
     _sceneAsset: {fileID: 102900000, guid: 4eaad980f54bfcf4b8d8acfa3d4a7d97, type: 3}
@@ -4057,7 +4057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88f4564f9f6c9e449b5210215fbed08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hostSettings: {fileID: 11400000, guid: c45c451a0c3d07f45a069d42b09a3026, type: 2}
+  _hostSettings: {fileID: 11400000, guid: 8c8f86fd370529948a2c845d93f6c5ea, type: 2}
   _hostManager: {fileID: 1992881569}
   _gameManager: {fileID: 1799187780}
 --- !u!114 &1992881571
@@ -4109,7 +4109,7 @@ MonoBehaviour:
   _gameManager: {fileID: 1799187780}
   _carSpawnController: {fileID: 1992881572}
   _teamController: {fileID: 1992881571}
-  _hostSettings: {fileID: 11400000, guid: c45c451a0c3d07f45a069d42b09a3026, type: 2}
+  _hostSettings: {fileID: 11400000, guid: 8c8f86fd370529948a2c845d93f6c5ea, type: 2}
 --- !u!1 &2130551779
 GameObject:
   m_ObjectHideFlags: 0
