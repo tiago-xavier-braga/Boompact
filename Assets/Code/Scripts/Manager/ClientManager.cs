@@ -21,7 +21,7 @@ namespace XaviGames.Manager
     public class ClientManager : MonoBehaviour
     {
         [SerializeField]
-        private HostSettings _hostSettings;
+        private GameSettings _hostSettings;
 
         [Header("Scenes")]
         [SerializeField]

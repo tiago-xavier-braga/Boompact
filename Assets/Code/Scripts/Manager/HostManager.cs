@@ -26,7 +26,7 @@ namespace XaviGames.Host
     public sealed class HostManager : MonoBehaviour
     {
         [SerializeField]
-        private HostSettings _hostSettings;
+        private GameSettings _hostSettings;
 
         [Header("Services")]
         [SerializeField]

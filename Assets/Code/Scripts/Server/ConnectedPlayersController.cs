@@ -14,7 +14,7 @@ namespace XaviGames.Host
     public class ConnectedPlayersController : MonoBehaviour
     {
         [SerializeField]
-        private HostSettings _hostSettings;
+        private GameSettings _hostSettings;
 
         [SerializeField]
         private HostManager _hostManager;

@@ -28,7 +28,7 @@ namespace XaviGames.Ui
         private TextMeshProUGUI _timeText;
 
         [SerializeField]
-        private HostSettings _hostSettings;
+        private GameSettings _hostSettings;
 
         [Rpc(SendTo.SpecifiedInParams)]
         public void SendPlayerResultRpc(bool isWinner, RpcParams rpcParams = default)

@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace XaviGames.Services
 {
-    [CreateAssetMenu(fileName = nameof(HostSettings), menuName = "Xavi Games/Services/Host Settings")]
-    public class HostSettings : ScriptableObject
+    [CreateAssetMenu(fileName = nameof(GameSettings), menuName = "Xavi Games/Services/Game Settings")]
+    public class GameSettings : ScriptableObject
     {
         private enum ConnectionType
         {
@@ -15,6 +15,16 @@ namespace XaviGames.Services
             DTLS,
             UDP
         }
+
+        [field: Header("Unity Ads")]
+        [field: SerializeField]
+        public string AndroidGameId { get; private set; }
+
+        [field: SerializeField]
+        public string IOSGameId { get; private set; }
+
+        [field: SerializeField]
+        public bool TestMode { get; private set; }
 
         [field: Header("Unity Host")]
         [SerializeField]

@@ -24,7 +24,7 @@ namespace XaviGames.Host
         private TeamController _teamController;
         
         [SerializeField] 
-        private HostSettings _hostSettings;
+        private GameSettings _hostSettings;
 
         public void StartMatch()
         {
