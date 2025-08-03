@@ -9,13 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1acac9a601b15a049a4dc305ff3598e9, type: 3}
-  m_Name: HostSettings
+  m_Script: {fileID: 11500000, guid: 9dbd2a87189677649b53c0250fca480b, type: 3}
+  m_Name: GameSettings
   m_EditorClassIdentifier: 
-  _connectionType: 2
+  <AndroidGameId>k__BackingField: 
+  <IOSGameId>k__BackingField: 
+  <TestMode>k__BackingField: 0
+  _connectionType: 0
   <MinPlayersInMatch>k__BackingField: 2
   <MaxPlayersInMatch>k__BackingField: 6
   <MinutesMatchDuration>k__BackingField: 2
-  <StartDelayAfterMinPlayers>k__BackingField: 20
+  <StartDelayAfterMinPlayers>k__BackingField: 30
   <MatchOverBannerDelay>k__BackingField: 5
-  <MatchEndDelay>k__BackingField: 20
+  <MatchEndDelay>k__BackingField: 15
