@@ -24,7 +24,7 @@ namespace XaviGames.Host
         private TeamController _teamController;
         
         [SerializeField] 
-        private GameSettings _hostSettings;
+        private GameSettings _gameSettings;
 
         public void StartMatch()
         {
@@ -42,13 +42,13 @@ namespace XaviGames.Host
                 yield break;
             }
 
-            if (_hostSettings == null)
+            if (_gameSettings == null)
             {
                 GameLogger.LogWarning("MatchSettings is not set. Cannot start countdown.", LogCategory.Server);
                 yield break;
             }
 
-            int currentSeconds = _hostSettings.MinutesMatchDuration * 60;
+            int currentSeconds = _gameSettings.MinutesMatchDuration * 60;
             while (currentSeconds > 0)
             {
                 currentSeconds--;
@@ -77,7 +77,7 @@ namespace XaviGames.Host
         private IEnumerator ShowMatchOverBannerAsync()
         {
             MatchUIController.Instance.MatchEndHandler.EnableMatchOverBannerRpc();
-            int remainingSeconds = _hostSettings.MatchOverBannerDelay;
+            int remainingSeconds = _gameSettings.MatchOverBannerDelay;
             while (remainingSeconds > 0)
             {
                 yield return new WaitForSeconds(1f);
@@ -92,7 +92,7 @@ namespace XaviGames.Host
         {
             SendResultForClients();
 
-            int remainingSeconds = _hostSettings.MatchEndDelay;
+            int remainingSeconds = _gameSettings.MatchEndDelay;
             while (remainingSeconds > 0)
             {
                 yield return new WaitForSeconds(1f);

@@ -26,7 +26,7 @@ namespace XaviGames.Host
     public sealed class HostManager : MonoBehaviour
     {
         [SerializeField]
-        private GameSettings _hostSettings;
+        private GameSettings _gameSettings;
 
         [Header("Services")]
         [SerializeField]
@@ -68,7 +68,7 @@ namespace XaviGames.Host
 
         public async void StartHostWithRelay(Action<bool> callback)
         {
-            bool isSuccess = await StartHostWithRelay(_hostSettings.MaxPlayersInMatch, _hostSettings.GetConnectionType());
+            bool isSuccess = await StartHostWithRelay(_gameSettings.MaxPlayersInMatch, _gameSettings.GetConnectionType());
 
             GameManager gameManager = GameManager.Instance;
             if (isSuccess)
@@ -139,8 +139,8 @@ namespace XaviGames.Host
             }
 
             GameLogger.Log($"Starting host with Relay." +
-                $" Max players: {_hostSettings.MaxPlayersInMatch}, " +
-                $"Connection type: {_hostSettings.GetConnectionType()}. " +
+                $" Max players: {_gameSettings.MaxPlayersInMatch}, " +
+                $"Connection type: {_gameSettings.GetConnectionType()}. " +
                 $"Join Code {_joinCode}, " +
                 $"Lobby: {_lobby.Name}", LogCategory.Relay);
 

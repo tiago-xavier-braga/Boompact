@@ -26,6 +26,12 @@ namespace XaviGames.Services
         [field: SerializeField]
         public bool TestMode { get; private set; }
 
+        [field: SerializeField]
+        public string InterstitialAndroidId { get; private set; }
+
+        [field: SerializeField]
+        public string InterstitialIOSId { get; private set; }
+
         [field: Header("Unity Host")]
         [SerializeField]
         private ConnectionType _connectionType;

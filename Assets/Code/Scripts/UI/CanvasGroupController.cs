@@ -35,14 +35,6 @@ namespace XaviGames.Ui
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
         }
-
-        public void InstantDisableCanvas()
-        {
-            LeanTween.cancel(gameObject);
-            _canvasGroup.alpha = 0f;
-            _canvasGroup.interactable = false;
-            _canvasGroup.blocksRaycasts = false;
-        }
     }
 }
 
