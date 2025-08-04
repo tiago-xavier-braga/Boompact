@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dbd2a87189677649b53c0250fca480b, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
-  <AndroidGameId>k__BackingField: 
-  <IOSGameId>k__BackingField: 
-  <TestMode>k__BackingField: 0
-  _connectionType: 0
+  <AndroidGameId>k__BackingField: 5884390
+  <IOSGameId>k__BackingField: 5884391
+  <TestMode>k__BackingField: 1
+  <InterstitialAndroidId>k__BackingField: Production_Interstitial
+  <InterstitialIOSId>k__BackingField: Interstitial_iOS
+  _connectionType: 2
   <MinPlayersInMatch>k__BackingField: 2
   <MaxPlayersInMatch>k__BackingField: 6
   <MinutesMatchDuration>k__BackingField: 2
