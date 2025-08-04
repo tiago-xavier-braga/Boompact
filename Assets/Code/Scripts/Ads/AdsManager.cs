@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.Events;
+using XaviEssencials.Runtime;
 using XaviGames.Services;
 
 namespace XaviGames.Ads
@@ -9,7 +12,11 @@ namespace XaviGames.Ads
         [SerializeField]
         private GameSettings _gameSettings;
 
+        [SerializeField]
+        private InterstitialController _interstitialController;
+
         private string _gameId;
+        private string _interstitialId;
 
         public static AdsManager Instance { get; private set; }
 
@@ -22,19 +29,14 @@ namespace XaviGames.Ads
             }
 
             Instance = this;
+            DontDestroyOnLoad(gameObject);
 
             InitializeAds();
         }
 
         public void InitializeAds()
         {
-#if UNITY_IOS
-            _gameId = _gameSettings.IOSGameId;
-#elif UNITY_ANDROID
-            _gameId = _gameSettings.AndroidGameId;
-#elif UNITY_EDITOR
-        _gameId = _gameSettings.AndroidGameId;
-#endif
+            SetPlatform();
 
             if (!Advertisement.isInitialized && Advertisement.isSupported)
             {
@@ -44,12 +46,37 @@ namespace XaviGames.Ads
 
         public void OnInitializationComplete()
         {
-            Debug.Log("Unity Ads initialization complete.");
+            LoadAllAds();
+            GameLogger.Log("Unity Ads initialization complete.", LogCategory.Unity);
         }
 
         public void OnInitializationFailed(UnityAdsInitializationError error, string message)
         {
-            Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
+            GameLogger.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}", LogCategory.Unity);
+        }
+
+        private void SetPlatform()
+        {
+            switch (Application.platform)
+            {
+                case RuntimePlatform.Android:
+                    _gameId = _gameSettings.AndroidGameId;
+                    _interstitialId = _gameSettings.InterstitialAndroidId;
+                    break;
+                case RuntimePlatform.IPhonePlayer:
+                    _gameId = _gameSettings.IOSGameId;
+                    _interstitialId = _gameSettings.InterstitialIOSId;
+                    break;
+                default:
+                    _gameId = _gameSettings.AndroidGameId; // Default to Android for unsupported platforms
+                    _interstitialId = _gameSettings.InterstitialAndroidId;
+                    break;
+            }
+        }
+
+        private void LoadAllAds()
+        {
+            _interstitialController.InitializeAds(_interstitialId);
         }
     }
 }
