@@ -15,8 +15,8 @@ MonoBehaviour:
   <AndroidGameId>k__BackingField: 5884390
   <IOSGameId>k__BackingField: 5884391
   <TestMode>k__BackingField: 1
-  <InterstitialAndroidId>k__BackingField: Production_Interstitial
-  <InterstitialIOSId>k__BackingField: Interstitial_iOS
+  <InterstitialAndroidId>k__BackingField: Rewarded_Android
+  <InterstitialIOSId>k__BackingField: Rewarded_iOS
   _connectionType: 2
   <MinPlayersInMatch>k__BackingField: 2
   <MaxPlayersInMatch>k__BackingField: 6

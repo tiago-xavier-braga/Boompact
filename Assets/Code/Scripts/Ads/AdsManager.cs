@@ -68,7 +68,7 @@ namespace XaviGames.Ads
                     _interstitialId = _gameSettings.InterstitialIOSId;
                     break;
                 default:
-                    _gameId = _gameSettings.AndroidGameId; // Default to Android for unsupported platforms
+                    _gameId = _gameSettings.AndroidGameId;
                     _interstitialId = _gameSettings.InterstitialAndroidId;
                     break;
             }
