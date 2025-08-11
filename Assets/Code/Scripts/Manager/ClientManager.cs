@@ -13,6 +13,7 @@ using Unity.Services.Relay.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
+using XaviGames.Host;
 using XaviGames.Services;
 using XaviGames.Ui;
 
@@ -106,9 +107,6 @@ namespace XaviGames.Manager
             }
 
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
-            
-            MatchUIController matchUIController = MatchUIController.Instance;
-            matchUIController.HudCanvasController.EnableCanvas();
             LoadingCanvasController.Instance.DisableLoading();
         }
     }

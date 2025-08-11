@@ -14,8 +14,16 @@ namespace XaviGames.Ui
         [SerializeField]
         private CanvasGroup _canvasGroup;
 
+        [SerializeField]
+        private bool _isEnabled = false;
+
         public virtual void EnableCanvas()
         {
+            if (_isEnabled)
+            {
+                return;
+            }
+
             LeanTween.cancel(gameObject);
             LeanTween.alphaCanvas(_canvasGroup, 1f, _canvasTransitionSO.AnimationDuration)
                 .setEase(LeanTweenType.easeInOutQuad);
@@ -23,10 +31,16 @@ namespace XaviGames.Ui
                 .setEase(LeanTweenType.easeInOutQuad);
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
+            _isEnabled = true;
         }
         
         public virtual void DisableCanvas()
         {
+            if (!_isEnabled)
+            {
+                return;
+            }
+
             LeanTween.cancel(gameObject);
             LeanTween.alphaCanvas(_canvasGroup, 0f, _canvasTransitionSO.AnimationDuration)
                 .setEase(LeanTweenType.easeInOutQuad);
@@ -34,6 +48,7 @@ namespace XaviGames.Ui
                 .setEase(LeanTweenType.easeInOutQuad);
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
+            _isEnabled = false;
         }
     }
 }

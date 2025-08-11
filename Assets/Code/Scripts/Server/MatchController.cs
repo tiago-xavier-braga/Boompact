@@ -30,7 +30,7 @@ namespace XaviGames.Host
         {
             _carSpawnController.SpawnAllCars();
             _teamController.DistributeInitialBombs();
-            _gameManager.SetGameStateRpc(GameState.GameInProgress);
+            _gameManager.SetGameStateServer(GameState.GameInProgress);
             StartCoroutine(StartCountdown());
         }
 
@@ -62,7 +62,7 @@ namespace XaviGames.Host
 
         private void FinishMatch()
         {
-            _gameManager.SetGameStateRpc(GameState.GameEnded);
+            _gameManager.SetGameStateServer(GameState.GameEnded);
             StartCoroutine(ShowMatchOverBannerAsync());
         }
 

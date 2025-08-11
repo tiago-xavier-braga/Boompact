@@ -28,7 +28,7 @@ namespace XaviGames.Ui
         private TextMeshProUGUI _timeText;
 
         [SerializeField]
-        private GameSettings _hostSettings;
+        private GameSettings _gameSettings;
 
         [Rpc(SendTo.SpecifiedInParams)]
         public void SendPlayerResultRpc(bool isWinner, RpcParams rpcParams = default)
@@ -61,7 +61,7 @@ namespace XaviGames.Ui
 
         private IEnumerator CountdownSeconds()
         {
-            int remainingSeconds = _hostSettings.MatchEndDelay;
+            int remainingSeconds = _gameSettings.MatchEndDelay;
             while (remainingSeconds > 0)
             {
                 _timeText.text = $"Reset in {remainingSeconds} seconds...";

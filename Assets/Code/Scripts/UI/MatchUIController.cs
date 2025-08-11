@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using XaviEssencials.Runtime;
+using XaviGames.Host;
+using XaviGames.Manager;
 
 namespace XaviGames.Ui
 {
@@ -16,6 +19,9 @@ namespace XaviGames.Ui
         [field: SerializeField]
         public MatchEndHandler MatchEndHandler { get; private set; }
 
+        [field: SerializeField]
+        public CanvasGroupController WaitingPlayersBannerController { get; private set; }
+
         [SerializeField]
         private SceneReference _menuScene;
 
@@ -26,7 +32,6 @@ namespace XaviGames.Ui
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
 
                 NetworkManager networkManager = NetworkManager.Singleton;
                 if (networkManager != null)
@@ -38,6 +43,32 @@ namespace XaviGames.Ui
             else
             {
                 Destroy(gameObject);
+            }
+        }
+
+        public override void OnNetworkSpawn()
+        {
+            GameManager gameManager = GameManager.Instance; 
+
+            OnGameStateChanged(GameState.Off, gameManager.GameState);
+            gameManager.NetState.OnValueChanged += OnGameStateChanged;
+        }
+
+        private void OnGameStateChanged(GameState previousValue, GameState newValue)
+        {
+            switch (newValue)
+            {
+                case GameState.WaitingForPlayers:
+                    WaitingPlayersBannerController.EnableCanvas();
+                    break;
+                case GameState.GameInProgress:
+                    WaitingPlayersBannerController.DisableCanvas();
+                    HudCanvasController.EnableCanvas();
+                    break;
+                default:
+                    HudCanvasController.DisableCanvas();
+                    WaitingPlayersBannerController.DisableCanvas();
+                    break;
             }
         }
 

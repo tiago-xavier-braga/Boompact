@@ -73,11 +73,11 @@ namespace XaviGames.Host
             GameManager gameManager = GameManager.Instance;
             if (isSuccess)
             {
-                gameManager.SetGameStateRpc(GameState.WaitingForPlayers);
+                gameManager.SetGameStateServer(GameState.WaitingForPlayers);
             }
             else
             {
-                gameManager.SetGameStateRpc(GameState.Off);
+                gameManager.SetGameStateServer(GameState.Off);
             }
             
             callback?.Invoke(isSuccess);
@@ -166,10 +166,6 @@ namespace XaviGames.Host
             }
 
             NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoadingHandler;
-            
-            MatchUIController matchUIController = MatchUIController.Instance;
-
-            matchUIController.HudCanvasController.EnableCanvas();
             LoadingCanvasController.Instance.DisableLoading();
         }
 

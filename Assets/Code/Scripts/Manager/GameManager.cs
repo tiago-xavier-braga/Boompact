@@ -12,36 +12,64 @@ namespace XaviGames.Manager
 {
     public class GameManager : NetworkBehaviour
     {
-        [field: SerializeField]
-        [field: ReadOnly]
-        public GameState GameState { get; private set; } = GameState.Off;
+        public static GameManager Instance { get; private set; }
+
+        public readonly NetworkVariable<GameState> NetState =
+            new NetworkVariable<GameState>(
+                GameState.Off,
+                NetworkVariableReadPermission.Everyone,
+                NetworkVariableWritePermission.Server);
+
+        public GameState GameState => NetState.Value;
 
         [SerializeField]
-        [ReadOnly]
-        private int _MaxFps = 120;
-
-        public static GameManager Instance { get; private set; } = null;
+        [ReadOnly] 
+        private int _maxFps = 120;
 
         private void Awake()
         {
-            if (Instance != null && Instance != this)
+            if (Instance != null && Instance != this) 
             {
-                Destroy(gameObject);
-                return;
+                Destroy(gameObject); 
+                return; 
             }
-
+            
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
             QualitySettings.vSyncCount = 0;
-            Application.targetFrameRate = _MaxFps;
+            Application.targetFrameRate = _maxFps;
         }
 
-        [Rpc(SendTo.ClientsAndHost)]
-        public void SetGameStateRpc(GameState state)
+        public override void OnNetworkSpawn()
         {
-            GameState = state;
-            GameLogger.Log($"Server state changed to: {state}", LogCategory.Server);
+            if (IsServer)
+            {
+                NetState.Value = GameState.Off;
+            }
+
+            NetState.OnValueChanged += OnStateChanged;
+        }
+
+        private void OnDestroy()
+        {
+            NetState.OnValueChanged -= OnStateChanged;
+        }
+
+        private void OnStateChanged(GameState prev, GameState next)
+        {
+            GameLogger.Log($"State changed: {prev} -> {next}", LogCategory.Server);
+        }
+
+        public void SetGameStateServer(GameState newState)
+        {
+            if (!IsServer)
+            {
+                return;
+            }
+            
+            NetState.Value = newState;
         }
     }
+
 }

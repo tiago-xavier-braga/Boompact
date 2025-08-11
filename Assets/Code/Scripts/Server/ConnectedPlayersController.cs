@@ -69,7 +69,7 @@ namespace XaviGames.Host
             }
             else
             {
-                _gameManager.SetGameStateRpc(GameState.WaitingForPlayers);
+                _gameManager.SetGameStateServer(GameState.WaitingForPlayers);
 
                 if (_startMatchCountdownCoroutine != null)
                 {

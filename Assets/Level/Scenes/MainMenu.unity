@@ -1130,6 +1130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasTransitionSO: {fileID: 11400000, guid: 5f2e6c8a57df77d4e956dd32a1e33f2e, type: 2}
   _canvasGroup: {fileID: 324222956}
+  _isEnabled: 1
 --- !u!225 &324222956
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -1481,6 +1482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasTransitionSO: {fileID: 11400000, guid: 5f2e6c8a57df77d4e956dd32a1e33f2e, type: 2}
   _canvasGroup: {fileID: 705144647}
+  _isEnabled: 0
 --- !u!225 &705144647
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2822,6 +2824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canvasTransitionSO: {fileID: 11400000, guid: 5f2e6c8a57df77d4e956dd32a1e33f2e, type: 2}
   _canvasGroup: {fileID: 1544954455}
+  _isEnabled: 0
   _roomListItemPrefab: {fileID: 4183417346020643144, guid: 682bab253270d3641af8f74347387827, type: 3}
   _content: {fileID: 823346705}
   _maxListCount: 30
