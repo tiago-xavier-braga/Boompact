@@ -17,10 +17,10 @@ MonoBehaviour:
   <TestMode>k__BackingField: 1
   <InterstitialAndroidId>k__BackingField: Rewarded_Android
   <InterstitialIOSId>k__BackingField: Rewarded_iOS
-  _connectionType: 2
+  _connectionType: 1
   <MinPlayersInMatch>k__BackingField: 2
   <MaxPlayersInMatch>k__BackingField: 6
   <MinutesMatchDuration>k__BackingField: 2
-  <StartDelayAfterMinPlayers>k__BackingField: 30
+  <StartDelayAfterMinPlayers>k__BackingField: 15
   <MatchOverBannerDelay>k__BackingField: 5
   <MatchEndDelay>k__BackingField: 15
