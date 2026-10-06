@@ -13,7 +13,7 @@ and single-round elimination were not finished.
 
 Unity **6000.1.9f1**: Universal Render Pipeline, Input System, Netcode for GameObjects.
 The project must be linked to a Unity Cloud project with **Relay** and **Lobby** enabled.
-[XaviEssencials](https://github.com/tiago-xavier-braga/XaviEssencials) is pulled in
+XaviEssencials is pulled in
 as a git package (scene references, scene bundles, logger).
 
 ## Running
