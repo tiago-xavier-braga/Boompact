@@ -1,64 +1,67 @@
-# 💣 Boompact
+# Boompact
 
-**Boompact** is an online multiplayer arcade racing game focused on fast-paced, chaotic, and explosive matches.  
-Players drive cars inside an arena and must pass bombs to others through collisions before the timer runs out —  
-or explode!
+An online multiplayer arcade racing game: players drive cars around an arena
+while bombs are handed out at random. A car carrying a bomb passes it on by
+crashing into a car without one. When the round timer runs out, whoever still
+holds a bomb loses. Built in Unity with Netcode for GameObjects.
 
-## 🎮 Gameplay
+**Status: discontinued.** Development stopped at the MVP stage. The match loop
+runs end to end over Relay, but the game was never released: the web build, ads
+and single-round elimination were not finished.
 
-- Players start the match with bombs randomly assigned.
-- A player holding a bomb must collide with another car to transfer it.
-- When the round timer ends, anyone still holding a bomb is eliminated.
-- The game ends immediately after the first and only round.
-- Matches are designed to be quick, energetic, and suitable for casual competition.
+## Requirements
 
-## 📦 Technologies Used
+Unity **6000.1.9f1**: Universal Render Pipeline, Input System, Netcode for GameObjects.
+The project must be linked to a Unity Cloud project with **Relay** and **Lobby** enabled.
+[XaviEssencials](https://github.com/tiago-xavier-braga/XaviEssencials) is pulled in
+as a git package (scene references, scene bundles, logger).
 
-- **Unity Matchmaker**
-- **Unity Hosting**
+## Running
 
-## 🌐 Platforms
+Open the project in Unity and press Play from `Assets/Level/Scenes/MainMenu.unity`.
+One instance hosts: it creates a Relay allocation and a public Lobby, then loads
+`Environment`. The others join from the room list. Use Multiplayer Play Mode to
+run several players from one editor.
 
-Boompact will be published on online web game platforms with monetization based on non-intrusive ads.  
-An Android version may be considered depending on the game's performance on web platforms.
+The match starts once `MinPlayersInMatch` players are connected and
+`StartDelayAfterMinPlayers` has passed. Player count, match length and end-screen
+delays live in `Assets/Level/ScriptableObjects/Services/HostSettings.asset`.
 
-## 🧪 Development Status
+## Controls
 
-> The project is currently under MVP development, with full focus on the online multiplayer system.  
-> Source code may be made available publicly for technical evaluation and interview purposes only.
+| Action | Keys |
+|---|---|
+| Drive | `W` `A` `S` `D` / arrow keys / triggers + left stick |
+| Handbrake | `Space` / gamepad east button |
+| Camera | mouse / right stick / touch drag |
 
-## ⚙️ Local Testing Setup
-
-Boompact includes a flexible configuration system that allows local client/server simulation without relying on 
-Unity Lobby, Relay, or Authentication services.
-
-### 🧰 `ServicesSettings` ScriptableObject
-
-A custom configuration asset located at:
+## Layout
 
 ```
-Xavi Games > Services > ServicesSettings
+Assets/
+  Art/          meshes, materials, textures, animations, fonts
+  Audio/        sound effects
+  Code/         gameplay scripts and shader graphs (toon, outline)
+  Level/        scenes, prefabs, ScriptableObjects (host settings, car database, user session)
+  Settings/     render pipeline, input, lighting, multiplayer and build profiles
+  ThirdParty/   LeanTween, PROMETEO car controller, vehicle and environment packs
 ```
 
-> ⚠️ Local multiplayer works with multiple Unity instances. No external services required.
+Organised by resource type. The host runs the match (`MatchController`,
+`TeamController`, `CarSpawnController`) and pushes state to clients through RPCs;
+each car is a networked object owned by its player.
 
-## 📄 License
+## What's implemented
 
-This project is protected by a **proprietary license** owned by XaviGames. Redistribution, commercial use, or 
-modification by third parties is strictly prohibited without prior written consent.
+- Host and join through Unity Relay, with a Lobby room list
+- Car selection carried into the match through a `UserSession` ScriptableObject
+- Server-side car spawning, one spawn point per player
+- Custom car physics, follow camera, engine and effect sounds
+- Random bomb distribution to half of the players at match start
+- Bomb transfer on collision, with a cooldown after receiving one
+- Match timer, match-over banner and per-player win/lose screen
+- Disconnect handling: clients return to the menu when the host leaves
 
-Some environments or 3D assets may have been created by third-party contributors. In such cases, XaviGames retains
-commercial usage rights based on written agreements or email-based licenses provided by the original authors.
+## License
 
-For more information, see [LICENSE.txt](./LICENSE.txt).
-
-## ✉️ Contact
-
-Developed by **Tiago Xavier Braga**  
-📧 xavigames.company@gmail.com  
-📧 braga.taigoxavier@gmail.com  
-🔗 [LinkedIn](https://www.linkedin.com/in/tiago-xavier-braga/)
-
----
-
-> Made with 🚗💣 by XaviGames – 2025
+Proprietary, © XaviGames. See [LICENSE.txt](./LICENSE.txt).
