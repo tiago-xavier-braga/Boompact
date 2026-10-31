@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://7eshgwpevg1d"]
+
+[ext_resource type="Texture2D" uid="uid://r2y3h7dw8okq" path="res://assets/textures/txt_car_kit_colormap.png" id="1_nhd1x"]
+
+[resource]
+cull_mode = 2
+albedo_texture = ExtResource("1_nhd1x")
